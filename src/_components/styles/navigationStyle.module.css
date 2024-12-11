@@ -1,0 +1,41 @@
+.topContainer{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+.navIconSubContainers{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    gap: 20rem;
+    /* align-items: center; */
+}
+.navIcons{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.iconContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.upgradeCAll{
+    height: 10rem;
+    width: 10rem;
+    background-color: rgb(175, 243, 175);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.upgradeButton{
+    width: 70%;
+    height: 1.5rem;
+    background-color: black;
+    color: white;
+}

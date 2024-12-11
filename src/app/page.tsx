@@ -6,6 +6,7 @@ import AuthFlow from "./auth/AuthFlow";
 import WelcomePage from "./auth/WelcomePage";
 import PricingPage from "./payment/PrincingPage";
 import PaymentPage from "./payment/PaymentPage";
+import HomeIndex from './dashboard/home/HomeIndex'
 export default function Home() {
   const router = useRouter();
   return (
@@ -18,7 +19,8 @@ export default function Home() {
       {/* <AuthFlow /> */}
       {/* <WelcomePage /> */}
       {/* <PricingPage /> */}
-      <PaymentPage />
+      {/* <PaymentPage /> */}
+      <HomeIndex />
     </div>
   );
 }
