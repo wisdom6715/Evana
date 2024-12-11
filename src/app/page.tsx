@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import AuthFlow from "./auth/AuthFlow";
+import WelcomePage from "./auth/WelcomePage";
+import PricingPage from "./payment/PrincingPage";
+import PaymentPage from "./payment/PaymentPage";
 export default function Home() {
   const router = useRouter();
   return (
@@ -12,7 +15,10 @@ export default function Home() {
     //   </main>
     // </div>
     <div>
-        <AuthFlow />
+      {/* <AuthFlow /> */}
+      {/* <WelcomePage /> */}
+      {/* <PricingPage /> */}
+      <PaymentPage />
     </div>
   );
 }
