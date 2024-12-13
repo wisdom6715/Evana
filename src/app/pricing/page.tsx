@@ -1,5 +1,6 @@
+'use client'
 import React from 'react'
-
+import Link from 'next/link'
 const PrincingPage = () => {
   return (
     <div className='flex flex-col justify-center w-[100%] h-[100vh] items-center'>
@@ -34,7 +35,7 @@ const PrincingPage = () => {
                             <p>Voice Communication</p>
                         </div>
                         <div className='flex items-center justify-center'>
-                            <button className='bg-black w-[270px] h-[38px] text-white'>Choose Basic Plan</button>
+                            <Link href='/payment' className='bg-black w-[270px] h-[38px] text-white'>Choose Basic Plan</Link>
                         </div>
                     </div>
                 </div>
@@ -60,7 +61,7 @@ const PrincingPage = () => {
                             <p>Voice Communication</p>
                         </div>
                         <div className='flex items-center justify-center'>
-                            <button className='bg-black w-[270px] h-[38px] text-white'>Choose Standard Plan</button>
+                            <Link href='/payment' className='bg-black w-[270px] h-[38px] text-white'>Choose Standard Plan</Link>
                         </div>
                     </div>
                 </div>

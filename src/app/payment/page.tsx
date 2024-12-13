@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import { PaystackButton } from 'react-paystack'
 import Image from 'next/image'
@@ -6,6 +7,7 @@ import visaCard from '@/app/assets/images/visacard.jpeg'
 import applePay from '@/app/assets/images/ApplePay.jpeg'
 import googlePay from '@/app/assets/images/gPay.jpeg'
 import secureIcon from '@/app/assets/images/secureIcon.png'
+import Link from 'next/link'
 
 const PaymentPage = () => {
 
@@ -89,7 +91,7 @@ const PaymentPage = () => {
                     Cancel anytime via Adobe Account or Customer Support. You also agree to the Terms of Use and the Subscription and Cancellation Terms.
                   </p>
                   <div className='flex flex-row items-center gap-2'>
-                    <button className='w-[300px] h-[45px] bg-black text-white'>Agree and Subscribe</button>
+                    <Link href='/dashboard/home' className='w-[300px] h-[45px] bg-black text-white'>Agree and Subscribe</Link>
                     <button className='w-[120px] h-[45px]'>Go back</button>
                   </div>
                 </div>

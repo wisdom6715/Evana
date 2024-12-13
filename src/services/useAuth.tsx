@@ -2,6 +2,7 @@
 import { useState} from 'react';
 import {  auth } from '@/lib/firebaseConfig'
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
 
 type UserInfo = {
     email?: string;
@@ -13,6 +14,7 @@ const useLogIn = () => {
       email: "",
       password: ""
     });
+    const router = useRouter();
     
     /// sign in and sign up function
     const handleAuth = async () => {
@@ -21,6 +23,7 @@ const useLogIn = () => {
       try {
         await signInWithEmailAndPassword(auth, userInfo.email, userInfo.password)
         console.log("account exists, logging in");
+        router.push('/welcome')
         return true;
       } catch (err: any) {
         if(err.code == 'auth/invalid-credential') {
@@ -28,6 +31,7 @@ const useLogIn = () => {
             try{
                 await createUserWithEmailAndPassword(auth, userInfo.email, userInfo.password)
                 console.log("account created successfully!");
+                router.push('/welcome')
                 return true;
             }catch(err: any) {
                 console.log("Error creating account: ", err.message);

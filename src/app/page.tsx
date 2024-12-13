@@ -2,11 +2,11 @@
 "use client"
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import AuthFlow from "./auth/AuthFlow";
-import WelcomePage from "./auth/WelcomePage";
-import PricingPage from "./payment/PrincingPage";
-import PaymentPage from "./payment/PaymentPage";
-import HomeIndex from './dashboard/home/HomeIndex'
+import AuthFlow from "./auth/page";
+import WelcomePage from "./welcome/page";
+import PricingPage from "./pricing/page";
+import PaymentPage from "./payment/page";
+import HomeIndex from './dashboard/home/page'
 export default function Home() {
   const router = useRouter();
   return (
@@ -16,11 +16,11 @@ export default function Home() {
     //   </main>
     // </div>
     <div>
-      {/* <AuthFlow /> */}
+      <AuthFlow />
       {/* <WelcomePage /> */}
       {/* <PricingPage /> */}
       {/* <PaymentPage /> */}
-      <HomeIndex />
+      {/* <HomeIndex /> */}
     </div>
   );
 }

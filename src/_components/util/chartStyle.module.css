@@ -1,0 +1,17 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+
+/* body {
+  font-family: Roboto, sans-serif;
+} */
+
+.chartContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Adjust to your layout needs */
+    height: 100%; /* Match the chart height */
+    background-color: #f0f0f0; /* Set background color if needed */
+    border: 1px solid #ddd; /* Optional border for styling */
+    overflow: hidden; /* Ensure content doesn't overflow */
+  }
+  

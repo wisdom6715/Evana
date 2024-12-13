@@ -1,11 +1,12 @@
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { OAuthProvider } from "firebase/auth";
+import { useRouter } from "next/navigation";
 
 
 const useThirdpartyAuth = () => {
     const providerGoogle = new GoogleAuthProvider();
     const providerMicrosoft = new OAuthProvider('microsoft.com');
-    
+    const router = useRouter()
     const auth = getAuth();
 
     /// Google Authentication
@@ -18,7 +19,8 @@ const useThirdpartyAuth = () => {
             
             // The signed-in user info.
             const user = result.user;
-    
+            router.push('/welcome')
+            // Additional user info provided by the sign-in provider.
             // IdP data available using getAdditionalUserInfo(result)
             // You can add any additional info handling here
             console.log(user, token);
@@ -47,6 +49,7 @@ const useThirdpartyAuth = () => {
             const credential = OAuthProvider.credentialFromResult(result);
             const accessToken = credential?.accessToken;
             const idToken = credential?.idToken;
+            router.push('/welcome')
         }catch (err) {
             console.error(err);
             
