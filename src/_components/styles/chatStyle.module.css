@@ -22,6 +22,36 @@
     background-color: rgb(255, 255, 255);
     display: flex;
 }
+.chatContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between messages */
+    margin: 20px 0;
+    width: 100%; /* Full width of the container */
+}
+
+.message {
+    max-width: 70%; /* Restrict the width of messages */
+    padding: 10px 15px;
+    border-radius: 15px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.botMessage {
+    align-self: flex-start; /* Align to the left */
+    background-color: #f1f1f1; /* Light gray background */
+    color: #333; /* Text color */
+    border: 1px solid #ddd;
+}
+
+.userMessage {
+    align-self: flex-end; /* Align to the right */
+    background-color: #007bff; /* Blue background */
+    color: #fff; /* White text */
+    border: 1px solid #0056b3;
+}
+
 .chatbotImageContainer{
     width: 5rem;
     height: 5rem;
@@ -52,6 +82,27 @@
 .chatContainer{
     display: grid;
     grid-template-rows: 92% 8%;
+    background-color: white !important;
+    overflow-y: scroll;
+}
+.mainInputContainer{
+    display: flex;
+    flex-direction: row;
+    background-color: blue;
+    height: 4rem;
+}
+.queryFormContainer{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:1rem;
+}
+.messagesContainer{
+    height: 70%;
+    overflow-y: scroll;
+    background-color: white;
+
 }
 .inputContainer{
     display: flex;
@@ -62,7 +113,7 @@
     background-color: rgb(214, 214, 214);
 }
 .input{
-    width: 80%;
+    width: 90%;
     background-color: rgb(214, 214, 214);
     padding-left: .5rem;
 }
