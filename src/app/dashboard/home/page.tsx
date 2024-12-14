@@ -12,7 +12,7 @@ const index = () => {
         <NagivationComponent />
       </div>
       <div className='flex flex-col w-[100%] items-center'>
-        <div className='grid grid-rows-[20%_40%_30%] w-[90%] h-[100%] gap-[5%]'>
+        <div className='grid grid-rows-[25%_40%_25%] w-[90%] h-[100%] gap-[5%]'>
           <Intro />
           <Milestones />
           <Update />

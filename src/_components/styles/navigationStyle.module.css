@@ -1,3 +1,8 @@
+.logoText{
+    padding-top: 1rem;
+    font-size: 30px;
+    color: black;
+}
 .topContainer{
     width: 100%;
     height: 100%;
@@ -23,6 +28,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 15px;
 }
 .upgradeCAll{
     height: 10rem;
