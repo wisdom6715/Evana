@@ -7,11 +7,8 @@ import useCustomerServiceAI from '@/services/useCustomerServiceAI'
 
 const ChatComponent = () => {
     const { 
-        status, 
-        qaStatus, 
         messages, 
         emailPromptVisible, 
-        currentQuery,
         handleFileUpload, 
         handleQuerySubmit, 
         handleEmailSubmit, 

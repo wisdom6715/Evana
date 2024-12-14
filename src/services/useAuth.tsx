@@ -10,7 +10,7 @@ type UserInfo = {
 };
 const useLogIn = () => {
     const [isLoading, setLoading] = useState(false)
-    const [userInfo, setUserInfo] = useState({
+    const [userInfo, setUserInfo] = useState<UserInfo>({
       email: "",
       password: ""
     });
