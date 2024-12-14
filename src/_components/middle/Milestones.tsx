@@ -2,7 +2,7 @@ import React from 'react'
 import styles from '@/_components/styles/middleStyle.module.css'
 import metricsGraph from '@/app/assets/images/metricsGraph.jpeg'
 import Image from 'next/image'
-import Chart from '@/_components/util/Chart'
+// import Chart from '@/_components/util/Chart'
 import DateComponent from '@/_components/util/DateComponent'
 const Milestones = () => {
   return (
@@ -12,7 +12,7 @@ const Milestones = () => {
             <DateComponent />
         </div>
         <div className={styles.graphImageContainere}>
-          <Chart />
+          {/* <Chart /> */}
         </div>
     </div>
   )
