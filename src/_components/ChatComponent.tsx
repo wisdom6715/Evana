@@ -14,12 +14,19 @@ const chatComponent = () => {
                         </svg>
                     </div>
                     <div className={styles.icon}></div>
-                    <div className={styles.icon}></div>
+                    <div className={styles.icon}>
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"  width="24" height="24"><g>
+                        <circle cx="256" cy="53.333" r="53.333"/><circle cx="256" cy="256" r="53.333"/><circle cx="256" cy="458.667" r="53.333"/>
+                    </g></svg>
+                    </div>
                 </div>
             </div>
 
             <div className={styles.chatContainer}>
-                <p className='text-center'>Your personal assistant, ready to help with frequently asked questions.</p>
+                <div className={styles.chatArea}>
+                    <p className='text-center'>Your personal assistant, ready to help with frequently asked questions.</p>
+
+                </div>
                 <div className={styles.inputContainer}>
                     <input type="text"  placeholder='Enter a message' className={styles.input}/>
                     <div>
