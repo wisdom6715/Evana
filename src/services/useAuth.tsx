@@ -1,62 +1,72 @@
-'use client'
-import { useState} from 'react';
-import {  auth } from '@/lib/firebaseConfig'
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+'use client';
+import { useState } from 'react';
+import { auth } from '@/lib/firebaseConfig';
+import { 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword, 
+  AuthError 
+} from 'firebase/auth';
+import { useRouter } from 'next/navigation';
 
 type UserInfo = {
-    email?: string;
-    password?: any;
+  email: string;
+  password: string;
 };
+
 const useLogIn = () => {
-    const [isLoading, setLoading] = useState(false)
-    const [userInfo, setUserInfo] = useState({
-      email: "",
-      password: ""
-    });
-    
-    /// sign in and sign up function
-    const handleAuth = async () => {
-      console.log('ceating account');
-      setLoading(true)
-      try {
-        await signInWithEmailAndPassword(auth, userInfo.email, userInfo.password)
-        console.log("account exists, logging in");
-        return true;
-      } catch (err: any) {
-        if(err.code == 'auth/invalid-credential') {
-            console.log('account does not exist, creating account');
-            try{
-                await createUserWithEmailAndPassword(auth, userInfo.email, userInfo.password)
-                console.log("account created successfully!");
-                return true;
-            }catch(err: any) {
-                console.log("Error creating account: ", err.message);
-                return false;
-            }
-            
+  const router = useRouter();
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [userInfo, setUserInfo] = useState<UserInfo>({
+    email: "",
+    password: "",
+  });
+
+  // Sign in and sign up function
+  const handleAuth = async (): Promise<boolean> => {
+    console.log('Creating account');
+    setLoading(true);
+    try {
+      await signInWithEmailAndPassword(auth, userInfo.email, userInfo.password);
+      console.log("Account exists, logging in");
+      router.replace('/welcome');
+      return true;
+    } catch (err) {
+      const error = err as AuthError;
+      if (error.code === 'auth/invalid-credential') {
+        console.log('Account does not exist, creating account');
+        try {
+          await createUserWithEmailAndPassword(auth, userInfo.email, userInfo.password);
+          console.log("Account created successfully!");
+          router.replace('/welcome');
+          return true;
+        } catch (createErr) {
+          const createError = createErr as AuthError;
+          console.log("Error creating account: ", createError.message);
+          return false;
         }
-        console.log(err.message);
-        
-        alert(err.message)
       }
-      finally {
-        setLoading(false)
-      }
+      console.log(error.message);
+      alert(error.message);
+      return false;
+    } finally {
+      setLoading(false);
     }
-  
+  };
+
   // Update user info state
-  const handleInputChange = (field: keyof UserInfo, value:any) => {
-    setUserInfo(prevState => ({
+  const handleInputChange = (field: keyof UserInfo, value: string) => {
+    setUserInfo((prevState) => ({
       ...prevState,
       [field]: value,
     }));
   };
-  return{
+
+  return {
     isLoading,
     userInfo,
     handleAuth,
     handleInputChange,
-  }
-}
+  };
+};
 
-export default useLogIn
+export default useLogIn;

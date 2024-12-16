@@ -6,6 +6,10 @@
     align-items: center;
     gap: 40px;
 }
+.logoContainer{
+    font-size: 30px;
+    margin-top: 1rem;
+}
 .navIconSubContainers{
     display: flex;
     width: 100%;
@@ -23,15 +27,21 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 10px;
 }
 .upgradeCAll{
-    height: 10rem;
-    width: 10rem;
-    background-color: rgb(175, 243, 175);
+    height: 23%;
+    width: 100%;
+    background-color: rgb(236, 236, 236);
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+    justify-content: center;
+    gap: 25px;
+    font-size: 15px;
+    text-align: center;
+    padding: 1rem;
 }
 .upgradeButton{
     width: 70%;

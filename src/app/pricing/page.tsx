@@ -1,6 +1,17 @@
+'use client'
 import React from 'react'
-
+import { useRouter } from 'next/navigation'
 const PrincingPage = () => {
+    const router = useRouter()
+    const handlePricing = (plan: string) =>{
+       console.log(`${plan} selected`);
+       if(plan === 'basicPlan'){
+        router.push('/payment')
+       }
+       if(plan === 'standardPlan'){
+        router.push('/')
+       }
+    }
   return (
     <div className='flex flex-col justify-center w-[100%] h-[100vh] items-center'>
         <div className='position: absolute top-5 left-5 '>
@@ -34,7 +45,7 @@ const PrincingPage = () => {
                             <p>Voice Communication</p>
                         </div>
                         <div className='flex items-center justify-center'>
-                            <button className='bg-black w-[270px] h-[38px] text-white'>Choose Basic Plan</button>
+                            <button className='bg-black w-[270px] h-[38px] text-white'  onClick={()=> handlePricing('basicPlan')}>Choose Basic Plan</button>
                         </div>
                     </div>
                 </div>
@@ -60,7 +71,7 @@ const PrincingPage = () => {
                             <p>Voice Communication</p>
                         </div>
                         <div className='flex items-center justify-center'>
-                            <button className='bg-black w-[270px] h-[38px] text-white'>Choose Standard Plan</button>
+                            <button className='bg-black w-[270px] h-[38px] text-white' onClick={() => handlePricing('standardPlan')}>Choose Standard Plan</button>
                         </div>
                     </div>
                 </div>

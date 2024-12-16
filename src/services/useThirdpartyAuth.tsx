@@ -1,8 +1,14 @@
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { OAuthProvider } from "firebase/auth";
-
+import { 
+    getAuth, 
+    signInWithPopup, 
+    GoogleAuthProvider, 
+    OAuthProvider, 
+    AuthError 
+} from "firebase/auth";
+import { useRouter } from "next/navigation";
 
 const useThirdpartyAuth = () => {
+    const router = useRouter();
     const providerGoogle = new GoogleAuthProvider();
     const providerMicrosoft = new OAuthProvider('microsoft.com');
     
@@ -11,8 +17,7 @@ const useThirdpartyAuth = () => {
     /// Google Authentication
     const handleGoogleSignIn = async () => {
         try {
-            const result = await signInWithPopup(auth, new GoogleAuthProvider());
-            
+            const result = await signInWithPopup(auth, providerGoogle);
             const credential = GoogleAuthProvider.credentialFromResult(result);
             const token = credential?.accessToken;
             
@@ -21,38 +26,53 @@ const useThirdpartyAuth = () => {
     
             // IdP data available using getAdditionalUserInfo(result)
             // You can add any additional info handling here
+            router.replace('/welcome')
             console.log(user, token);
-        } catch (error: any) {
+        } catch (error) {
+            // Type assertion to handle Firebase authentication errors
+            const authError = error as AuthError;
+            
             // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            
-            // The email of the user's account used.
-            const email = error.customData.email;
-            
-            // The AuthCredential type that was used.
-            const credential = GoogleAuthProvider.credentialFromError(error);
+            const errorCode = authError.code;
+            const errorMessage = authError.message;
             
             // You can handle or log the error details as needed
-            console.error(`Error: ${errorCode} - ${errorMessage}`);
-            console.error(`User email: ${email}`);
+            console.error(`Google Sign-In Error: ${errorCode} - ${errorMessage}`);
+            
+            // Optionally, you can add more specific error handling
+            if (errorCode === 'auth/popup-closed-by-user') {
+                console.log('Sign-in popup was closed by the user');
+            }
         }
     };
 
     /// Microsoft Authentication Provider
-    const handleMicrosoftSignin = async () =>{
-        try{
-            const result = await signInWithPopup(auth, providerMicrosoft)
+    const handleMicrosoftSignin = async () => {
+        try {
+            const result = await signInWithPopup(auth, providerMicrosoft);
             // User is signed in.
             const credential = OAuthProvider.credentialFromResult(result);
             const accessToken = credential?.accessToken;
             const idToken = credential?.idToken;
-        }catch (err) {
-            console.error(err);
-            
-        }
 
-    }
+            // If necessary, use these tokens for additional handling or logging
+            console.log("Microsoft Access Token:", accessToken);
+            console.log("Microsoft ID Token:", idToken);
+
+            router.replace('/welcome');
+        } catch (error) {
+            // Type assertion to handle Firebase authentication errors
+            const authError = error as AuthError;
+            
+            console.error(`Microsoft Sign-In Error: ${authError.code} - ${authError.message}`);
+            
+            // Optionally, you can add more specific error handling
+            if (authError.code === 'auth/popup-closed-by-user') {
+                console.log('Sign-in popup was closed by the user');
+            }
+        }
+    };
+
     // returns from the custom hook function
     return {
         handleGoogleSignIn,
@@ -60,4 +80,4 @@ const useThirdpartyAuth = () => {
     }
 }
 
-export default useThirdpartyAuth
+export default useThirdpartyAuth;

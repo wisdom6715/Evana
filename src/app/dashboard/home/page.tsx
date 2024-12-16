@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import NagivationComponent from '@/_components/NagivationComponent'
 import ChatComponent from '@/_components/ChatComponent'
@@ -12,7 +13,7 @@ const index = () => {
         <NagivationComponent />
       </div>
       <div className='flex flex-col w-[100%] items-center'>
-        <div className='grid grid-rows-[20%_50%_20%] w-[90%] h-[100%] gap-[5%]'>
+        <div className='grid grid-rows-[20%_42%_25%] w-[90%] h-[100%] gap-[6%]'>
           <Intro />
           <Milestones />
           <Update />
