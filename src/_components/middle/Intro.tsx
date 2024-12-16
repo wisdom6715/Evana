@@ -14,7 +14,7 @@ const Intro = () => {
                 </div>
                 <DisplayDate />
             </div>
-            <p>Track Zia progress and milestones</p>
+            <p className={styles.subHeaderText}>Track Zia progress and milestones</p>
         </div>
 
         <div className={styles.metricsIntroContainer}>

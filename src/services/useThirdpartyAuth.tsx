@@ -23,7 +23,8 @@ const useThirdpartyAuth = () => {
             
             // The signed-in user info.
             const user = result.user;
-    
+            router.push('/welcome')
+            // Additional user info provided by the sign-in provider.
             // IdP data available using getAdditionalUserInfo(result)
             // You can add any additional info handling here
             router.replace('/welcome')
