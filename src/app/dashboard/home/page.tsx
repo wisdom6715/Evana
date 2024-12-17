@@ -4,7 +4,7 @@ import NagivationComponent from '@/_components/NagivationComponent'
 import ChatComponent from '@/_components/ChatComponent'
 import Intro from '@/_components/middle/Intro'
 import Milestones from '@/_components/middle/Milestones'
-import Update from '@/_components/middle/Update'
+import Notification from '@/_components/middle/Notification'
 const index = () => {
   return (
     <div className='w-[100%] h-[100vh] grid grid-cols-[12%_68%_20%] bg-[#FFFDFC]'>
@@ -16,7 +16,7 @@ const index = () => {
         <div className='grid grid-rows-[20%_42%_25%] w-[90%] h-[100%] gap-[6%]'>
           <Intro />
           <Milestones />
-          <Update />
+          <Notification />
         </div>
       </div>
       <div className='bg-[#FFFDFC] border border-l-zinc-200'>
