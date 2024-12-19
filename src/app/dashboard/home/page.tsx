@@ -21,6 +21,7 @@ const index = () => {
       </div>
       <div className='bg-[#FFFDFC] border border-l-zinc-200'>
         <ChatComponent />
+
       </div>
     </div>
   )
