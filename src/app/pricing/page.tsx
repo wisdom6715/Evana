@@ -13,7 +13,8 @@ const PrincingPage = () => {
        }
     }
   return (
-    <div className='flex flex-col justify-center w-[100%] h-[100vh] items-center'>
+    <>
+        <div className='flex flex-col justify-center w-[100%] h-[100vh] items-center'>
         <div className='position: absolute top-5 left-5 '>
             <h1 className='text-bold text-[30px]' >KustomAI</h1>
         </div>
@@ -25,6 +26,7 @@ const PrincingPage = () => {
                 </p>
             </div>
             <div className=' flex flex-row items-center gap-20'>
+                {/* Including basic plan */}
                 <div className='flex flex-col gap-[28px] border border-[#D9D9D9] w-[351px] h-[498px] p-5 '>
                     <div className='flex flex-col gap-7'>
                         <div className='flex flex-col items-center'>
@@ -49,6 +51,8 @@ const PrincingPage = () => {
                         </div>
                     </div>
                 </div>
+
+                {/* Including standard plan */}
 
                 <div className=' flex flex-col gap-[34px] border border-[#D9D9D9] w-[351px] h-[498px] p-5 '>
                     <div className='flex flex-col gap-7'>
@@ -75,9 +79,38 @@ const PrincingPage = () => {
                         </div>
                     </div>
                 </div>
-            </div>       
+
+                {/* Including enterprise plan */}
+
+                <div className=' flex flex-col gap-[34px] border border-[#D9D9D9] w-[351px] h-[498px] p-5 '>
+                    <div className='flex flex-col gap-7'>
+                        <div className='flex flex-col items-center'>
+                            <h1 className='text-bold text-[30px]'>Enterprise</h1>
+                        </div>
+                        <div className='gap-5'>
+                            <h2 className='text-bold text-[15px] text-lg'>$300</h2>
+                            <p>
+                                Enterprise plan offers
+                            </p>
+                        </div>
+                    </div>
+                    <div className='flex flex-col gap-[65px]'>
+                        <div className='flex flex-col gap-[15px]'>
+                            <p>Unpmited text analysis</p>
+                            <p>10,000 text samples per month</p>
+                            <p>No AI training or customization</p>
+                            <p>Voice Communication</p>
+                            <p>Voice Communication</p>
+                        </div>
+                        <div className='flex items-center justify-center'>
+                            <button className='bg-black w-[270px] h-[38px] text-white' onClick={() => handlePricing('standardPlan')}>Choose Standard Plan</button>
+                        </div>
+                    </div>
+                </div>
+                </div>       
+            </div>
         </div>
-    </div>
+    </>
   )
 }
 
