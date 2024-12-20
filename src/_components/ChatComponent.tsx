@@ -5,6 +5,7 @@ const chatComponent = () => {
   return (
     <>
         <div className={styles.generalContainer}>
+            {/* chatbot custom container wit styles */}
             <div className={styles.botContainer}>
                 <div className={styles.botImage}></div>
                 <div className={styles.iconsContainer}>
@@ -22,6 +23,7 @@ const chatComponent = () => {
                 </div>
             </div>
 
+            {/* Chat container with the chat to check performance */}
             <div className={styles.chatContainer}>
                 <div className={styles.chatArea}>
                     <p className='text-center'>Your personal assistant, ready to help with frequently asked questions.</p>

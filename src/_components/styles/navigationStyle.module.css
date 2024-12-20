@@ -1,8 +1,3 @@
-.logoText{
-    padding-top: 1rem;
-    font-size: 30px;
-    color: black;
-}
 .topContainer{
     width: 100%;
     height: 100%;
@@ -21,6 +16,7 @@
     height: 100%;
     flex-direction: column;
     gap: 20rem;
+    flex-wrap: wrap;
     /* align-items: center; */
 }
 .navIcons{
