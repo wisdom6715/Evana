@@ -1,4 +1,6 @@
 import React from 'react'
+import Profile from '@/design-system/form/Profile'
+import Customize from '@/design-system/form/Customize'
 
 const index = () => {
   return (
@@ -19,31 +21,7 @@ const index = () => {
           </div>
 
           <div style={{backgroundColor: 'white', width: '100%'}}>
-           <form action="" style={{display: 'flex', flexDirection: 'column', gap: '2rem', padding: '2rem'}}>
-
-              <div>
-                <p>Company's Name</p>
-                <input type="text" style={{backgroundColor: 'grey', width: '70%', height: '2.5rem'}}/>
-              </div>
-
-              <div>
-                <p>Company's Email</p>
-                <input type="text" style={{backgroundColor: 'grey', width: '70%', height: '2.5rem'}}/>
-              </div>
-
-              <div>
-                <p>Website url</p>
-                <input type="text" style={{backgroundColor: 'grey', width: '70%', height: '2.5rem'}}/>
-              </div>
-
-              <div>
-                <p>password</p>
-                <input type="text" style={{backgroundColor: 'grey', width: '70%', height: '2.5rem'}}/>
-              </div>
-              <div>
-                <button style={{backgroundColor: 'black', color: 'white', padding: '.7rem'}}>Save and Continue</button>
-              </div>
-           </form>
+            <Profile />
           </div>
         </div>
         
