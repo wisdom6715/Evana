@@ -7,21 +7,25 @@ import Milestones from '@/_components/middle/Milestones'
 import Notification from '@/_components/middle/Notification'
 const index = () => {
   return (
-    <div className='w-[100%] h-[100vh] grid grid-cols-[12%_68%_20%] bg-[#FFFDFC]'>
+    <div className='w-[100%] h-[100vh] grid grid-cols-[10%_90%] bg-[#FFFDFC]'>
       {/* Navigation is component */}
       <div className='bg-[#FFFDFC] border border-l-zinc-200 grid grid-rows-[90%_10%] pl-4 pr-4'>
         <NagivationComponent />
       </div>
-      <div className='flex flex-col w-[100%] items-center'>
-        <div className='grid grid-rows-[20%_42%_25%] w-[90%] h-[100%] gap-[6%]'>
-          <Intro />
-          <Milestones />
-          <Notification />
+      <div className='w-[100%] h-[100vh] grid grid-cols-[80%_20%] bg-[#fffff]'> 
+        <div className='flex flex-col w-[100%] items-center'>
+          <div className='grid grid-rows-[20%_42%_29%] w-[90%] h-[100%] gap-[4%]'>
+            <Intro />
+            <Milestones />
+            <Notification />
+          </div>
         </div>
-      </div>
-      <div className='bg-[#FFFDFC] border border-l-zinc-200'>
-        <ChatComponent />
 
+        <div className='bg-[#FFFDFC] border border-l-zinc-200'>
+          <ChatComponent />
+
+        </div>
+        
       </div>
     </div>
   )

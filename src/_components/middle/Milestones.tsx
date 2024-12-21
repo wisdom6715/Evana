@@ -5,11 +5,11 @@ const Milestones = () => {
   return (
     <div className={styles.mainGraphContainer}>
         <div className={styles.introTextContainer}>
-            <p>Performance</p>
+            <p className={styles.chartHeader}>Performance</p>
             <DisplayDate />
             
         </div>
-        <div className={styles.graphImageContainere}>
+        <div className={styles.graphContainer}>
           {/* Metrics Graph container */}
         </div>
     </div>

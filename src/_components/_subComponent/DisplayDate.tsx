@@ -13,7 +13,7 @@ const DisplayDate: React.FC = () => {
   });
 
   return (
-    <div style={{ fontSize: "1rem",  color: "#333" }}>
+    <div style={{ fontSize: "1rem",  color: "black", fontWeight: 400 }}>
       {formattedDate}
     </div>
   );

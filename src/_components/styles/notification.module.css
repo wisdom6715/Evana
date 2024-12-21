@@ -1,0 +1,43 @@
+/* h-[100%] text-white */
+.mainContainer{
+    height: 100%;
+    color: black
+}
+.contentContainer{
+    /* flex flex-col h-[100%] gap-3 */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: .7rem;
+}
+.updateItemsContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    overflow-y: scroll;
+    margin-bottom: 1rem;
+}
+.imageIcon{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgb(114, 114, 114);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* flex flex-row items-center gap-1 bg-gray-300 */
+.headerText{
+    color: black;
+    font-size: 18px;
+    font-weight: 500;
+}
+.notificationElement{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .5rem;
+    background-color: rgb(235, 235, 235);
+    cursor: pointer;
+}
