@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import usePaymant from '@/services/usePaymant'
 import masterCard from '@/app/assets/images/mastercard.jpeg'
 import visaCard from '@/app/assets/images/visacard.jpeg'
 import applePay from '@/app/assets/images/ApplePay.jpeg'
@@ -17,38 +18,7 @@ const DynamicPaystackButton = dynamic(() =>
 
 const PaymentPage: React.FC = () => {
   const router = useRouter()
-  const [isClient, setIsClient] = useState(false)
-
-  // Ensure component only renders on client side
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
-
-  const publicKey = 'pk_live_85b70a04648ec72c551f83d8a21d1d93019dfb14'
-  const amount = 5000 * 100; // Amount in kobo
-  const email = "customer@example.com";
-  const name = "wisdom ajibola";
-
-  const componentProps = {
-    email,
-    amount,
-    metadata: {
-      name,
-      custom_fields: [
-        {
-          display_name: "Phone Number",
-          variable_name: "phone_number",
-          value: "+2348123456789", // Replace with actual phone number
-        },
-      ],
-    },
-    publicKey,
-    text: "Pay Now",
-    onSuccess: () =>
-      alert("Thanks for donating to us! we do not take it for granted!!"),
-    onClose: () => alert("Wait! You need to donate, don't go!!!!"),
-  }
-
+  const {isClient, componentProps} = usePaymant();
   return (
     <div className='w-full bg-yellow-100 grid grid-rows-[5%_92%_3%] h-screen'>
       <div className='bg-white h-full border-b border-gray-200'>
@@ -85,13 +55,12 @@ const PaymentPage: React.FC = () => {
                 <div className='flex flex-col gap-4'>
                   {/* Dynamically render Paystack button only on client side */}
                   {isClient && (
-                    <DynamicPaystackButton 
+                    <DynamicPaystackButton
                       className='w-[474px] h-[45px] border border-gray-300' 
                       {...componentProps} 
                       text='Debit/Credit'
                     />
                   )}
-                  <button className='w-[474px] h-[45px] border border-gray-300'>Gpay</button>
                   <button className='w-[474px] h-[45px] border border-gray-300'>Apple pay</button>
                 </div>
 

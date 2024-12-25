@@ -16,9 +16,8 @@ const pricingTiers: PricingTier[] = [
     id: 'basicPlan',
     name: 'Basic',
     price: 29.99,
-    description: 'Basic plan offers free access to all features.',
+    description: 'Basic plan offers free access to all features:',
     features: [
-      'Unlimited text analysis', 
       'unlimited usage',
       'AI training or customization',
       'Audio chat',
@@ -34,8 +33,8 @@ const pricingTiers: PricingTier[] = [
     description: 'Standard plan offers basic features plus:',
     features: [
       'Realtime chat support',
-      'image/document upload on the real time chat feature',
       '3 desks for real time chat',
+      'Conversation categorization',
       'image/document upload on the real time chat feature'
     ],
     buttonText: 'Choose Standard Plan'
@@ -48,7 +47,6 @@ const pricingTiers: PricingTier[] = [
     features: [
       'unlimited desks for realtime chat support',
       'Access to upcoming AI products',
-      'Conversation categorization',
       'Multilingul support',
       'Message broadCasting (in-app, email, widget)'
     ],
