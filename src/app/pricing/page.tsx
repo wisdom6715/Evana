@@ -15,41 +15,42 @@ const pricingTiers: PricingTier[] = [
   {
     id: 'basicPlan',
     name: 'Basic',
-    price: 100,
+    price: 29.99,
     description: 'Basic plan offers free access to all features.',
     features: [
-      'Unlimited text analysis',
-      '10,000 text samples per month',
-      'No AI training or customization',
-      'Voice Communication'
+      'Unlimited text analysis', 
+      'unlimited usage',
+      'AI training or customization',
+      'Audio chat',
+      'no code integrations',
+      'email support',
     ],
     buttonText: 'Choose Basic Plan'
   },
   {
     id: 'standardPlan',
     name: 'Standard',
-    price: 300,
-    description: 'Standard plan offers',
+    price: 99.99,
+    description: 'Standard plan offers basic features plus:',
     features: [
-      'Unlimited text analysis',
-      '10,000 text samples per month',
-      'No AI training or customization',
-      'Voice Communication',
-      'Voice Communication'
+      'Realtime chat support',
+      'image/document upload on the real time chat feature',
+      '3 desks for real time chat',
+      'image/document upload on the real time chat feature'
     ],
     buttonText: 'Choose Standard Plan'
   },
   {
     id: 'enterprisePlan',
     name: 'Enterprise',
-    price: 300,
-    description: 'Enterprise plan offers',
+    price: 199.99,
+    description: 'Enterprise plan offers all features plus:',
     features: [
-      'Unlimited text analysis',
-      '10,000 text samples per month',
-      'No AI training or customization',
-      'Voice Communication',
-      'Voice Communication'
+      'unlimited desks for realtime chat support',
+      'Access to upcoming AI products',
+      'Conversation categorization',
+      'Multilingul support',
+      'Message broadCasting (in-app, email, widget)'
     ],
     buttonText: 'Choose Enterprise Plan'
   }
