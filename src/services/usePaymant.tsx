@@ -1,77 +1,104 @@
-'use client'
-import { useState, useEffect } from 'react'
-import { onAuthStateChanged } from 'firebase/auth'
-import { auth } from '@/lib/firebaseConfig'
+'use client';
+import { useState, useEffect } from 'react';
+import { getAuth} from 'firebase/auth';
+import { useRouter } from 'next/router';
+import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 
-interface PaymentProps {
-  email: string
-  amount: number
-  metadata: {
-    name: string
-    custom_fields: Array<{
-      display_name: string
-      variable_name: string
-      value: string
-    }>
+interface UserDetails {
+  email: string;
+  name: string;
+  phoneNumber: string;
+}
+
+declare global {
+  interface Window {
+    PaystackPop: any;
   }
-  publicKey: string
-  text: string
-  onSuccess: () => void
-  onClose: () => void
 }
 
 const usePayment = () => {
-  const [isClient, setIsClient] = useState(false)
-  const [user, setUser] = useState<any>(null)
+  const [isClient, setIsClient] = useState<boolean>(false);
+  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
+  const auth = getAuth();
+  const db = getFirestore(); // Initialize Firestore
+  const user = auth.currentUser;
+  const router = useRouter();
 
   useEffect(() => {
-    // Set to true after the component mounts to avoid SSR issues
-    setIsClient(true)
+    setIsClient(true);
 
-    // Listen to auth state changes and update the user
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user)
-    })
+    if (user) {
+      const fetchUserDetails = async () => {
+        const userDoc = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userDoc);
+        if (userSnap.exists()) {
+          setUserDetails(userSnap.data() as UserDetails);
+        }
+        console.log('user detail updated');
+        
+      };
+      fetchUserDetails();
+    }
+  }, [user, db]);
 
-    // Cleanup the listener on component unmount
-    return () => unsubscribe()
-  }, [])
-  /// testing public key
-  const publicKey = 'pk_test_0f6dbe5cfc910acdd8e996e823a74fefc66b2d79'
-  // Adjust the amount according to the user's plan or bill type. For simplicity, we're assuming a fixed amount.
-  /// configure plan and bill type f each user
-  const amount = 5000 * 100 // Amount in kobo
+  const publicKey = 'pk_live_85b70a04648ec72c551f83d8a21d1d93019dfb14';
+  const amount = 5000 * 100; // Amount in kobo
 
-  // Wait until the user is available before rendering componentProps
-  if (!user) {
-    return { isClient, componentProps: null }
-  }
+  const handlePaymentSuccess = async (response: any) => {
+    alert('Payment was successful! Thank you for your subscription.');
 
-  const componentProps: PaymentProps = {
-    email: user?.email ?? '',
+    const expiryDate = new Date();
+    expiryDate.setDate(expiryDate.getDate() + 30);
+
+    if (user) {
+      const userDoc = doc(db, "users", user.uid);
+      await setDoc(userDoc, {
+        id: user.uid,
+        status: "paid",
+        expiryDate: expiryDate.toISOString(),
+      }, { merge: true });
+    }
+
+    router.push('/dashboard');
+  };
+
+  const handlePaymentClose = () => {
+    alert('Payment was cancelled, please try again.');
+  };
+
+  const componentProps = {
+    email: userDetails?.email || 'customer@example.com',
     amount,
     metadata: {
-      name: user?.displayName ?? '',
+      name: userDetails?.name || 'John Doe',
       custom_fields: [
         {
-          display_name: user?.displayName ?? '',
-          variable_name: user?.uid ?? '',
-          value: user?.phoneNumber ?? '', 
+          display_name: "Phone Number",
+          variable_name: "phone_number",
+          value: userDetails?.phoneNumber || '+2348123456789',
         },
       ],
     },
     publicKey,
     text: "Pay Now",
-    onSuccess: () =>
-      window.location.href = '/dashboard/settings',
-      // alert("Thanks for donating to us! We do not take it for granted!!"),
-    onClose: () => alert("Wait! You need to donate, don't go!!!!"),
-  }
+    onSuccess: handlePaymentSuccess,
+    onClose: handlePaymentClose,
+  };
+
+  const loadPaystack = () => {
+    if (window.PaystackPop) {
+      const handler = window.PaystackPop.setup(componentProps);
+      handler.openIframe();
+    } else {
+      alert('Paystack failed to load, please try again.');
+    }
+  };
 
   return {
+    isClient,
+    loadPaystack,
     componentProps,
-    isClient
-  }
-}
+  };
+};
 
-export default usePayment
+export default usePayment;
