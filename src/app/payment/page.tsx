@@ -1,24 +1,38 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+
 import usePaymant from '@/services/usePaymant'
 import masterCard from '@/app/assets/images/mastercard.jpeg'
 import visaCard from '@/app/assets/images/visacard.jpeg'
 import applePay from '@/app/assets/images/ApplePay.jpeg'
 import googlePay from '@/app/assets/images/gPay.jpeg'
 import secureIcon from '@/app/assets/images/secureIcon.png'
-
+import { useState, useEffect } from 'react'
 // Dynamically import PaystackButton to prevent SSR issues
 const DynamicPaystackButton = dynamic(() => 
   import('react-paystack').then((mod) => mod.PaystackButton), 
   { ssr: false }
 );
 
+
+
 const PaymentPage: React.FC = () => {
   const router = useRouter()
   const {isClient, componentProps} = usePaymant();
+  const searchParams = useSearchParams();
+  const [queryParams, setQueryParams] = useState<{ plan?: string; billing?: string }>({});
+  
+  useEffect(() => {
+    const plan = searchParams.get('plan');
+    const billing = searchParams.get('billing');
+    setQueryParams({ 
+      plan: plan || '', 
+      billing: billing || '' 
+    });
+  }, [searchParams]);
   return (
     <div className='w-full bg-yellow-100 grid grid-rows-[5%_92%_3%] h-screen'>
       <div className='bg-white h-full border-b border-gray-200'>
@@ -102,8 +116,8 @@ const PaymentPage: React.FC = () => {
                 <div className='flex flex-col gap-1'>
                   <h1>Subscription</h1>
                   <div className='flex flex-row justify-between'>
-                    <p>Annually, monthly billed</p>
-                    <p>$20.00</p>
+                    <p>{queryParams.plan} {queryParams.billing} plan</p>
+                    <p>${queryParams.billing}</p>
                   </div>
                 </div>
               </div>

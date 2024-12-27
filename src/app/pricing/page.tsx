@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useBillingContext } from '@/services/useBillingContext'
 
 interface PricingTier {
   id: string;
@@ -34,6 +35,7 @@ const pricingTiers: PricingTier[] = [
     features: [
       'Realtime chat support',
       '3 desks for real time chat',
+      'Voice Realtime Conversation',
       'Conversation categorization',
       'image/document upload on the real time chat feature'
     ],
