@@ -1,14 +1,23 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { getAuth, User } from 'firebase/auth';
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
-import { useRouter } from 'next/navigation';
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import firebaseApp from '@/lib/firebaseConfig';
+import { useRouter, useSearchParams } from 'next/navigation'
 
 interface UserDetails {
   email: string;
   name: string;
   phoneNumber: string;
+}
+
+interface PaymentDetails {
+  planType: string;
+  billingCycle: string;
+  amount: number;
+  status: string;
+  paymentDate: any;
+  expiryDate: string;
 }
 
 declare global {
@@ -39,50 +48,109 @@ interface PaystackConfig {
 const usePayment = () => {
   const [isClient, setIsClient] = useState<boolean>(false);
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const auth = getAuth(firebaseApp);
   const db = getFirestore(firebaseApp);
   const user: User | null = auth.currentUser;
   const router = useRouter();
 
+  const [queryParams, setQueryParams] = useState<{ plan?: string; billing?: string; price?:number }>({});
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const plan = searchParams.get('plan');
+    const billing = searchParams.get('billing');
+    const price = searchParams.get('price');
+    let parsedPrice = price ? parseFloat(price) : 0;
+
+    if (billing === 'annual') {
+      parsedPrice = Math.floor(parsedPrice * 12);
+    }
+
+    setQueryParams({ 
+      plan: plan || '', 
+      billing: billing || '',
+      price: parsedPrice,
+    });
+  }, [searchParams]);
+
   useEffect(() => {
     setIsClient(true);
 
-    if (user) {
-      const fetchUserDetails = async () => {
+    const fetchUserDetails = async () => {
+      if (!user) return;
+      
+      try {
         const userDoc = doc(db, 'users', user.uid);
         const userSnap = await getDoc(userDoc);
+        
         if (userSnap.exists()) {
           setUserDetails(userSnap.data() as UserDetails);
+        } else {
+          // Create initial user document if it doesn't exist
+          const initialUserData = {
+            email: user.email,
+            name: user.displayName,
+            phoneNumber: '',
+            createdAt: serverTimestamp(),
+          };
+          await setDoc(userDoc, initialUserData);
+          setUserDetails(initialUserData as UserDetails);
         }
-        console.log('User details updated');
-      };
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+      }
+    };
+
+    if (user) {
       fetchUserDetails();
     }
   }, [user, db]);
 
-  const publicKey = 'pk_live_85b70a04648ec72c551f83d8a21d1d93019dfb14';
-  const amount = 5000 * 100;
+  const publicKey = 'pk_test_0f6dbe5cfc910acdd8e996e823a74fefc66b2d79';
+  const amount = queryParams.price || 0;
 
   const handlePaymentSuccess = async (response: any) => {
-    alert('Payment was successful! Thank you for your subscription. Please proceed with your action.');
+    setIsLoading(true);
+    try {
+      if (!user) {
+        throw new Error('No user authenticated');
+      }
 
-    const expiryDate = new Date();
-    expiryDate.setDate(expiryDate.getDate() + 30);
+      const expiryDate = new Date();
+      expiryDate.setDate(expiryDate.getDate() + (queryParams.billing === 'annual' ? 365 : 30));
 
-    if (user) {
+      const paymentDetails: PaymentDetails = {
+        planType: queryParams.plan || 'basic',
+        billingCycle: queryParams.billing || 'monthly',
+        amount: amount,
+        status: 'active',
+        paymentDate: serverTimestamp(),
+        expiryDate: expiryDate.toISOString(),
+      };
+
+      // Update user document with payment information
       const userDoc = doc(db, 'users', user.uid);
-      await setDoc(
-        userDoc,
-        {
-          id: user.uid,
-          status: 'paid',
-          expiryDate: expiryDate.toISOString(),
-        },
-        { merge: true }
-      );
-    }
+      await setDoc(userDoc, {
+        subscription: paymentDetails,
+        lastUpdated: serverTimestamp(),
+        paymentHistory: {
+          [response.reference]: {
+            ...paymentDetails,
+            transactionRef: response.reference,
+            status: 'successful',
+          }
+        }
+      }, { merge: true });
 
-    router.push('/dashboard/home');
+      alert('Payment was successful! Thank you for your subscription.');
+      router.push('/dashboard/home');
+    } catch (error) {
+      console.error('Error updating payment information:', error);
+      alert('There was an error processing your payment. Please contact support.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handlePaymentClose = () => {
@@ -91,7 +159,7 @@ const usePayment = () => {
 
   const componentProps: PaystackConfig = {
     email: user?.email || 'customer@example.com',
-    amount,
+    amount: amount * 100, // Convert to kobo/cents
     metadata: {
       name: user?.displayName || 'John Doe',
       custom_fields: [
@@ -109,6 +177,11 @@ const usePayment = () => {
   };
 
   const loadPaystack = () => {
+    if (!user) {
+      alert('Please login to continue with payment');
+      return;
+    }
+
     if (window.PaystackPop) {
       const handler = window.PaystackPop.setup(componentProps);
       handler.openIframe();
@@ -121,6 +194,8 @@ const usePayment = () => {
     isClient,
     loadPaystack,
     componentProps,
+    queryParams,
+    isLoading
   };
 };
 

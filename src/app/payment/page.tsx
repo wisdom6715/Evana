@@ -2,7 +2,7 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter} from 'next/navigation'
 
 import usePaymant from '@/services/usePaymant'
 import masterCard from '@/app/assets/images/mastercard.jpeg'
@@ -21,18 +21,9 @@ const DynamicPaystackButton = dynamic(() =>
 
 const PaymentPage: React.FC = () => {
   const router = useRouter()
-  const {isClient, componentProps} = usePaymant();
-  const searchParams = useSearchParams();
-  const [queryParams, setQueryParams] = useState<{ plan?: string; billing?: string }>({});
-  
-  useEffect(() => {
-    const plan = searchParams.get('plan');
-    const billing = searchParams.get('billing');
-    setQueryParams({ 
-      plan: plan || '', 
-      billing: billing || '' 
-    });
-  }, [searchParams]);
+  const {isClient, componentProps, queryParams} = usePaymant();
+
+
   return (
     <div className='w-full bg-yellow-100 grid grid-rows-[5%_92%_3%] h-screen'>
       <div className='bg-white h-full border-b border-gray-200'>
@@ -117,7 +108,7 @@ const PaymentPage: React.FC = () => {
                   <h1>Subscription</h1>
                   <div className='flex flex-row justify-between'>
                     <p>{queryParams.plan} {queryParams.billing} plan</p>
-                    <p>${queryParams.billing}</p>
+                    <p>${queryParams.price?.toLocaleString('en-us')}</p>
                   </div>
                 </div>
               </div>
@@ -133,7 +124,7 @@ const PaymentPage: React.FC = () => {
                   <p>DEC 14, 2024</p>
                   <p>7 days trial ends</p>
                 </div>
-                <p>$20.00</p>
+                <p>${queryParams.price?.toLocaleString('en-us')}</p>
               </div>
             </div>
 

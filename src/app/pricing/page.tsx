@@ -1,7 +1,6 @@
 'use client'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useBillingContext } from '@/services/useBillingContext'
 
 interface PricingTier {
   id: string;
@@ -71,20 +70,23 @@ const PricingPage = () => {
 
     const handlePricing = (planId: string) => {
         const billingType = isAnnual ? 'annual' : 'monthly';
-        switch(planId) {
-            case 'basicPlan':
-                router.push(`/payment?plan=basic&billing=${billingType}`);
-                break;
-            case 'standardPlan':
-                router.push(`/payment?plan=standard&billing=${billingType}`);
-                break;
-            case 'enterprisePlan':
-                router.push(`/payment?plan=enterprise&billing=${billingType}`);
-                break;
-            default:
-                router.push('/');
-        }
-        console.log(`${planId} selected/ `, billingType);
+        // Find the selected tier
+        const selectedTier = pricingTiers.find(tier => tier.id === planId);
+        
+        if (!selectedTier) return;
+
+        // Calculate the actual price based on billing type
+        const price = calculatePrice(selectedTier.price);
+        
+        // Create the URL with the correct plan, billing type, and calculated price
+        const queryParams = new URLSearchParams({
+            plan: selectedTier.name.toLowerCase(),
+            billing: billingType,
+            price: price.toString()
+        });
+
+        router.push(`/payment?${queryParams.toString()}`);
+        console.log(`${planId} selected - ${billingType} billing at $${price}/month`);
     };
 
     return (
