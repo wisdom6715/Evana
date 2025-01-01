@@ -10,7 +10,6 @@ import visaCard from '@/app/assets/images/visacard.jpeg'
 import applePay from '@/app/assets/images/ApplePay.jpeg'
 import googlePay from '@/app/assets/images/gPay.jpeg'
 import secureIcon from '@/app/assets/images/secureIcon.png'
-import { useState, useEffect } from 'react'
 // Dynamically import PaystackButton to prevent SSR issues
 const DynamicPaystackButton = dynamic(() => 
   import('react-paystack').then((mod) => mod.PaystackButton), 

@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import NagivationComponent from '@/_components/NagivationComponent'
-import styles from '../_component/styles/desk.module.css'
+// import styles from '../_component/styles/desk.module.css'
 import MessageItem from '../_component/MessageItem'
 import MessageChat from '../_component/MessageChat'
 const page = () => {

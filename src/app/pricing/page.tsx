@@ -21,6 +21,7 @@ const pricingTiers: PricingTier[] = [
       'unlimited usage',
       'AI training or customization',
       'Audio chat',
+      'Message broadcasting',
       'no code integrations',
       'email support',
     ],

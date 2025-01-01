@@ -1,5 +1,4 @@
 import React from 'react'
-import Profile from '@/design-system/form/Profile'
 import Customize from '@/design-system/form/Customize'
 
 const index = () => {
@@ -20,7 +19,7 @@ const index = () => {
             </div>
           </div>
 
-          <div style={{backgroundColor: 'white', width: '100%'}}>
+          <div style={{backgroundColor: 'white', width: '100%', height: '100%'}}>
             {/* <Profile /> */}
             <Customize />
           </div>
