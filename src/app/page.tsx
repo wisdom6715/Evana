@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 import Page from '@/app/auth/page';  // The initial page component
 
 export default function Home() {

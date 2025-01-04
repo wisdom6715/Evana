@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { getAuth, User } from 'firebase/auth';
-import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 import firebaseApp from '@/lib/firebaseConfig';
 import { useRouter, useSearchParams } from 'next/navigation'
 
@@ -16,8 +16,17 @@ interface PaymentDetails {
   billingCycle: string;
   amount: number;
   status: string;
-  paymentDate: any;
+  paymentDate: Timestamp;
   expiryDate: string;
+}
+
+// Define Paystack response type
+interface PaystackResponse {
+  reference: string;
+  status: string;
+  transaction: string;
+  message: string;
+  redirect_url?: string;
 }
 
 declare global {
@@ -41,7 +50,7 @@ interface PaystackConfig {
   };
   publicKey: string;
   text: string;
-  onSuccess: (response: any) => void;
+  onSuccess: (response: PaystackResponse) => void;
   onClose: () => void;
 }
 
@@ -110,7 +119,7 @@ const usePayment = () => {
   const publicKey = 'pk_test_0f6dbe5cfc910acdd8e996e823a74fefc66b2d79';
   const amount = queryParams.price || 0;
 
-  const handlePaymentSuccess = async (response: any) => {
+  const handlePaymentSuccess = async (response: PaystackResponse) => {
     setIsLoading(true);
     try {
       if (!user) {
@@ -125,7 +134,7 @@ const usePayment = () => {
         billingCycle: queryParams.billing || 'monthly',
         amount: amount,
         status: 'active',
-        paymentDate: serverTimestamp(),
+        paymentDate: serverTimestamp() as Timestamp,
         expiryDate: expiryDate.toISOString(),
       };
 

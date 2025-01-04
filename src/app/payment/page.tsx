@@ -1,8 +1,8 @@
 'use client'
-import React from 'react'
+import React, { Suspense } from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { useRouter} from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import usePaymant from '@/services/usePaymant'
 import masterCard from '@/app/assets/images/mastercard.jpeg'
@@ -10,18 +10,17 @@ import visaCard from '@/app/assets/images/visacard.jpeg'
 import applePay from '@/app/assets/images/ApplePay.jpeg'
 import googlePay from '@/app/assets/images/gPay.jpeg'
 import secureIcon from '@/app/assets/images/secureIcon.png'
+
 // Dynamically import PaystackButton to prevent SSR issues
 const DynamicPaystackButton = dynamic(() => 
   import('react-paystack').then((mod) => mod.PaystackButton), 
   { ssr: false }
 );
 
-
-
-const PaymentPage: React.FC = () => {
+// Separate component for the payment content
+const PaymentContent = () => {
   const router = useRouter()
   const {isClient, componentProps, queryParams} = usePaymant();
-
 
   return (
     <div className='w-full bg-yellow-100 grid grid-rows-[5%_92%_3%] h-screen'>
@@ -150,7 +149,23 @@ const PaymentPage: React.FC = () => {
         <p>Secure transactions</p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default PaymentPage
+// Loading component
+const LoadingComponent = () => (
+  <div className="w-full h-screen flex items-center justify-center">
+    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+  </div>
+);
+
+// Main component with Suspense
+const PaymentPage: React.FC = () => {
+  return (
+    <Suspense fallback={<LoadingComponent />}>
+      <PaymentContent />
+    </Suspense>
+  );
+};
+
+export default PaymentPage;
