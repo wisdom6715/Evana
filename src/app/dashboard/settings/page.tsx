@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import NagivationComponent from '@/_components/NagivationComponent'
-import Settings from '@/design-system/_component/SettingsProfile'
+import Settings from '@/design-system/_component/Settings'
 const index = () => {
   return (
     <div className='w-[100%] h-[100vh] grid grid-cols-[10%_90%] bg-[#FFFDFC]'>

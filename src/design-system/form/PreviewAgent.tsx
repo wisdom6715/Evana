@@ -3,8 +3,8 @@ import React from 'react'
 const PreviewAgent = () => {
   return (
     <div style={{
-      width: '70%', 
-      height: '80%', 
+      width: '65%', 
+      height: '85%', 
       backgroundColor: 'transparent',
     }}>
       <div style={{
