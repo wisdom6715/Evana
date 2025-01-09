@@ -3,19 +3,19 @@ import LogRead from './LogRead'
 import ChatlogList from './ChatlogList'
 const Summary = () => {
   return (
-    <div className='w-full bg-red-50 flex justify-center items-center'>
-        <div className='w-[90%] h-[95%] bg-black grid-rows-[5%_95%] grid'>
-            <div className='bg-white flex items-center pl-2'>
+    <div className='w-full bg-white flex justify-center items-center'>
+        <div className='w-[90%] h-[95%] bg-white grid-rows-[4%_96%] grid gap-1'>
+            <div className='bg-[#f1f1f3] flex items-center pl-2 border border-gray-200'>
                 <h1>Chatlog Summary</h1>
             </div>
-            <div className=' bg-gray-200 grid-cols-[15%_85%] grid'>
+            <div className='bg-white border border-gray-200 grid-cols-[15%_85%] grid'>
                 {/* chatlog Summary lists */}
-                <div className='min-h-[50vh] max-h-[90vh] p-2 grid grid-rows-[4%_96%] '>
+                <div className='min-h-[50vh] max-h-[90vh] grid grid-rows-[4%_96%] '>
                     <ChatlogList />
                 </div>
 
                 {/* chatlog canva read space */}
-                <div className='bg-gray-100 pl-10 pr-10'>
+                <div className='border border-l-[#c7c7c7]'>
                     <LogRead />
                 </div>
             </div>
