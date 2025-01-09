@@ -11,7 +11,7 @@ type navProperties = {
 }
 const index = () => {
   const [activeComponent, setActiveComponent] = useState<string>('Company Profile')
-  const navProperties =[
+  const navProperties: navProperties[] =[
     {
       title: 'Company Profile'
     },
@@ -19,11 +19,11 @@ const index = () => {
       title: 'Customize chatbot'
     },
     {
-      title: 'Integration'
+      title: 'Help Desks',
+      plan: 'stardand'
     },
     {
-      title: 'Help Desks',
-      plan: 'advanced'
+      title: 'Integration'
     },
     {
       title: 'Subscription Details'
@@ -34,7 +34,7 @@ const index = () => {
   ]
   const handleNavigation = (title: string) => {
     console.log('Navigation triggered', title);
-    setActiveComponent(title); // Update the active component based on the selected title
+    setActiveComponent(title); 
   };
   const renderComponent = () => {
     switch(activeComponent){
@@ -63,8 +63,8 @@ const index = () => {
             <div style={{display: 'flex', flexDirection: 'column', gap: 10}}>
             {
               navProperties.map((nav, index) => (
-                <div key={index} style={{display: 'flex', alignItems: 'center', gap: 20, justifyContent: 'flex-start', borderStyle: "solid", borderWidth: '1px', borderColor: 'grey', padding: 10, cursor: 'pointer'}}>
-                  <h3 onClick={() => handleNavigation(nav.title)}>{nav.title}</h3>
+                <div onClick={() => handleNavigation(nav.title)} key={index} style={{display: 'flex', alignItems: 'center', backgroundColor: activeComponent === nav.title? '#EAEAEA' : 'white', gap: 25, justifyContent: 'flex-start', padding: 5, cursor: 'pointer'}}>
+                  <h3 >{nav.title}</h3>
                 </div>
               ))
             }

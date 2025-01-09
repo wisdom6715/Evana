@@ -88,6 +88,8 @@ const Profile = () => {
     };
 
     return (
+        <>
+        <h1 style={{padding: '.5rem 2rem'}}>Enter Your Company's information</h1>
         <form onSubmit={handleSubmit} className={style.formContainer}>
             {companyFields.map((field) => (
                 <div key={field.name} className={style.inputContainer}>
@@ -133,6 +135,7 @@ const Profile = () => {
                 </button>
             </div>
         </form>
+        </>
     );
 };
 
