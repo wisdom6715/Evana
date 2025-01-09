@@ -15,9 +15,9 @@ const NagivationComponent = () => {
         // navigate to the settings page
         router.push('/dashboard/settings');
         break;
-      case 'customize':
+      case 'chatlogs':
         //navifate to the customize page
-        router.push('/dashboard/customize');
+        router.push('/dashboard/chatlogs');
         break;
       case 'desk':
         //navigate to the desk page
@@ -36,7 +36,7 @@ const NagivationComponent = () => {
     <>
         <div className={styles.topContainer}>
             <div className={styles.logoContainer}>
-                <h1 >KustomAI</h1>
+                <h1 >IntuitionLabs</h1>
             </div>
 
             <div className={styles.navIconSubContainers}>
@@ -48,9 +48,9 @@ const NagivationComponent = () => {
                         <p>Home</p>
                     </div>
 
-                    <div className={styles.iconContainer} onClick={()=> handlePageNavigation('customize')}>
+                    <div className={styles.iconContainer} onClick={()=> handlePageNavigation('chatlogs')}>
                         <Image alt='customize icon' src={customizeIcon} height={20}/>
-                        <p>Customize</p>
+                        <p>Chatlogs</p>
                     </div>
 
                     <div className={styles.iconContainer} onClick={()=> handlePageNavigation('desk')}>

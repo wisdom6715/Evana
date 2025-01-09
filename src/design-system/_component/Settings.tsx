@@ -3,6 +3,8 @@ import Customize from '@/design-system/form/Customize'
 import Profile from '../form/Profile'
 import HelpDesk from '../form/HelpDesk'
 import Privacy from '../form/Privacy'
+import Integration from '../form/Integration'
+import Subscription from '../form/Subscription'
 type navProperties = {
   title: string
   plan?: string
@@ -22,9 +24,6 @@ const index = () => {
     {
       title: 'Help Desks',
       plan: 'advanced'
-    },
-    {
-      title: 'Chat logs'
     },
     {
       title: 'Subscription Details'
@@ -47,6 +46,10 @@ const index = () => {
         return <Privacy />
       case 'Help Desks':
         return <HelpDesk />
+      case 'Integration':
+        return <Integration />
+      case 'Subscription Details':
+        return <Subscription />
       default:
         return <Profile />
     }

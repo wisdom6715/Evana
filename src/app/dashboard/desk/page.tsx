@@ -2,11 +2,11 @@
 import React from 'react'
 import NagivationComponent from '@/_components/NagivationComponent'
 // import styles from '../_component/styles/desk.module.css'
-import MessageItem from '../_component/MessageItem'
-import MessageChat from '../_component/MessageChat'
+import MessageItem from '../_component/desksComponent/MessageItem'
+import MessageChat from '../_component/desksComponent/MessageChat'
 const page = () => {
   return (
-    <div className='w-[100%] h-[100vh] grid grid-cols-[10%_90%] bg-[#FFFDFC]'>
+    <div className='w-[100%] h-[100vh] grid grid-cols-[12%_88%] bg-[#FFFDFC]'>
       {/* Navigation is component */}
       <div className='bg-[#FFFDFC] border border-l-zinc-200 grid grid-rows-[90%_10%] pl-4 pr-4'>
         <NagivationComponent />

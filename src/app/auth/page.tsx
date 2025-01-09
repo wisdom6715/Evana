@@ -22,7 +22,7 @@ const AuthFlow = () => {
                 Graphical Introduction Container
             </div>
             <div className='w-1/2 h-[90vh] text-white flex items-center justify-center flex-col gap-[60px]'>
-                <h1 className='text-black text-lg font-bold bg-gray-200 text-[30px]'>KustomAI</h1>
+                <h1 className='text-black text-lg font-bold bg-gray-200 text-[30px]'>IntuitionLabs</h1>
                 <div className='flex flex-col gap-[30px]'>
                     <div className='text-black flex flex-col items-center justify-center'>
                         <h1 className='text-black font-bold text-lg text'>Welcome Back!</h1>

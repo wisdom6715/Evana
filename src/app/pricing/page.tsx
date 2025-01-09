@@ -102,7 +102,7 @@ const PricingPage = () => {
         <>
             <div className='flex flex-col justify-center w-[100%] h-[100vh] items-center'>
                 <div className='position: absolute top-5 left-5 '>
-                    <h1 className='text-bold text-[30px]'>KustomAI</h1>
+                    <h1 className='text-bold text-[30px]'>IntuitionLabs</h1>
                 </div>
                 <div className='flex flex-col items-center gap-14'>
                     <div className='flex flex-col items-center gap-4'>

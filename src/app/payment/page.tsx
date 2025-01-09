@@ -25,7 +25,7 @@ const PaymentContent = () => {
   return (
     <div className='w-full bg-yellow-100 grid grid-rows-[5%_92%_3%] h-screen'>
       <div className='bg-white h-full border-b border-gray-200'>
-        <h1 className='font-bold text-2xl text-black pl-10'>KustomAI</h1>
+        <h1 className='font-bold text-2xl text-black pl-10'>IntuitionLabs</h1>
       </div>
       {/* main payment container */}
       <div className='bg-gray-300 h-full flex justify-center'>
