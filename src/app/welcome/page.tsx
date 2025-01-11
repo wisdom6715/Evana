@@ -1,11 +1,13 @@
 'use client'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import Logo from '@/app/assets/images/newLogo.png'
 const WelcomePage = () => {
     const router = useRouter()
   return (
     <div className='flex flex-col items-center justify-center w-[100%] h-[100vh] bg-white'>
-        <div className='position: absolute left-5 top-5'>
-            <h1 className='text-bold text-[30px] '>IntuitionLabs</h1>
+        <div className='position: absolute left-1 top-0'>
+            <Image className='w-64 h-24' src={Logo} alt='Intuitionlabs Logo'/>
         </div>
         <div className='flex flex-col items-center justify-center gap-10'>
             <div className='flex flex-col items-center justify-center w-[45%] text-center'>

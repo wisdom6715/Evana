@@ -1,6 +1,8 @@
 'use client'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import Logo from '@/app/assets/images/newLogo.png'
 
 interface PricingTier {
   id: string;
@@ -101,8 +103,8 @@ const PricingPage = () => {
     return (
         <>
             <div className='flex flex-col justify-center w-[100%] h-[100vh] items-center'>
-                <div className='position: absolute top-5 left-5 '>
-                    <h1 className='text-bold text-[30px]'>IntuitionLabs</h1>
+                <div className='position: absolute top-0 left-1 '>
+                    <Image className='w-64 h-24' src={Logo} alt='Intuitionlabs Logo'/>
                 </div>
                 <div className='flex flex-col items-center gap-14'>
                     <div className='flex flex-col items-center gap-4'>

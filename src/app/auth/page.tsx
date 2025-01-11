@@ -6,6 +6,7 @@ import microsoftLogo from '@/app/assets/images/microsoft.jpeg'
 import useAuth from '@/services/useAuth'
 import useThirdpartyAuth from '@/services/useThirdpartyAuth'
 import Link from 'next/link'
+import Logo from '@/app/assets/images/newLogo.png'
 
 const AuthFlow = () => {
     const { userInfo, handleAuth, handleInputChange } = useAuth()
@@ -21,32 +22,32 @@ const AuthFlow = () => {
             <div className="w-1/2 bg-gray-200 h-[90vh] text-white flex items-center justify-center rounded-tr-[20px] rounded-br-[20px]">
                 Graphical Introduction Container
             </div>
-            <div className='w-1/2 h-[90vh] text-white flex items-center justify-center flex-col gap-[60px]'>
-                <h1 className='text-black text-lg font-bold bg-gray-200 text-[30px]'>IntuitionLabs</h1>
-                <div className='flex flex-col gap-[30px]'>
-                    <div className='text-black flex flex-col items-center justify-center'>
-                        <h1 className='text-black font-bold text-lg text'>Welcome Back!</h1>
-                        <h2>Sign up or log in by entering your email below</h2>
+            <div className='w-1/2 h-[90vh] text-white flex items-center justify-center flex-col'>
+                <Image src={Logo} alt='Intuitionlabs Logo' className='w-72 h-28'/>
+                <div className='flex flex-col gap-[30px] items-center'>
+                    <div className='text-black flex flex-col items-center justify-center gap-2 w-[90%]'>
+                        <h1 className='text-black font-bold text-lg text-[2.5rem]'>Welcome Back!</h1>
+                        <h2 className='text-center'>Sign up or log in by entering your email and password below</h2>
                     </div>
 
-                    <div className='text-black text-sm flex flex-col items-center gap-[14px]'>
+                    <div className='w-[90%] text-black text-sm flex flex-col items-center gap-[14px]'>
                         <div 
-                            className='flex items-center w-[434px] h-[54px] gap-5 bg-white-200 justify-center rounded-lg border border-[C3C3C3]-200 cursor-pointer' 
+                            className='flex items-center w-[100%] h-[54px] gap-5 bg-white-200 justify-center rounded-lg border border-[C3C3C3]-200 cursor-pointer' 
                             onClick={handleGoogleSignIn}
                         >
                             <Image 
-                                className='w-5 h-5'
+                                className='w-7 h-7'
                                 alt='google logo'
                                 src={googleLogo}
                             />
                             <p>Continue with Google</p>
                         </div>
                         <div 
-                            className='flex items-center w-[434px] h-[54px] gap-5 bg-white-200 justify-center rounded-lg border border-[C3C3C3]-200 cursor-pointer' 
+                            className='flex items-center w-[100%] h-[54px] gap-5 bg-white-200 justify-center rounded-lg border border-[C3C3C3]-200 cursor-pointer' 
                             onClick={handleMicrosoftSignin}
                         >
                             <Image 
-                                className='w-5 h-5'
+                                className='w-7 h-7'
                                 alt='microsoft logo'
                                 src={microsoftLogo}
                             />
@@ -54,11 +55,11 @@ const AuthFlow = () => {
                         </div>
                     </div>
 
-                    <form className='flex flex-col gap-[14px]' onSubmit={handleSubmission}>
+                    <form className='flex flex-col gap-[14px] items-center w-[90%]' onSubmit={handleSubmission}>
                         <input 
                             type="text" 
                             placeholder="Email" 
-                            className='bg-gray-200 h-[54px] pl-5 rounded-lg'
+                            className='bg-gray-200 w-[100%] h-[54px] pl-5 rounded-lg'
                             onChange={(e) => handleInputChange('email', e.target.value)}
                             value={userInfo.email}
                             required
@@ -66,23 +67,25 @@ const AuthFlow = () => {
                         <input 
                             type="password" 
                             placeholder="Password" 
-                            className='bg-gray-200 h-[54px] pl-5 rounded-lg'
+                            className='bg-gray-200 w-[100%] h-[54px] pl-5 rounded-lg'
                             onChange={(e) => handleInputChange('password', e.target.value)}
                             value={userInfo.password}
                             required
                         />
                         <button 
                             type="submit"
-                            className='text-white w-[434px] h-[54px] bg-black rounded-lg'
+                            className='text-white w-[100%] h-[54px] bg-black rounded-lg'
                             onClick={handleAuth}
                         >
                             Continue
                         </button>
-
-                        <p className='text-black text-sm'>
-                            By continuing you agree to KustomAI <Link href={'/'}>Terms of Service</Link> <Link href={'/'}>Privacy Policies</Link>
-                        </p>
+                        <div className='w-[100%] items-center flex-row'>
+                            <p className="text-black text-sm break-words text-center">
+                                By continuing you agree to IntuitionLabs <Link href={'/'}>Terms of Service</Link> <Link href={'/'}>Privacy Policies</Link>
+                            </p>
+                        </div>
                     </form>
+                    
                 </div>
             </div>
         </div>

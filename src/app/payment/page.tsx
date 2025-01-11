@@ -10,6 +10,7 @@ import visaCard from '@/app/assets/images/visacard.jpeg'
 import applePay from '@/app/assets/images/ApplePay.jpeg'
 import googlePay from '@/app/assets/images/gPay.jpeg'
 import secureIcon from '@/app/assets/images/secureIcon.png'
+import Logo from '@/app/assets/images/Screenshot 2025-01-11 090739.png'
 
 // Dynamically import PaystackButton to prevent SSR issues
 const DynamicPaystackButton = dynamic(() => 
@@ -24,8 +25,8 @@ const PaymentContent = () => {
 
   return (
     <div className='w-full bg-yellow-100 grid grid-rows-[5%_92%_3%] h-screen'>
-      <div className='bg-white h-full border-b border-gray-200'>
-        <h1 className='font-bold text-2xl text-black pl-10'>IntuitionLabs</h1>
+      <div className='bg-white h-full border-b border-gray-200 flex items-center'>
+        <Image className='w-52 h-10 pl-3' src={Logo} alt='Intuitionlabs Logo'/>
       </div>
       {/* main payment container */}
       <div className='bg-gray-300 h-full flex justify-center'>

@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "kustomAI",
-  description: "Welcome to KustomAI",
+  title: "IntuitionLabs",
+  description: "Welcome to IntuitionLabs",
 };
 
 export default function RootLayout({

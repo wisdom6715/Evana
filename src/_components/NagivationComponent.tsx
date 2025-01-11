@@ -5,6 +5,8 @@ import customizeIcon from '@/app/assets/images/customize.png'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
+
+import Logo from '@/app/assets/images/Screenshot 2025-01-11 090739.png'
 const NagivationComponent = () => {
     const [activeNav, setActiveNav] = useState<string>('')
     const router = useRouter()
@@ -23,7 +25,7 @@ const NagivationComponent = () => {
     <>
         <div className={styles.topContainer}>
             <div className={styles.logoContainer}>
-                <h1 >IntuitionLabs</h1>
+                <Image className='w-64 h-12' src={Logo} alt='Intuitionlabs Logo'/>
             </div>
 
             <div className={styles.navIconSubContainers}>
