@@ -25,8 +25,14 @@ const useCompanyRegistration = (): UseCompanyRegistrationResult => {
         setError(null);
         
         try {
-            const response = await axios.post(`${API_BASE_URL}/register`, data);
+            const response = await axios.post(`${API_BASE_URL}/api/register`, data,{
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
             alert(`Company registered successfully! Company ID: ${response.data.company_id}`);
+            const company_id = response.data.company_id;
+            saveToLocalStorage('companyId', company_id)
         } catch (err: any) {
             setError(err.response?.data?.message || err.message);
             alert(`Registration failed: ${err.response?.data?.message || err.message}`);
@@ -34,6 +40,15 @@ const useCompanyRegistration = (): UseCompanyRegistrationResult => {
             setIsLoading(false);
         }
     };
+
+    const saveToLocalStorage = (key: string, value: string) => {
+        try {
+          const stringifiedValue = JSON.stringify(value);  // Convert object to string if needed
+          localStorage.setItem(key, stringifiedValue);      // Store the data in localStorage
+        } catch (error) {
+          console.error("Error saving to localStorage", error);
+        }
+      };
 
     return {
         registerCompany,

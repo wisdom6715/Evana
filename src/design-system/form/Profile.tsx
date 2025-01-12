@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react'
 import style from '../form/styles/profile.module.css'
-
+import useCompanyRegistration from '@/api/registerCompany';
 type CompanyTypes = {
     label: string;
     type: string;
@@ -10,18 +10,19 @@ type CompanyTypes = {
 }
 
 interface FormData {
-    companyName: string;
-    companyEmail: string;
-    companyContact: string;
-    companyIndustry: string;
+    name: string;
+    ai_name: string;
+    phone: string;
+    domain_name: string;
 }
 
 const Profile = () => {
+    const { registerCompany } = useCompanyRegistration()
     const [formData, setFormData] = useState<FormData>({
-        companyName: '',
-        companyEmail: '',
-        companyContact: '',
-        companyIndustry: 'e-commerce' // Default value
+        name: '',
+        ai_name: '',
+        phone: '',
+        domain_name: 'e-commerce' // Default value
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -30,21 +31,21 @@ const Profile = () => {
         {
             label: 'Company Name',
             type: 'text',
-            name: 'companyName',
+            name: 'name',
             placeholder: 'Company Name',
             required: true
         },
         {
             label: 'Company Email Address',
             type: 'email', // Changed to email for better validation
-            name: 'companyEmail',
+            name: 'ai_name',
             placeholder: 'Company Email',
             required: true
         },
         {
             label: 'Company Contact',
             type: 'tel',
-            name: 'companyContact',
+            name: 'phone',
             placeholder: 'Company Contact',
             required: true
         }
@@ -77,7 +78,7 @@ const Profile = () => {
             // Add your API call here
             console.log('Form submitted:', formData);
             // await submitFormData(formData);
-            
+            registerCompany(formData);
             // Add success handling here
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -108,11 +109,11 @@ const Profile = () => {
             ))}
             
             <div className={style.inputContainer}>
-                <label htmlFor="companyIndustry">Company Industry</label>
+                <label htmlFor="domain_name">Company Industry</label>
                 <select
-                    id="companyIndustry"
-                    name="companyIndustry"
-                    value={formData.companyIndustry}
+                    id="domain_name"
+                    name="domain_name"
+                    value={formData.domain_name}
                     onChange={handleInputChange}
                     className={style.inputTag}
                     required

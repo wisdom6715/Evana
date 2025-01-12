@@ -4,6 +4,7 @@ import DisplayDate from '../_subComponent/DisplayDate'
 import Image from 'next/image'
 import greetEmoji from '@/app/assets/images/greets.png'
 const Intro = () => {
+    
   return (
     <div className={styles.mainContainer}>
         <div className={styles.introContainer}>
