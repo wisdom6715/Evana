@@ -33,6 +33,7 @@ const useCompanyRegistration = (): UseCompanyRegistrationResult => {
             alert(`Company registered successfully! Company ID: ${response.data.company_id}`);
             const company_id = response.data.company_id;
             saveToLocalStorage('companyId', company_id)
+            /// company_id f750e419-3652-4b5f-9edc-1840c3e9994b
         } catch (err: any) {
             setError(err.response?.data?.message || err.message);
             alert(`Registration failed: ${err.response?.data?.message || err.message}`);

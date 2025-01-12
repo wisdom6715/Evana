@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import Page from '@/app/auth/page';  // The initial page component
+import Page from "@/landingPage/home/page"
 
 export default function Home() {
 
