@@ -7,6 +7,7 @@ import useAuth from '@/services/useAuth'
 import useThirdpartyAuth from '@/services/useThirdpartyAuth'
 import Link from 'next/link'
 import Logo from '@/app/assets/images/newLogo.png'
+import AuthImage from '@/landingPage/home/_components/images/lastSectionImage.webp'
 
 const AuthFlow = () => {
     const { userInfo, handleAuth, handleInputChange } = useAuth()
@@ -19,9 +20,7 @@ const AuthFlow = () => {
 
     return (
         <div className='flex flex-row h-[100vh] items-center justify-center'>
-            <div className="w-1/2 bg-gray-200 h-[90vh] text-white flex items-center justify-center rounded-tr-[20px] rounded-br-[20px]">
-                Graphical Introduction Container
-            </div>
+            <Image src={AuthImage} alt='auth image' className="w-1/2 bg-gray-200 h-[90vh] rounded-tr-[2rem] rounded-br-[2rem]" />
             <div className='w-1/2 h-[90vh] text-white flex items-center justify-center flex-col'>
                 <Image src={Logo} alt='Intuitionlabs Logo' className='w-72 h-28'/>
                 <div className='flex flex-col gap-[30px] items-center'>
