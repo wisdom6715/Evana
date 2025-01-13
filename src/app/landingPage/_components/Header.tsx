@@ -8,7 +8,7 @@ const Intro = () => {
         <Image src={Logo} alt='intuitionlabs logo'/>
         <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '1rem'}}>
             <Link href='/'>Home</Link>
-            <Link href='/'>Products</Link>
+            <Link href='/landingPage/products'>Products</Link>
             <Link href='/landingPage/cost'>Pricing</Link>
         </div>
         <button style={{padding: '.5rem 2rem', backgroundColor: 'black', color: 'white'}}>Get Started</button>

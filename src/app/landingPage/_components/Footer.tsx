@@ -13,7 +13,7 @@ const Footer = () => {
             <div style={{ display: 'flex', flexDirection: 'column'}}>
                 <p>Quick Links</p>
                 <Link href='/'>Home</Link>
-                <Link href='/'>Products</Link>
+                <Link href='/landingPage/products'>Products</Link>
                 <Link href='/landingPage/cost'>Pricing</Link>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column'}}>
