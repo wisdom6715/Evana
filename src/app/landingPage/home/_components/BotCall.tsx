@@ -4,20 +4,24 @@ import BotImage from './images/Bot.webp'
 
 const BotCall = () => {
   return (
-    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', marginTop: '4rem', width: '100%'}}>
-        <Image src={BotImage} alt='Bot image' style={{backgroundColor: 'red'}}/>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', justifyContent: 'center'}}>
-          <div>
-            <p>Join the AI Revolution</p>
-            <h1 style={{fontSize: '3rem', fontWeight: 700}}>Empower Businesses with</h1>
-            <p style={{fontSize: '1.2rem', fontWeight: 400, }}>at intuitionlabswe are commited to empowering businesses with latest AI technology . Our team of experts work tirelessly to develop innovative solutions</p>
-          </div>
-
-          <div >
-            <button style={{padding: '.5rem 2rem', backgroundColor: 'black', color: 'white'}}>Get Started</button>
-          </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 mt-16 w-full">
+      <Image src={BotImage} alt="Bot image" className="bg-red-500" />
+      <div className="flex flex-col gap-8 justify-center items-center sm:items-start">
+        <div className="flex flex-col justify-center items-center sm:items-start gap-4">
+          <p className="text-center sm:text-left">Join the AI Revolution</p>
+          <h1 className="text-[2rem] md:text-[2.5rem] font-bold text-center sm:text-left">
+            Empower Businesses with
+          </h1>
+          <p className="text-lg font-light text-center sm:text-left">
+            At IntuitionLabs, we are committed to empowering businesses with the latest AI technology. Our team of experts works tirelessly to develop innovative solutions.
+          </p>
         </div>
-    </div>
+    
+        <div className="flex justify-center sm:justify-start">
+          <button className="py-2 px-8 bg-black text-white">Get Started</button>
+        </div>
+      </div>
+  </div>  
   )
 }
 

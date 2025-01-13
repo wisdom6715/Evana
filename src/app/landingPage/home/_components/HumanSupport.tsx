@@ -1,24 +1,32 @@
-import React from 'react'
-import Image from 'next/image'
-import Support from '@/app/landingPage/home/_components/images/support.webp'
+import React from 'react';
+import Image from 'next/image';
+import Support from '@/app/landingPage/home/_components/images/support.webp';
+
 const HumanSupport = () => {
   return (
-    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', width: '100%', marginTop: '4rem', gap: '3rem'}}>
-        <Image src={Support} alt='customer support with bot'/>
-        <div style={{backgroundColor: 'white', width: '90%', display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '3rem'}}>
-            <div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '.5rem'}}>
-                <p style={{color: 'greenyellow', fontSize: '1.2rem'}}>Empower your team with AI</p>
-                <div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: '1.5rem'}}>
-                    <h1 style={{fontSize: '3rem', fontWeight: 700, }}>Enhance Customer experience with</h1>
-                    <p style={{fontSize: '1.2rem', fontWeight: 400, }}>IntuitionLabs AI powered solution are designed to streamlined your business operation and elevate customers </p>
-                </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 w-full mt-16 gap-12">
+        <Image src={Support} alt="customer support with bot" />
+        <div className="bg-white w-[90%] flex flex-col justify-center items-center md:items-start gap-12">
+            <div className="flex flex-col justify-center items-center md:items-start gap-2">
+            <p className="text-green-400 text-lg">Empower your team with AI</p>
+            <div className="flex flex-col justify-center items-center md:items-start gap-6">
+                <h1 className="text-[2rem] md:text-[2.5rem] font-bold text-center md:text-left">
+                Enhance Customer experience
+                </h1>
+                <p className="text-lg font-normal text-center md:text-left">
+                IntuitionLabs AI-powered solutions are designed to streamline your
+                business operations and elevate customer experiences.
+                </p>
             </div>
-            <div>
-                <button style={{padding: '.5rem 2rem', backgroundColor: 'black', color: 'white'}}>Get Started</button>
+            </div>
+            <div className="flex justify-center md:justify-start">
+            <button className="px-8 py-2 bg-black text-white rounded">
+                Get Started
+            </button>
             </div>
         </div>
     </div>
-  )
-}
+  );
+};
 
-export default HumanSupport
+export default HumanSupport;

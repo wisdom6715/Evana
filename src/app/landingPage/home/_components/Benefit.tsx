@@ -1,4 +1,3 @@
-import index from '@/design-system/_component/Settings';
 import React from 'react'
 import { useState } from 'react'
 const Benefit = () => {
@@ -96,28 +95,33 @@ const Benefit = () => {
         }
     ]
   return (
-    <div style={{marginTop: '4rem', display: 'flex', flexDirection: 'column', gap: '2rem'}}>
-        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center'}}>
-            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center'}}>
-                <p style={{fontSize: '2.5rem', fontWeight: 700}}>Benefits </p>
-                <p style={{fontSize: '2.5rem', fontWeight: 700}}>of AI Employees</p>
+        <div className="mt-16 flex flex-col gap-8">
+            <div className="flex flex-col items-center text-center">
+                <div className="flex flex-col items-center text-center">
+                    <p className="text-[2rem] md:text-[2.5rem] font-bold">Benefits</p>
+                    <p className="text-[2rem] md:text-[2.5rem] font-bold">of AI Employees</p>
+                </div>
+                <p>Assign routine and repetitive tasks to digital employees. Integrating them is as simple <br /> as working with your HR department</p>
             </div>
-            <p>Assign routine and repetitive tasks to digital employees.  Integrating them is as simple <br /> as working with your HR department</p>
-        </div>
-        <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', rowGap: '1rem', columnGap: '1rem'}}>
-            {benefitsOfAI.map((item, index)=>{
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {benefitsOfAI.map((item, index) => {
                 return (
-                    <div key={index} style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem', padding: '1rem', border: hoverIndex === index ? '.1rem solid #cb8bfa' : 'white',borderRadius: '1rem',}} onMouseEnter={() => setHoverIndex(index)} onMouseLeave={()=> setHoverIndex(null)}>
-                        {item.icon}
-                        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '1rem'}}>
-                            <h1>{item.title}</h1>
-                            <p style={{width: '80%'}}>{item.description}</p>
-                        </div>
+                <div
+                    key={index}
+                    className={`flex flex-col items-center gap-8 p-4 border rounded-xl ${hoverIndex === index ? 'border-[#cb8bfa]' : 'border-white'}`}
+                    onMouseEnter={() => setHoverIndex(index)}
+                    onMouseLeave={() => setHoverIndex(null)}
+                >
+                    {item.icon}
+                    <div className="flex flex-col items-center text-center gap-4">
+                        <h1>{item.title}</h1>
+                        <p className="w-4/5">{item.description}</p>
                     </div>
-                )
+                </div>
+                );
             })}
         </div>
-    </div>
+    </div>  
   )
 }
 

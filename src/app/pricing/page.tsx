@@ -102,7 +102,7 @@ const PricingPage = () => {
 
     return (
         <>
-            <div className='flex flex-col justify-center w-[100%] h-[100vh] items-center'>
+            <div className='flex flex-col justify-center w-[100%] h-[100vh] items-center absolute inset-0 -z-10 bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem] transition-all duration-200'>
                 <div className='position: absolute top-0 left-1 '>
                     <Image className='w-64 h-24' src={Logo} alt='Intuitionlabs Logo'/>
                 </div>
@@ -168,7 +168,8 @@ const PricingPage = () => {
                                 <div className='flex flex-col gap-[100px]'>
                                     <div className='flex items-center justify-center'>
                                         <button 
-                                            className='bg-black w-[270px] h-[38px] text-white'
+                                            style={{ backgroundColor: 'black', color: 'white'}}
+                                            className=' w-[270px] h-[38px]'
                                             onClick={() => handlePricing(tier.id)}
                                         >
                                             {tier.buttonText}

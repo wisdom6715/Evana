@@ -12,7 +12,7 @@ import LastSection from './_components/LastSection';
 import Footer from '../_components/Footer';
 const Page = () => {
     return (
-        <div className={styles.generalContainer}
+        <div className='w-[100%] h-[100vh] relative pl-[5%] pr-[5%]'
         style={{
             backgroundImage: `url(${bgImage.src})`,
             backgroundSize: 'cover',

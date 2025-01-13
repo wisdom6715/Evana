@@ -82,15 +82,12 @@ const PricingPage = () => {
 
     const handlePricing = (planId: string) => {
         const billingType = isAnnual ? 'annual' : 'monthly';
-        // Find the selected tier
         const selectedTier = pricingTiers.find(tier => tier.id === planId);
         
         if (!selectedTier) return;
 
-        // Calculate the actual price based on billing type
         const price = calculatePrice(selectedTier.price);
         
-        // Create the URL with the correct plan, billing type, and calculated price
         const queryParams = new URLSearchParams({
             plan: selectedTier.name.toLowerCase(),
             billing: billingType,
@@ -98,96 +95,106 @@ const PricingPage = () => {
         });
 
         router.push(`/payment?${queryParams.toString()}`);
-        console.log(`${planId} selected - ${billingType} billing at $${price}/month`);
     };
 
     return (
-        <>
-            <div className='flex flex-col  w-[100%] h-[100vh] pl-[16%] pr-[16%] gap-[5%] absolute inset-0 -z-10 bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem] transition-all duration-200'>
-                <div className='justify-center'>
-                    {/* <Image className='w-64 h-24' src={Logo} alt='Intuitionlabs Logo'/> */}
-                    <Header />
-                </div>
-                <div className='flex flex-col gap-14'>
-                    <div className='flex flex-col items-center gap-4'>
-                        <div className='w-[70%] text-center flex gap-5 flex-col'>
-                            <h2>AI Pricing Plans: Choose the Best Package for Your Business</h2>
-                            <p>
-                                CortexLab offers customizable AI assistant plans to suit your specific requirements. Whether you're a small Startup or a large enterprise, 
-                                our pricing options ensure that you get the perfect solution for your needs.
-                            </p>
+        <div className='min-h-screen w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]'>
+            <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
+                <Header />
+                
+                <div className='mt-12 space-y-12'>
+                    <div className='text-center space-y-4'>
+                        <h2 className='text-3xl font-bold sm:text-4xl'>
+                            AI Pricing Plans: Choose the Best Package for Your Business
+                        </h2>
+                        <p className='max-w-2xl mx-auto text-lg text-gray-600'>
+                            CortexLab offers customizable AI assistant plans to suit your specific requirements. Whether you're a small Startup or a large enterprise, 
+                            our pricing options ensure that you get the perfect solution for your needs.
+                        </p>
+                        
+                        {/* Toggle Switch */}
+                        <div className='flex justify-center mt-8'>
+                            <label className="relative inline-flex items-center cursor-pointer">
+                                <input 
+                                    type="checkbox" 
+                                    className="sr-only peer"
+                                    checked={isAnnual}
+                                    onChange={(e) => setIsAnnual(e.target.checked)}
+                                />
+                                <div className="w-[200px] h-10 bg-gray-100 peer-focus:outline-none rounded-full peer 
+                                    peer-checked:after:translate-x-[100px] 
+                                    after:content-[''] 
+                                    after:absolute 
+                                    after:top-[2px] 
+                                    after:left-[2px] 
+                                    after:bg-white 
+                                    after:shadow-md 
+                                    after:rounded-full 
+                                    after:h-[36px]    
+                                    after:w-[96px]     
+                                    after:transition-all">
+                                    <span className={`absolute left-7 top-1/2 -translate-y-1/2 text-sm z-10 ${!isAnnual ? 'text-black font-semibold' : 'text-gray-400'}`}>
+                                        Monthly
+                                    </span>
+                                    <span className={`absolute right-7 top-1/2 -translate-y-1/2 text-sm z-10 ${isAnnual ? 'text-black font-semibold' : 'text-gray-400'}`}>
+                                        Yearly
+                                    </span>
+                                </div>
+                            </label>
                         </div>
-                        <label className="relative inline-flex items-center cursor-pointer">
-                            <input 
-                                type="checkbox" 
-                                className="sr-only peer"
-                                checked={isAnnual}
-                                onChange={(e) => setIsAnnual(e.target.checked)}
-                            />
-                            <div className="w-[200px] h-10 bg-gray-100 peer-focus:outline-none rounded-full peer 
-                                peer-checked:after:translate-x-[100px] 
-                                after:content-[''] 
-                                after:absolute 
-                                after:top-[2px] 
-                                after:left-[2px] 
-                                after:bg-white 
-                                after:shadow-md 
-                                after:rounded-full 
-                                after:h-[36px]    
-                                after:w-[96px]     
-                                after:transition-all">
-                                {/* Monthly text */}
-                                <span className={`absolute left-7 top-1/2 -translate-y-1/2 text-sm z-10 ${!isAnnual ? 'text-black font-semibold' : 'text-gray-400'}`}>
-                                    Monthly
-                                </span>
-                                {/* Yearly text */}
-                                <span className={`absolute right-7 top-1/2 -translate-y-1/2 text-sm z-10 ${isAnnual ? 'text-black font-semibold' : 'text-gray-400'}`}>
-                                    Yearly
-                                </span>
-                            </div>
-                        </label>
                     </div>
-                    <div className='grid grid-cols-3 gap-[5%]'>
-                        {pricingTiers.map((tier) => (
-                            <div key={tier.id} className='flex flex-col justify-between gap-[5%] border border-[#D9D9D9] h-[600px] p-5'>
-                                <div className='flex flex-col gap-7'>
-                                    <div className='flex flex-col items-center'>
-                                        <h1 className='text-bold text-[30px]'>{tier.name}</h1>
-                                    </div>
-                                    <div>
-                                        <h2 className='text-bold text-[15px] text-lg'>
-                                            ${calculatePrice(tier.price)}/mo
-                                            {isAnnual && <span className="text-sm text-gray-500 ml-1">(billed annually)</span>}
-                                        </h2>
-                                        <p>{tier.description}</p>
-                                    </div>
 
-                                    <div className='flex flex-col gap-[100px]'>
-                                        <div className='flex flex-col gap-[10px]'>
-                                            {tier.features.map((feature, index) => (
-                                                <p key={index}>{feature}</p>
-                                            ))}
+                    {/* Pricing Cards */}
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+                        {pricingTiers.map((tier) => (
+                            <div 
+                                key={tier.id} 
+                                className='flex flex-col justify-between border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow duration-300'
+                            >
+                                <div className='space-y-6'>
+                                    <div className='text-center'>
+                                        <h3 className='text-2xl font-bold'>{tier.name}</h3>
+                                        <div className='mt-4'>
+                                            <span className='text-4xl font-bold'>${calculatePrice(tier.price)}</span>
+                                            <span className='text-gray-600'>/mo</span>
+                                            {isAnnual && (
+                                                <p className='text-sm text-gray-500 mt-1'>billed annually</p>
+                                            )}
                                         </div>
                                     </div>
+                                    
+                                    <p className='text-gray-600'>{tier.description}</p>
+                                    
+                                    <ul className='space-y-3'>
+                                        {tier.features.map((feature, index) => (
+                                            <li key={index} className='flex items-start'>
+                                                <svg className='h-6 w-6 text-green-500 mr-2' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                                                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
+                                                </svg>
+                                                <span>{feature}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
-                                <div className='flex flex-col gap-[100px]'>
-                                    <div className='flex items-center justify-center'>
-                                        <button 
-                                            className='bg-black w-[270px] h-[38px] text-white'
-                                            onClick={() => handlePricing(tier.id)}
-                                        >
-                                            {tier.buttonText}
-                                        </button>
-                                    </div>
-                                </div>
+                                
+                                <button 
+                                    onClick={() => handlePricing(tier.id)}
+                                    className='mt-8 w-full bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800 transition-colors duration-200'
+                                >
+                                    {tier.buttonText}
+                                </button>
                             </div>
                         ))}
                     </div>
                 </div>
-                <PlansChart />
+
+                <div className='mt-16'>
+                    <PlansChart />
+                </div>
+
                 <Footer />
             </div>
-        </>
+        </div>
     );
 };
 

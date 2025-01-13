@@ -1,70 +1,67 @@
-import React from 'react'
-import Header from '@/app/landingPage/_components/Header'
-import ChatDemo from './_component/ChatDemo'
-import DemoBenefits from './_component/DemoBenefits'
-import Footer from '../_components/Footer'
-import Link from 'next/link'
-const page = () => {
+import React from 'react';
+import Header from '@/app/landingPage/_components/Header';
+import ChatDemo from './_component/ChatDemo';
+import DemoBenefits from './_component/DemoBenefits';
+import Footer from '../_components/Footer';
+import Link from 'next/link';
+
+const ProductPage = () => {
+  const sections = ['virtual', 'appointment', 'support', 'sales'] as const;
+  
   return (
-    <div>
-      <div className='flex flex-col  w-[100%] h-[100vh] pl-[16%] pr-[16%]'>
+    <div className="min-h-screen bg-gradient-to-b from-white to-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Header />
-        <div className='flex flex-col mt-[4rem] w-[100%]'>
-          <div className='flex flex-col items-center text-center'>
-            <h1>About IntuitionLabs: Leading AI Solutions in CA</h1>
-            <p className='w-[80%]'>Explore the diverse types of AI workers shaping the future of business operations from virtual assistants streamlining administrative tasks to advanced data analysts uncovering valuable insights.</p>
+        
+        <main className="mt-16">
+          {/* Hero Section */}
+          <div className="text-center max-w-3xl mx-auto">
+            <h1 className="text-4xl font-bold text-gray sm:text-5xl lg:text-6xl">
+              About IntuitionLabs: Leading AI Solutions in CA
+            </h1>
+            <p className="mt-6 text-xl text-slate-700">
+              Explore the diverse types of AI workers shaping the future of business operations 
+              from virtual assistants streamlining administrative tasks to advanced data analysts 
+              uncovering valuable insights.
+            </p>
           </div>
 
-          <div className='mt-[5rem]'>
-            <div className='grid grid-cols-2 w-[100%] h-[40rem] mt-[2rem]'>
-              <div>
-                <DemoBenefits  type='virtual'/>
-              </div>
-              <div >
-              <ChatDemo type='virtual' />
-              </div>
-            </div>
-
-            <div className='grid grid-cols-2 w-[100%] h-[40rem] mt-[4rem]'>
-              <div>
-                <DemoBenefits  type='appointment'/>
-              </div>
-              <div >
-              <ChatDemo type='appointment' />
-              </div>
-            </div>
-
-            <div className='grid grid-cols-2 w-[100%] h-[40rem] mt-[4rem]'>
-              <div>
-                <DemoBenefits  type='support'/>
-              </div>
-              <div >
-              <ChatDemo type='support' />
-              </div>
-            </div>
-            
-
-            <div className='grid grid-cols-2 w-[100%] h-[40rem] mt-[4rem]'>
-              <div>
-                <DemoBenefits  type='sales'/>
-              </div>
-              <div >
-              <ChatDemo type='sales' />
-              </div>
-            </div>
+          {/* Product Sections */}
+          <div className="mt-20 space-y-32">
+            {sections.map((type) => (
+              <section 
+                key={type}
+                className="grid lg:grid-cols-2 gap-12 items-center"
+              >
+                <div className="lg:pr-8">
+                  <DemoBenefits type={type} />
+                </div>
+                <div className="lg:pl-8">
+                  <ChatDemo type={type} />
+                </div>
+              </section>
+            ))}
           </div>
-          <div style={{margin: '5rem 0'}}>
-            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '1rem'}}>
-              <p style={{fontSize: '2rem', fontWeight: 650}}>Let’s us grow for you <br />
-              any aI Employee!</p>
-              <Link href='/' style={{padding: '.5rem 2rem', backgroundColor: 'black', color: 'white'}}>Get Started</Link>
-            </div>
+
+          {/* CTA Section */}
+          <div className="my-32 text-center">
+            <h2 className="text-4xl font-bold text-white">
+              Let us grow your business with<br />
+              any AI Employee!
+            </h2>
+            <Link 
+              href="/" 
+              className="inline-block mt-8 px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Get Started
+            </Link>
           </div>
-          <Footer />
-        </div>
+        </main>
+
+        <Footer />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default ProductPage;
