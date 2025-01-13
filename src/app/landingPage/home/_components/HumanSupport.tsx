@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import Support from '@/landingPage/home/_components/images/support.webp'
+import Support from '@/app/landingPage/home/_components/images/support.webp'
 const HumanSupport = () => {
   return (
     <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', width: '100%', marginTop: '4rem', gap: '3rem'}}>

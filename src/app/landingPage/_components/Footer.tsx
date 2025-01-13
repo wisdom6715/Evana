@@ -14,8 +14,7 @@ const Footer = () => {
                 <p>Quick Links</p>
                 <Link href='/'>Home</Link>
                 <Link href='/'>Products</Link>
-                <Link href='/'>Pricing</Link>
-                <Link href='/'>Resounces</Link>
+                <Link href='/landingPage/cost'>Pricing</Link>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column'}}>
                 <p>Our Solutions</p>

@@ -25,7 +25,7 @@ const AuthFlow = () => {
                 <Image src={Logo} alt='Intuitionlabs Logo' className='w-72 h-28'/>
                 <div className='flex flex-col gap-[30px] items-center'>
                     <div className='text-black flex flex-col items-center justify-center gap-2 w-[90%]'>
-                        <h1 className='text-black font-bold text-lg text-[2.5rem]'>Welcome Back!</h1>
+                        <h1 style={{fontSize: '2rem', fontWeight: 600}}>Welcome Back!</h1>
                         <h2 className='text-center'>Sign up or log in by entering your email and password below</h2>
                     </div>
 
