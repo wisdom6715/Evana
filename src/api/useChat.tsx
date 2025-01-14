@@ -1,4 +1,3 @@
-// useQAForm.ts
 import { useState, useEffect } from 'react';
 import useWebSocket from './initializeWebsocket';
 
@@ -9,11 +8,12 @@ interface APIResponse {
   notification_id?: string;
 }
 
-interface WebSocketMessage {
+// Match the types from initializeWebsocket.tsx
+interface CustomerRequest {
   user_id: string;
-  user_type: string;
-  company_id: string;
+  user_type: 'customer';
   query_id: string;
+  message?: string;
 }
 
 interface UseQAFormProps {
@@ -93,11 +93,11 @@ const useQAForm = ({ wsUrl }: UseQAFormProps): UseQAFormReturn => {
             setCurrentQueryId(data.notification_id);
             setAnswer('Connecting you with a customer service representative...');
             
-            const wsMessage: WebSocketMessage = {
+            const wsMessage: CustomerRequest = {
               user_id: customerId,
               user_type: 'customer',
-              company_id: companyId,
               query_id: data.notification_id,
+              message: query // Optional: Include the original query as a message
             };
             sendMessage(wsMessage);
           }

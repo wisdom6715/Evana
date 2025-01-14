@@ -12,12 +12,19 @@ interface FileUploadConfig {
     onError: () => void;
 }
 
+// Create a full mock form event type
+interface MockFormEvent extends FormEvent<HTMLFormElement> {
+    currentTarget: HTMLFormElement & {
+        files?: FileList | null;
+    };
+}
+
 const ChatComponent: React.FC = () => {
     const [popupMessage, setPopupMessage] = useState<string | null>(null);
-    const [inputFocuse, setInputFocuse] = useState(false)
+    const [inputFocuse, setInputFocuse] = useState(false);
     const companyId = 'cfcfbfd2-d4db-4335-a89f-eaecbf762be2';
 
-    const [{ isLoading, error, isSuccess }, { handleSubmit, handleFileUpload, fileInputRef }] = useFileUpload({
+    const [{ isLoading, error }, { handleSubmit, handleFileUpload, fileInputRef }] = useFileUpload({
         companyId,
         apiBaseUrl: 'http://localhost:5000/api',
         onSuccess: () => {
@@ -40,31 +47,42 @@ const ChatComponent: React.FC = () => {
     const {
         handleChatting,
         answer,
-        connectionStatus,
     } = useQAForm({
         wsUrl: WS_URL
     });
 
     const onSubmit = (e: FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
-        setQuery('')
-        handleChatting(query, companyId);
+        if (query.trim()) {
+            handleChatting(query, companyId);
+            setQuery('');
+        }
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         if (e.target.files?.[0]) {
-            const formEvent = {
+            // Create a mock form event that matches the expected type
+            const mockEvent: MockFormEvent = {
+                ...new Event('submit') as unknown as  any,
                 preventDefault: () => {},
-                currentTarget: { files: e.target.files }
+                currentTarget: {
+                    ...document.createElement('form'),
+                    files: e.target.files
+                }
             };
-            handleSubmit(formEvent as any);
+            handleSubmit(mockEvent);
         }
     };
     
-    // conditional rendering of the mic based on the ind of input
-    useEffect(()=>{
+    useEffect(() => {
         setInputFocuse(query !== '');
-    },[query]);
+    }, [query]);
+
+    const renderUploadStatus = () => {
+        if (isLoading) return <div className={styles.uploadStatus}>Uploading...</div>;
+        if (error) return <div className={styles.uploadError}>Upload failed</div>;
+        return null;
+    };
 
     return (
         <>
@@ -126,29 +144,30 @@ const ChatComponent: React.FC = () => {
                             <div>
                                 <div style={{ display: 'flex', justifyContent: 'flex-start', margin: '1rem 0' }}>
                                     <div style={{
-                                    maxWidth: '85%',
-                                    padding: '1rem',
-                                    backgroundColor: '#e9ecef',
-                                    borderRadius: '8px',
-                                    wordBreak: 'break-word'
+                                        maxWidth: '85%',
+                                        padding: '1rem',
+                                        backgroundColor: '#e9ecef',
+                                        borderRadius: '8px',
+                                        wordBreak: 'break-word'
                                     }}>
-                                    <p style={{ margin: 0 }}>{answer}</p>
+                                        <p style={{ margin: 0 }}>{answer}</p>
                                     </div>
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem 0' }}>
                                     <div style={{
-                                    maxWidth: '60%',
-                                    padding: '1rem',
-                                    backgroundColor: '#d1ecf1',
-                                    borderRadius: '8px',
-                                    wordBreak: 'break-word'
+                                        maxWidth: '60%',
+                                        padding: '1rem',
+                                        backgroundColor: '#d1ecf1',
+                                        borderRadius: '8px',
+                                        wordBreak: 'break-word'
                                     }}>
-                                    <p style={{ margin: 0 }}>{query}</p>
+                                        <p style={{ margin: 0 }}>{query}</p>
                                     </div>
                                 </div>
                             </div>
                         )}
-                        </div>
+                        {renderUploadStatus()}
+                    </div>
                     <form className={styles.inputContainer} onSubmit={onSubmit}>
                         <input 
                             type="text" 
@@ -158,14 +177,14 @@ const ChatComponent: React.FC = () => {
                             onChange={(e) => setQuery(e.target.value)}
                         />
                         <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap:'.5rem', paddingRight: '.5rem'}}>
-                            {inputFocuse === false? (
+                            {!inputFocuse && (
                                 <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="24" height="24">
-                                <path d="M12,19.273c5.144,0,7.438-2.818,7.438-9.137S17.144,1,12,1,4.563,3.818,4.563,10.137s2.293,9.137,7.437,9.137Zm0-17.273c2.819,0,5.461,.701,6.22,5.207h-2.802c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h2.933c.057,.587,.087,1.229,.087,1.93s-.03,1.342-.087,1.93h-2.933c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h2.802c-.759,4.506-3.401,5.207-6.22,5.207s-5.46-.701-6.22-5.207h2.802c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5h-2.932c-.057-.587-.087-1.229-.087-1.93s.03-1.342,.087-1.93h2.932c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5h-2.802c.759-4.506,3.401-5.207,6.22-5.207Z"/>
-                                <path d="M22.414,11.783c-.273-.018-.516,.184-.538,.459-.631,8.065-5.719,9.758-9.876,9.758S2.755,20.307,2.124,12.242c-.021-.276-.264-.478-.538-.459-.275,.021-.481,.262-.459,.538,.728,9.292,7.125,10.68,10.874,10.68s10.146-1.388,10.874-10.68c.021-.275-.184-.516-.459-.538Z"/>
-                            </svg>
-                            ) : null}
+                                    <path d="M12,19.273c5.144,0,7.438-2.818,7.438-9.137S17.144,1,12,1,4.563,3.818,4.563,10.137s2.293,9.137,7.437,9.137Zm0-17.273c2.819,0,5.461,.701,6.22,5.207h-2.802c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h2.933c.057,.587,.087,1.229,.087,1.93s-.03,1.342-.087,1.93h-2.933c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h2.802c-.759,4.506-3.401,5.207-6.22,5.207s-5.46-.701-6.22-5.207h2.802c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5h-2.932c-.057-.587-.087-1.229-.087-1.93s.03-1.342,.087-1.93h2.932c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5h-2.802c.759-4.506,3.401-5.207,6.22-5.207Z"/>
+                                    <path d="M22.414,11.783c-.273-.018-.516,.184-.538,.459-.631,8.065-5.719,9.758-9.876,9.758S2.755,20.307,2.124,12.242c-.021-.276-.264-.478-.538-.459-.275,.021-.481,.262-.459,.538,.728,9.292,7.125,10.68,10.874,10.68s10.146-1.388,10.874-10.68c.021-.275-.184-.516-.459-.538Z"/>
+                                </svg>
+                            )}
                             <button type='submit'> 
-                                <svg  xmlns="http://www.w3.org/2000/svg" id="arrow-circle-down" viewBox="0 0 24 24" width="24" height="24">
+                                <svg xmlns="http://www.w3.org/2000/svg" id="arrow-circle-down" viewBox="0 0 24 24" width="24" height="24">
                                     <path d="M12,24A12,12,0,1,0,0,12,12.013,12.013,0,0,0,12,24ZM6.293,9.465,9.879,5.879h0a3,3,0,0,1,4.243,0l3.585,3.586.024.025a1,1,0,1,1-1.438,1.389L13,7.586,13.007,18a1,1,0,0,1-2,0L11,7.587,7.707,10.879A1,1,0,1,1,6.293,9.465Z"/>
                                 </svg>
                             </button>

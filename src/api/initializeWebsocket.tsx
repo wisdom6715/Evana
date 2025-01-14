@@ -1,19 +1,42 @@
-// useWebSocket.ts
 import { useState, useEffect, useCallback } from 'react';
 
-interface WebSocketMessage {
+// Define specific message types that can be handled
+interface BaseWebSocketMessage {
   type: string;
   query_id: string;
-  response?: string;
-  [key: string]: any; // For any additional properties
 }
 
-interface WebSocketRequest {
+interface ResponseMessage extends BaseWebSocketMessage {
+  type: 'response';
+  response: string;
+}
+
+interface StatusMessage extends BaseWebSocketMessage {
+  type: 'status';
+  status: string;
+}
+
+// Union type for all possible message types
+type WebSocketMessage = ResponseMessage | StatusMessage;
+
+// Define specific request types
+interface BaseWebSocketRequest {
   user_id: string;
   user_type: string;
   query_id: string;
-  [key: string]: any; // For any additional properties
 }
+
+interface CustomerRequest extends BaseWebSocketRequest {
+  user_type: 'customer';
+  message?: string;
+}
+
+interface AgentRequest extends BaseWebSocketRequest {
+  user_type: 'agent';
+  action: 'accept' | 'resolve' | 'transfer';
+}
+
+type WebSocketRequest = CustomerRequest | AgentRequest;
 
 interface UseWebSocketProps {
   wsUrl: string;
@@ -48,7 +71,7 @@ const useWebSocket = ({
       setConnectionStatus('Connected to support system');
 
       if (currentCustomerId && currentQueryId) {
-        const initialMessage: WebSocketRequest = {
+        const initialMessage: CustomerRequest = {
           user_id: currentCustomerId,
           user_type: 'customer',
           query_id: currentQueryId,
@@ -59,15 +82,17 @@ const useWebSocket = ({
 
     ws.onmessage = (event: MessageEvent) => {
       try {
-        const parsedMessage: WebSocketMessage = JSON.parse(event.data);
+        const parsedMessage = JSON.parse(event.data) as WebSocketMessage;
         console.log('WebSocket message received:', parsedMessage);
 
         if (parsedMessage.type === 'response' && parsedMessage.query_id === currentQueryId) {
-          setMessage(parsedMessage.response || 'No response provided');
+          setMessage(parsedMessage.response);
           setConnectionStatus('Response received from agent');
+        } else if (parsedMessage.type === 'status') {
+          setConnectionStatus(parsedMessage.status);
         }
       } catch (error) {
-        console.error('Error parsing WebSocket message:', error);
+        console.error('Error parsing WebSocket message:', error instanceof Error ? error.message : 'Unknown error');
         setConnectionStatus('Error processing message');
       }
     };

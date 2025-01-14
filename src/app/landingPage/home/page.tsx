@@ -11,7 +11,7 @@ import LastSection from './_components/LastSection';
 import Footer from '../_components/Footer';
 const Page = () => {
     return (
-        <div className='w-[100%] h-[100vh] relative pl-[5%] pr-[5%]'
+        <div className='w-[100%] h-[100vh] relative pl-[5%] pr-[5%] md:px-[16%] py-4'
         style={{
             backgroundImage: `url(${bgImage.src})`,
             backgroundSize: 'cover',

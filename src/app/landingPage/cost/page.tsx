@@ -99,7 +99,7 @@ const PricingPage = () => {
 
     return (
         <div className='min-h-screen w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]'>
-            <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
+            <div className=' px-[5%] md:px-[16%] py-4'>
                 <Header />
                 
                 <div className='mt-12 space-y-12'>

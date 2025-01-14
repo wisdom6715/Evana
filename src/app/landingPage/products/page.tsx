@@ -10,7 +10,7 @@ const ProductPage = () => {
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto md:px-[16%] py-4 px-[5%]">
         <Header />
         
         <main className="mt-16">
