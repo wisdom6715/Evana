@@ -37,6 +37,7 @@ const index = () => {
     setActiveComponent(title); 
   };
   const renderComponent = () => {
+    
     switch(activeComponent){
       case 'Company Profile':
         return <Profile />

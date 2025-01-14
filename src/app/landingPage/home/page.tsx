@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import styles from '@/app/landingPage/home/_components/styles/home.module.css';
 import bgImage from '@/app/landingPage/home/_components/images/backgroundImage.webp'
 import Header from '../_components/Header';
 import Intro from './_components/Intro';

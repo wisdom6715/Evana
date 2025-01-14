@@ -86,19 +86,19 @@ const DemoBenefits: React.FC<DemoBenefitsProps> = ({ type }) => {
                 <div>
                     <p style={{fontSize: '1.5rem', fontWeight: 600}}>Capabilities</p>
                     <ul style={{display: 'flex', flexDirection: 'column', gap: '.5rem', paddingLeft: '.5rem'}}>
-                        {selectedType.Capabilities.map(items => <li> {items} </li>)}
+                        {selectedType.Capabilities.map((items, index) => <li key={index}> {items} </li>)}
                     </ul>
                 </div>
                 <div>
                     <p style={{fontSize: '1.5rem', fontWeight: 600}}>Applications</p>
                     <ul style={{display: 'flex', flexDirection: 'column', gap: '.5rem', paddingLeft: '.5rem'}}>
-                        {selectedType.Applications.map(items => <li> {items} </li>)}
+                        {selectedType.Applications.map((items, index) => <li key={index}> {items} </li>)}
                     </ul>
                 </div>
                 <div>
                     <p style={{fontSize: '1.5rem', fontWeight: 600}}>Features</p>
                     <ul style={{display: 'flex', flexDirection: 'column', gap: '.5rem', paddingLeft: '.5rem'}}>
-                        {selectedType.features.map(items => <li> {items} </li>)}
+                        {selectedType.features.map((items, index) => <li key={index}> {items} </li>)}
                     </ul>
                 </div>
             </div>

@@ -1,14 +1,3 @@
-type Page = {
-    id: string;
-    url: string;
-    title: string;
-    isPublished: boolean;
-    rank: number;
-    views: number;
-    createdAt: Date;
-    updatedAt: Date;
-};
-
 type PageWithRanking = {
     url: string;
     title: string;
