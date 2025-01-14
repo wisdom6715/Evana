@@ -45,13 +45,13 @@ const ProductPage = () => {
 
           {/* CTA Section */}
           <div className="my-32 text-center">
-            <h2 className="text-4xl font-bold text-white">
+            <h2 className="text-4xl font-bold text-black">
               Let us grow your business with<br />
               any AI Employee!
             </h2>
             <Link 
               href="/" 
-              className="inline-block mt-8 px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+              className="inline-block mt-8 px-8 py-3 bg-black text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
             >
               Get Started
             </Link>
