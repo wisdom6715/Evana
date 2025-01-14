@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "apexcharts": "^4.2.0",
+    "axios": "^1.7.9",
     "firebase": "^11.0.2",
     "next": "^15.1.0",
     "react": "^19.0.0",

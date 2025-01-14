@@ -63,13 +63,19 @@ const ChatComponent: React.FC = () => {
         if (e.target.files?.[0]) {
             // Create a mock form event that matches the expected type
             const mockEvent: MockFormEvent = {
-                ...new Event('submit') as unknown as  any,
+                ...new Event('submit') as any,
                 preventDefault: () => {},
-                currentTarget: {
-                    ...document.createElement('form'),
+                currentTarget: Object.assign(document.createElement('form'), {
                     files: e.target.files
-                }
-            };
+                  }),
+            bubbles: true,
+            cancelable: true,
+            defaultPrevented: false,
+            isTrusted: true,
+            timeStamp: Date.now(),
+            type: 'submit',
+            target: e.target
+            } as MockFormEvent;
             handleSubmit(mockEvent);
         }
     };
