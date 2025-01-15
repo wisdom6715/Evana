@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import axios, { AxiosError } from 'axios';
+import { db } from '@/lib/firebaseConfig';
+import { collection, addDoc } from "firebase/firestore";
 
 interface RegisterCompanyData {
     name: string;
@@ -44,9 +46,11 @@ const useCompanyRegistration = (): UseCompanyRegistrationResult => {
                     },
                 }
             );
-            
+            const companyId = response.data.company_id
             alert(`Company registered successfully! Company ID: ${response.data.company_id}`);
-            saveToLocalStorage('companyId', response.data.company_id);
+            const collectionRef = collection(db, "users");
+            const docRef = await addDoc(collectionRef, { companyId });
+            console.log(docRef.id);
             
         } catch (err) {
             const error = err as AxiosError<ApiError>;
@@ -55,19 +59,6 @@ const useCompanyRegistration = (): UseCompanyRegistrationResult => {
             alert(`Registration failed: ${errorMessage}`);
         } finally {
             setIsLoading(false);
-        }
-    };
-
-    const saveToLocalStorage = (key: string, value: string) => {
-        try {
-            const stringifiedValue = JSON.stringify(value);
-            localStorage.setItem(key, stringifiedValue);
-        } catch (error) {
-            if (error instanceof Error) {
-                console.error("Error saving to localStorage:", error.message);
-            } else {
-                console.error("Unknown error saving to localStorage");
-            }
         }
     };
 

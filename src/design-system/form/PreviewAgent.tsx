@@ -1,10 +1,18 @@
 import React from 'react'
-
-const PreviewAgent = () => {
+import Image from 'next/image';
+import sampleLogo from '@/app/assets/images/chatbot.jpeg'
+type PreviewAgentProps = {
+  logo: File | null;
+  welcomeMessage: string;
+  chatbotName: string;
+  theme: string;
+};
+const PreviewAgent: React.FC<PreviewAgentProps> = ({ logo, welcomeMessage, chatbotName, theme }) => {
+  const logoUrl = logo ? URL.createObjectURL(logo) : sampleLogo;
   return (
     <div style={{
       width: '65%', 
-      height: '85%', 
+      height: '90%', 
       backgroundColor: 'transparent',
     }}>
       <div style={{
@@ -14,7 +22,7 @@ const PreviewAgent = () => {
         gridTemplateRows: '40% 60%'
       }}>
         <div style={{
-          background: 'linear-gradient(to bottom, #004d40, #e3fffa)',
+          background: `linear-gradient(to bottom,${theme} , #fffa)`,
           borderTopLeftRadius: '1.2rem',
           borderTopRightRadius: '1.2rem',
           display: 'flex',
@@ -31,13 +39,13 @@ const PreviewAgent = () => {
           }}>
               <div style={{width: '100%', height: '80%', paddingTop: '2rem', backgroundColor: 'transparent', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                   {/* <!-- company's logo tag to be replaced with image tag --> */}
-                  <div style={{width: '2.5rem', height: '2.5rem', borderRadius: '50%', backgroundColor: 'red'}}></div>
+                  <Image width={30} height={30} style={{width: '2.5rem', height: '2.5rem', borderRadius: '50%', backgroundColor: 'blueviolet'}} src={logoUrl} alt="company's logo"/>
                   {/* <!-- chatbot avatar logo tag to be replaced with image tag --> */}
                   <div style={{width: '2.5rem', height: '2.5rem', borderRadius: '50%', backgroundColor: 'blueviolet'}}></div>
               </div>
               <div style={{paddingTop: '1rem'}}>
-                  <h2 style={{color: 'white'}}>Hi, I'm Zia</h2>
-                  <h2 style={{color: 'white'}}>I'm here to help with questions about our services.</h2>
+                  <h2 style={{color: 'white'}}>Hi, I'm {chatbotName}</h2>
+                  <p style={{color: 'white', maxWidth: '15rem', }}>{welcomeMessage || "I'm here to help with questions about our services."}</p>
             </div>
           </div>
           <div style={{

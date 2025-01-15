@@ -1,4 +1,4 @@
-import React, { useState, FormEvent, useEffect } from 'react';
+import React, { useState, FormEvent, useEffect, useRef } from 'react';
 import styles from '@/_components/styles/chatStyle.module.css';
 import Image from 'next/image';
 import customizeIcon from '@/app/assets/images/customize.png';
@@ -12,16 +12,22 @@ interface FileUploadConfig {
     onError: () => void;
 }
 
-// Create a full mock form event type
 interface MockFormEvent extends FormEvent<HTMLFormElement> {
     currentTarget: HTMLFormElement & {
         files?: FileList | null;
     };
 }
 
+interface Message {
+    type: 'answer' | 'query';
+    content: string;
+}
+
 const ChatComponent: React.FC = () => {
+    const [messages, setMessages] = useState<Message[]>([]);
     const [popupMessage, setPopupMessage] = useState<string | null>(null);
     const [inputFocuse, setInputFocuse] = useState(false);
+    const chatAreaRef = useRef<HTMLDivElement>(null);
     const companyId = 'cfcfbfd2-d4db-4335-a89f-eaecbf762be2';
 
     const [{ isLoading, error }, { handleSubmit, handleFileUpload, fileInputRef }] = useFileUpload({
@@ -51,6 +57,21 @@ const ChatComponent: React.FC = () => {
         wsUrl: WS_URL
     });
 
+    useEffect(() => {
+        if (answer) {
+            setMessages(prev => [...prev, 
+                { type: 'answer', content: answer },
+                { type: 'query', content: query }
+            ]);
+        }
+    }, [answer, query]);
+
+    useEffect(() => {
+        if (chatAreaRef.current) {
+            chatAreaRef.current.scrollTop = chatAreaRef.current.scrollHeight;
+        }
+    }, [messages]);
+
     const onSubmit = (e: FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
         if (query.trim()) {
@@ -61,20 +82,19 @@ const ChatComponent: React.FC = () => {
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         if (e.target.files?.[0]) {
-            // Create a mock form event that matches the expected type
             const mockEvent: MockFormEvent = {
                 ...new Event('submit') as any,
                 preventDefault: () => {},
                 currentTarget: Object.assign(document.createElement('form'), {
                     files: e.target.files
-                  }),
-            bubbles: true,
-            cancelable: true,
-            defaultPrevented: false,
-            isTrusted: true,
-            timeStamp: Date.now(),
-            type: 'submit',
-            target: e.target
+                }),
+                bubbles: true,
+                cancelable: true,
+                defaultPrevented: false,
+                isTrusted: true,
+                timeStamp: Date.now(),
+                type: 'submit',
+                target: e.target
             } as MockFormEvent;
             handleSubmit(mockEvent);
         }
@@ -142,36 +162,30 @@ const ChatComponent: React.FC = () => {
                 </div>
 
                 <div className={styles.chatContainer}>
-                    <div className={styles.chatArea}>
+                    <div className={styles.chatArea} ref={chatAreaRef}>
                         <p className={styles.subText}>
                             Your virtual assistant, ready to help with frequently asked questions.
                         </p>
-                        {answer && (
-                            <div>
-                                <div style={{ display: 'flex', justifyContent: 'flex-start', margin: '1rem 0' }}>
-                                    <div style={{
-                                        maxWidth: '85%',
-                                        padding: '1rem',
-                                        backgroundColor: '#e9ecef',
-                                        borderRadius: '8px',
-                                        wordBreak: 'break-word'
-                                    }}>
-                                        <p style={{ margin: 0 }}>{answer}</p>
+                        <div className="flex flex-col space-y-4">
+                            {messages.map((message, index) => (
+                                <div
+                                    key={index}
+                                    className={`flex ${
+                                        message.type === 'answer' ? 'justify-start' : 'justify-end'
+                                    } my-4`}
+                                >
+                                    <div
+                                        className={`max-w-[85%] p-4 rounded-lg break-words ${
+                                            message.type === 'answer'
+                                                ? 'bg-gray-200'
+                                                : 'bg-blue-100'
+                                        }`}
+                                    >
+                                        <p className="m-0">{message.content}</p>
                                     </div>
                                 </div>
-                                <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem 0' }}>
-                                    <div style={{
-                                        maxWidth: '60%',
-                                        padding: '1rem',
-                                        backgroundColor: '#d1ecf1',
-                                        borderRadius: '8px',
-                                        wordBreak: 'break-word'
-                                    }}>
-                                        <p style={{ margin: 0 }}>{query}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+                            ))}
+                        </div>
                         {renderUploadStatus()}
                     </div>
                     <form className={styles.inputContainer} onSubmit={onSubmit}>

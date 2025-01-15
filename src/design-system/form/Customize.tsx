@@ -20,7 +20,6 @@ type InputField = {
 type CustomizationTypes = {
     chatbotName: string;
     logo: File | null;
-    chatbotIcon: File | null;
     welcomeMessage: string;
     theme: string;
 };
@@ -29,7 +28,6 @@ const Customize = () => {
     const [formData, setFormData] = useState<CustomizationTypes>({
         chatbotName: 'Maria',
         logo: null,
-        chatbotIcon: null,
         welcomeMessage: '',
         theme: '#000000'
     });
@@ -62,20 +60,6 @@ const Customize = () => {
                 border: '.1rem dashed black',
                 height: '40px',
                 padding: '.2rem'
-            },
-            required: true
-        },
-        {
-            label: '🖼️ Chatbot Icon',
-            type: 'file',
-            name: 'chatbotIcon',
-            placeholder: 'Upload icon',
-            styles: {
-                backgroundColor: 'rgb(225, 225, 225)',
-                width: '90%',
-                border: '.1rem solid black',
-                height: '40px',
-                padding: '0 0 0 .5rem'
             },
             required: true
         },
@@ -194,7 +178,12 @@ const Customize = () => {
                 </div>
             </form>
             <div className={style.customizationPreview}>
-                <PreviewAgent />
+                <PreviewAgent 
+                    logo={formData.logo} 
+                    welcomeMessage={formData.welcomeMessage} 
+                    chatbotName={formData.chatbotName} 
+                    theme={formData.theme} 
+                />
             </div>
         </div>
     );
