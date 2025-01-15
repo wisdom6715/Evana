@@ -18,8 +18,8 @@ export const getPages = async ({
     try {
         // Define the base pages
         const basePages = [
-            { url: '/products', title: 'Products' },
-            { url: '/pricing', title: 'Pricing' }
+            { url: '/landingPage/products', title: 'Products' },
+            { url: '/landingPage/cost', title: 'Pricing' }
         ];
 
         // Filter and sort the base pages
