@@ -18,7 +18,6 @@ export const getPages = async ({
     try {
         // Define the base pages
         const basePages = [
-            { url: '/', title: 'Home' },
             { url: '/products', title: 'Products' },
             { url: '/pricing', title: 'Pricing' }
         ];
