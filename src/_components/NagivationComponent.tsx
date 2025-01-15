@@ -25,7 +25,7 @@ const NagivationComponent = () => {
     <>
         <div className={styles.topContainer}>
             <div className={styles.logoContainer}>
-                <Image className='w-64 h-12' src={Logo} alt='Intuitionlabs Logo'/>
+                <Image className='w-64 h-10' src={Logo} alt='Intuitionlabs Logo'/>
             </div>
 
             <div className={styles.navIconSubContainers}>
