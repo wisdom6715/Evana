@@ -8,14 +8,14 @@ const Summary = () => {
             <div className='bg-[#f1f1f3] flex items-center pl-2 border border-gray-200'>
                 <h1>Chatlog Summary</h1>
             </div>
-            <div className='bg-white border border-gray-200 grid-cols-[15%_85%] grid'>
+            <div className='bg-white  grid-cols-[10%_90%] grid'>
                 {/* chatlog Summary lists */}
-                <div className='min-h-[50vh] max-h-[90vh] grid grid-rows-[4%_96%] '>
+                <div className='min-h-[50vh] max-h-[100vh] grid grid-rows-[4%_96%] '>
                     <ChatlogList />
                 </div>
 
                 {/* chatlog canva read space */}
-                <div className='border border-l-[#c7c7c7]'>
+                <div className='border border-[#e6e6e6]'>
                     <LogRead />
                 </div>
             </div>

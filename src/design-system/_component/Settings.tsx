@@ -64,16 +64,16 @@ const Settings: React.FC = () => {
 
   return (
     <div className="w-full bg-white flex items-center justify-center">
-      <div style={{height: '80%'}} className="grid grid-cols-[15%_85%] w-4/5 bg-white border border-gray-400">
+      <div style={{height: '80%', display: 'grid', gridTemplateColumns: '15% 85%'}} className=" w-4/5 bg-blue-800 border border-gray-400">
         <div className="bg-white flex items-start gap-6 flex-col px-4 border-r border-gray-400">
-          <h2 className="text-lg font-medium pt-2">Account settings</h2>
+          <h2 className="text-lg font-medium" style={{paddingTop: '1rem'}}>Account settings</h2>
           <div className="flex flex-col w-full gap-2">
             {navProperties.map((nav, index) => (
               <div
                 key={index}
                 onClick={() => handleNavigation(nav.title as ComponentType)}
-                className={`flex items-center w-full justify-start px-3 py-2 cursor-pointer rounded-md transition-colors hover:bg-gray-100 ${
-                  activeComponent === nav.title ? 'bg-[#EAEAEA] hover:bg-[#EAEAEA]' : 'bg-white'
+                className={`flex items-center w-full justify-start px-3 py-2 cursor-pointer rounded-md transition-colors ${
+                  activeComponent === nav.title ? 'bg-gray-200 hover:bg-gray-300' : 'bg-white hover:bg-gray-100'
                 }`}
               >
                 <h3 className="text-sm">{nav.title}</h3>

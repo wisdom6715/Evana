@@ -38,8 +38,8 @@ const PaymentContent = () => {
             <div className='w-[60%] h-[90%] flex flex-col gap-4'>
               <div className='flex flex-col gap-4'>
                 <div className='flex flex-col gap-2'>
-                  <p className='font-bold text-base text-black'>Step 1 of 2</p>
-                  <h2 className='font-bold text-2xl text-black'>Enter payment info to start your free trial</h2>
+                  <p className='text-lg text-black'>Step 1 of 2</p>
+                  <h2 className='text-2xl text-black'>Enter payment info to start your free trial</h2>
                 </div>
 
                 <div className='flex flex-col gap-2'>
@@ -121,7 +121,7 @@ const PaymentContent = () => {
               </div>
               <div className='flex flex-row justify-between items-start'>
                 <div className='flex flex-col justify-between'>
-                  <DisplayDate daysToAdd={7} className='text-xs'/>
+                  <DisplayDate daysToAdd={7} className='text-l'/>
                   <p>7 days trial ends</p>
                 </div>
                 <p>${queryParams.price?.toLocaleString('en-us')}</p>

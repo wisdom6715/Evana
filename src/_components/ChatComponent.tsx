@@ -4,6 +4,7 @@ import Image from 'next/image';
 import customizeIcon from '@/app/assets/images/customize.png';
 import { useFileUpload } from '@/api/useUpload';
 import useQAForm from '@/api/useChat';
+import Update from './_subComponent/Update';
 
 interface FileUploadConfig {
     companyId: string;
@@ -27,6 +28,7 @@ const ChatComponent: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [popupMessage, setPopupMessage] = useState<string | null>(null);
     const [inputFocuse, setInputFocuse] = useState(false);
+    const [switchToUpdate, setSwitchToUpdate] = useState(true);
     const chatAreaRef = useRef<HTMLDivElement>(null);
     const companyId = 'cfcfbfd2-d4db-4335-a89f-eaecbf762be2';
 
@@ -104,6 +106,7 @@ const ChatComponent: React.FC = () => {
         setInputFocuse(query !== '');
     }, [query]);
 
+    /// switch to Update component to post on the chatbot
     return (
         <>
             <div className={styles.generalContainer}>
@@ -144,7 +147,7 @@ const ChatComponent: React.FC = () => {
                                 </svg>
                             )}
                         </div>
-                        <div className={styles.icon}>
+                        <div className={styles.icon} onClick={()=> setSwitchToUpdate(prevstate => !prevstate)}>
                             <Image alt="customize icon" src={customizeIcon} height={20} />
                         </div>
                         <div className={styles.icon}>
@@ -159,55 +162,59 @@ const ChatComponent: React.FC = () => {
                     </div>
                 </div>
 
-                <div className={styles.chatContainer}>
-                    <div className={styles.chatArea} ref={chatAreaRef}>
-                        <p className={styles.subText}>
-                            Your virtual assistant, ready to help with frequently asked questions.
-                        </p>
-                        <div className="flex flex-col space-y-4">
-                            {messages.map((message, index) => (
-                                <div
-                                    key={index}
-                                    className={`flex ${
-                                        message.type === 'answer' ? 'justify-start' : 'justify-end'
-                                    } my-4`}
-                                >
-                                    <div
-                                        className={`max-w-[85%] p-4 rounded-lg break-words ${
-                                            message.type === 'answer'
-                                                ? 'bg-gray-200'
-                                                : 'bg-blue-100'
-                                        }`}
-                                    >
-                                        <p className="m-0">{message.content}</p>
-                                    </div>
+                {
+                    switchToUpdate ? (
+                        <div className={styles.chatContainer}>
+                            <div className={styles.chatArea} ref={chatAreaRef}>
+                                <p className={styles.subText}>
+                                    Your virtual assistant, ready to help with frequently asked questions.
+                                </p>
+                                <div className="flex flex-col space-y-4">
+                                    {messages.map((message, index) => (
+                                        <div
+                                            key={index}
+                                            className={`flex ${
+                                                message.type === 'answer' ? 'justify-start' : 'justify-end'
+                                            } my-4`}
+                                        >
+                                            <div
+                                                className={`max-w-[85%] p-4 rounded-lg break-words ${
+                                                    message.type === 'answer'
+                                                        ? 'bg-gray-200'
+                                                        : 'bg-blue-100'
+                                                }`}
+                                            >
+                                                <p className="m-0">{message.content}</p>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
+                            </div>
+                            <form className={styles.inputContainer} onSubmit={onSubmit}>
+                                <input 
+                                    type="text" 
+                                    placeholder="Enter a message" 
+                                    className={styles.input}
+                                    value={query}
+                                    onChange={(e) => setQuery(e.target.value)}
+                                />
+                                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap:'.5rem', paddingRight: '.5rem'}}>
+                                    {!inputFocuse && (
+                                        <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="24" height="24">
+                                            <path d="M12,19.273c5.144,0,7.438-2.818,7.438-9.137S17.144,1,12,1,4.563,3.818,4.563,10.137s2.293,9.137,7.437,9.137Zm0-17.273c2.819,0,5.461,.701,6.22,5.207h-2.802c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h2.933c.057,.587,.087,1.229,.087,1.93s-.03,1.342-.087,1.93h-2.933c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h2.802c-.759,4.506-3.401,5.207-6.22,5.207s-5.46-.701-6.22-5.207h2.802c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5h-2.932c-.057-.587-.087-1.229-.087-1.93s.03-1.342,.087-1.93h2.932c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5h-2.802c.759-4.506,3.401-5.207,6.22-5.207Z"/>
+                                            <path d="M22.414,11.783c-.273-.018-.516,.184-.538,.459-.631,8.065-5.719,9.758-9.876,9.758S2.755,20.307,2.124,12.242c-.021-.276-.264-.478-.538-.459-.275,.021-.481,.262-.459,.538,.728,9.292,7.125,10.68,10.874,10.68s10.146-1.388,10.874-10.68c.021-.275-.184-.516-.459-.538Z"/>
+                                        </svg>
+                                    )}
+                                    <button type='submit'> 
+                                        <svg xmlns="http://www.w3.org/2000/svg" id="arrow-circle-down" viewBox="0 0 24 24" width="24" height="24">
+                                            <path d="M12,24A12,12,0,1,0,0,12,12.013,12.013,0,0,0,12,24ZM6.293,9.465,9.879,5.879h0a3,3,0,0,1,4.243,0l3.585,3.586.024.025a1,1,0,1,1-1.438,1.389L13,7.586,13.007,18a1,1,0,0,1-2,0L11,7.587,7.707,10.879A1,1,0,1,1,6.293,9.465Z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                    </div>
-                    <form className={styles.inputContainer} onSubmit={onSubmit}>
-                        <input 
-                            type="text" 
-                            placeholder="Enter a message" 
-                            className={styles.input}
-                            value={query}
-                            onChange={(e) => setQuery(e.target.value)}
-                        />
-                        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap:'.5rem', paddingRight: '.5rem'}}>
-                            {!inputFocuse && (
-                                <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="24" height="24">
-                                    <path d="M12,19.273c5.144,0,7.438-2.818,7.438-9.137S17.144,1,12,1,4.563,3.818,4.563,10.137s2.293,9.137,7.437,9.137Zm0-17.273c2.819,0,5.461,.701,6.22,5.207h-2.802c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h2.933c.057,.587,.087,1.229,.087,1.93s-.03,1.342-.087,1.93h-2.933c-.276,0-.5,.224-.5,.5s.224,.5,.5,.5h2.802c-.759,4.506-3.401,5.207-6.22,5.207s-5.46-.701-6.22-5.207h2.802c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5h-2.932c-.057-.587-.087-1.229-.087-1.93s.03-1.342,.087-1.93h2.932c.276,0,.5-.224,.5-.5s-.224-.5-.5-.5h-2.802c.759-4.506,3.401-5.207,6.22-5.207Z"/>
-                                    <path d="M22.414,11.783c-.273-.018-.516,.184-.538,.459-.631,8.065-5.719,9.758-9.876,9.758S2.755,20.307,2.124,12.242c-.021-.276-.264-.478-.538-.459-.275,.021-.481,.262-.459,.538,.728,9.292,7.125,10.68,10.874,10.68s10.146-1.388,10.874-10.68c.021-.275-.184-.516-.459-.538Z"/>
-                                </svg>
-                            )}
-                            <button type='submit'> 
-                                <svg xmlns="http://www.w3.org/2000/svg" id="arrow-circle-down" viewBox="0 0 24 24" width="24" height="24">
-                                    <path d="M12,24A12,12,0,1,0,0,12,12.013,12.013,0,0,0,12,24ZM6.293,9.465,9.879,5.879h0a3,3,0,0,1,4.243,0l3.585,3.586.024.025a1,1,0,1,1-1.438,1.389L13,7.586,13.007,18a1,1,0,0,1-2,0L11,7.587,7.707,10.879A1,1,0,1,1,6.293,9.465Z"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    ) : <Update />
+                }
             </div>
         </>
     );

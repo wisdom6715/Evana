@@ -108,7 +108,7 @@ const PricingPage = () => {
                 </div>
                 <div className='flex flex-col items-center gap-14'>
                     <div className='flex flex-col items-center gap-4'>
-                        <h2>Pricing</h2>
+                        <h2 className='text-[2rem]'>Pricing Plans</h2>
                         <p>
                             We offer a variety of pricing plans to suit your needs. Please select your preferred plan below.
                         </p>
@@ -144,7 +144,7 @@ const PricingPage = () => {
                     </div>
                     <div className='flex flex-row items-center gap-20'>
                         {pricingTiers.map((tier) => (
-                            <div key={tier.id} className='flex flex-col justify-between gap-[28px] border border-[#D9D9D9] w-[351px] h-[600px] p-5'>
+                            <div key={tier.id} className='flex flex-col justify-between gap-[28px] border border-[#D9D9D9] w-[351px] h-[600px] p-5 bg-white'>
                                 <div className='flex flex-col gap-7'>
                                     <div className='flex flex-col items-center'>
                                         <h1 className='text-bold text-[30px]'>{tier.name}</h1>

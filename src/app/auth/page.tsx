@@ -19,19 +19,19 @@ const AuthFlow = () => {
     }
 
     return (
-        <div className='flex flex-row h-[100vh] items-center justify-center'>
+        <div className='flex flex-row h-[100vh] items-center justify-center  absolute inset-0 -z-10 bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem] transition-all duration-200'>
             <Image src={AuthImage} alt='auth image' className="w-1/2 bg-gray-200 h-[90vh] rounded-tr-[1.5rem] rounded-br-[1.5rem] object-cover" />
             <div className='w-1/2 h-[90vh] text-white flex items-center justify-center flex-col'>
                 <Image src={Logo} alt='Intuitionlabs Logo' className='w-72 h-28'/>
                 <div className='flex flex-col gap-[30px] items-center'>
                     <div className='text-black flex flex-col items-center justify-center gap-2 w-[90%]'>
-                        <h1 style={{fontSize: '2rem', fontWeight: 600}}>Welcome Back!</h1>
+                        <h1 style={{fontSize: '30px', fontWeight: 550}}>Welcome Back!</h1>
                         <h2 className='text-center'>Sign up or log in by entering your email and password below</h2>
                     </div>
 
                     <div className='w-[90%] text-black text-sm flex flex-col items-center gap-[14px]'>
                         <div 
-                            className='flex items-center w-[100%] h-[54px] gap-5 bg-white-200 justify-center rounded-lg border border-[C3C3C3]-200 cursor-pointer' 
+                            className='flex items-center w-[100%] h-[54px] gap-5 bg-white justify-center rounded-lg border border-[C3C3C3]-200 cursor-pointer' 
                             onClick={handleGoogleSignIn}
                         >
                             <Image 
@@ -42,7 +42,7 @@ const AuthFlow = () => {
                             <p>Continue with Google</p>
                         </div>
                         <div 
-                            className='flex items-center w-[100%] h-[54px] gap-5 bg-white-200 justify-center rounded-lg border border-[C3C3C3]-200 cursor-pointer' 
+                            className='flex items-center w-[100%] h-[54px] gap-5 bg-white justify-center rounded-lg border border-[C3C3C3]-200 cursor-pointer' 
                             onClick={handleMicrosoftSignin}
                         >
                             <Image 
@@ -57,16 +57,16 @@ const AuthFlow = () => {
                     <form className='flex flex-col gap-[14px] items-center w-[90%]' onSubmit={handleSubmission}>
                         <input 
                             type="text" 
-                            placeholder="Email" 
-                            className='bg-gray-200 w-[100%] h-[54px] pl-5 rounded-lg'
+                            placeholder="Email.........." 
+                            className='bg-gray-200 w-[100%] h-[54px] pl-5 rounded-lg outline-none'
                             onChange={(e) => handleInputChange('email', e.target.value)}
                             value={userInfo.email}
                             required
                         />
                         <input 
                             type="password" 
-                            placeholder="Password" 
-                            className='bg-gray-200 w-[100%] h-[54px] pl-5 rounded-lg'
+                            placeholder="Password......." 
+                            className='bg-gray-200 w-[100%] h-[54px] pl-5 rounded-lg outline-none'
                             onChange={(e) => handleInputChange('password', e.target.value)}
                             value={userInfo.password}
                             required

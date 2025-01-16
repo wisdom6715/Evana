@@ -23,11 +23,11 @@ const page = () => {
                 </div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '40% 59%', gap: '1%', backgroundColor: 'white'}}>
-                <div style={{backgroundColor: 'white',  borderStyle: 'solid', borderWidth: '.1rem', borderColor: '#DFDFDF'}}>
-                    <MessageItem />
+                <div style={{backgroundColor: 'white',  borderStyle: 'solid', borderWidth: '.1rem', borderColor: '#DFDFDF', overflowY: 'scroll'}}>
+                  <MessageItem />
                 </div>
                 <div style={{backgroundColor: 'white',  borderStyle: 'solid', borderWidth: '.1rem', borderColor: '#DFDFDF'}}>
-                    <MessageChat />
+                  <MessageChat />
                 </div>
             </div>
         </div>

@@ -14,7 +14,7 @@ const index = () => {
       </div>
       <div className='w-[100%] h-[100vh] grid grid-cols-[80%_20%] bg-[#fffff]'> 
         <div className='flex flex-col w-[100%] items-center'>
-          <div className='grid grid-rows-[20%_42%_29%] w-[90%] h-[100%] gap-[4%]'>
+          <div className='grid grid-rows-[23%_42%_29%] w-[90%] h-[100%] gap-[3%]'>
             <Intro />
             <Milestones />
             <Notification />
