@@ -4,7 +4,9 @@ import { auth } from '@/lib/firebaseConfig';
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
-  AuthError 
+  AuthError,
+  setPersistence, 
+  browserLocalPersistence,
 } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 
@@ -21,6 +23,14 @@ const useLogIn = () => {
     password: "",
   });
 
+  setPersistence(auth, browserLocalPersistence)
+  .then(() => {
+    console.log('Session persistence set to local');
+  })
+  .catch((error) => {
+    console.error('Error setting persistence:', error);
+  });
+  
   // Sign in and sign up function
   const handleAuth = async (): Promise<boolean> => {
     console.log('Creating account');

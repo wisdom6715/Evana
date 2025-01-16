@@ -160,7 +160,12 @@ const PricingPage = () => {
                                     <div className='flex flex-col gap-[100px]'>
                                         <div className='flex flex-col gap-[10px]'>
                                             {tier.features.map((feature, index) => (
-                                                <p key={index}>{feature}</p>
+                                                <div key={index} className='flex flex-row items-center'>
+                                                    <svg className='h-6 w-6 text-green-500 mr-2' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                                                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
+                                                    </svg>
+                                                    <p key={index}>{feature}</p>
+                                                </div>
                                             ))}
                                         </div>
                                     </div>

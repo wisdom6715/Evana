@@ -11,6 +11,8 @@ import applePay from '@/app/assets/images/ApplePay.jpeg'
 import googlePay from '@/app/assets/images/gPay.jpeg'
 import secureIcon from '@/app/assets/images/secureIcon.png'
 import Logo from '@/app/assets/images/Screenshot 2025-01-11 090739.png'
+import {auth} from '@/lib/firebaseConfig'
+import DisplayDate from '@/_components/_subComponent/DisplayDate'
 
 // Dynamically import PaystackButton to prevent SSR issues
 const DynamicPaystackButton = dynamic(() => 
@@ -22,6 +24,7 @@ const DynamicPaystackButton = dynamic(() =>
 const PaymentContent = () => {
   const router = useRouter()
   const {isClient, componentProps, queryParams} = usePaymant();
+  const user = auth.currentUser;
 
   return (
     <div className='w-full bg-yellow-100 grid grid-rows-[5%_92%_3%] h-screen'>
@@ -41,7 +44,7 @@ const PaymentContent = () => {
 
                 <div className='flex flex-col gap-2'>
                   <p className='text-lg text-black'>Signed in as</p>
-                  <h3 className='text-sm text-gray-400'>Bostonconsult@outlook.com</h3>
+                  <h3 className='text-sm text-gray-400'>{user?.email || 'loading...'}</h3>
                 </div>
               </div>
 
@@ -69,19 +72,17 @@ const PaymentContent = () => {
                 </div>
 
                 <div className='flex flex-col gap-3'>
-                  <p className='w-[474px] text-left text-xs'>
-                    By clicking &quot;Agree and subscribe,&quot; you agree: After your free trial ends on Dec 14, 2024, you will be charged US$22.99 (plus tax) monthly. 
-                    At the end of your one-year term, your subscription will automatically renew monthly until you cancel. No annual commitment required after the first year. 
-                    Price subject to change at renewal. Cancel before the free trial ends and you won&apos;t be charged. Cancel before Dec 28, 2024 to get a full refund and avoid a fee. 
-                    Cancel anytime via Adobe Account or Customer Support. You also agree to the Terms of Use and the Subscription and Cancellation Terms.
-                  </p>
+                <p className="w-[474px] text-left text-xs">
+                  By clicking &quot;Agree and subscribe,&quot; you agree: After your free trial ends on{' '}
+                  <span style={{ fontSize: '0.75rem', fontWeight: 'normal', lineHeight: '1rem' }}>
+                    <DisplayDate daysToAdd={7} />
+                  </span>You will be charged ${queryParams.price?.toLocaleString('en-us')} {queryParams.billing}, your subscription will automatically renew {queryParams.billing} until you cancel. Price subject to change at renewal.
+                </p>
                   <div className='flex flex-row items-center gap-2'>
-                    <button 
-                      className='w-[300px] h-[45px] bg-black text-white' 
-                      onClick={() => router.replace('/dashboard/home')}
-                    >
-                      Agree and Subscribe
-                    </button>
+                    <div className='flex flex-row items-center gap-3'>
+                      <input type="checkbox" />
+                      <p>Agree and Subscribe</p>
+                    </div>
                     <button 
                       className='w-[120px] h-[45px]' 
                       onClick={() => router.back()}
@@ -100,8 +101,8 @@ const PaymentContent = () => {
               <h1 className='font-bold'>Your cart</h1>
               <div className='flex flex-col gap-8 border border-gray-300 rounded-lg p-3 h-[135px]'>
                 <div className='flex flex-row justify-between'>
-                  <h1>KustomAI</h1>
-                  <p>7 free trial</p>
+                  <h1>IntuitionLabs</h1>
+                  <p>7 days free trial</p>
                 </div>
                 <div className='flex flex-col gap-1'>
                   <h1>Subscription</h1>
@@ -120,7 +121,7 @@ const PaymentContent = () => {
               </div>
               <div className='flex flex-row justify-between items-start'>
                 <div className='flex flex-col justify-between'>
-                  <p>DEC 14, 2024</p>
+                  <DisplayDate daysToAdd={7} className='text-xs'/>
                   <p>7 days trial ends</p>
                 </div>
                 <p>${queryParams.price?.toLocaleString('en-us')}</p>
@@ -131,12 +132,16 @@ const PaymentContent = () => {
               <p>Free trial terms</p>
               <div className='flex flex-col justify-between items-start border-t border-gray-300 gap-5 p-3'>
                 <div className='flex flex-row items-center'>
-                  <p>box </p>
-                  <p>7 days free trial ends</p>
+                  <svg className='h-6 w-6 text-green-500 mr-2' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
+                  </svg>
+                  <p>Free trial ends in 7 days</p>
                 </div>
                 <div className='flex flex-row items-center'>
-                  <p>box </p>
-                  <p>7 days free trial ends</p>
+                  <svg className='h-6 w-6 text-green-500 mr-2' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                      <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
+                  </svg>
+                  <p>You have access to features available for your plan</p>
                 </div>
               </div>
             </div>

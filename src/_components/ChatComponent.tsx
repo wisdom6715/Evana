@@ -104,12 +104,6 @@ const ChatComponent: React.FC = () => {
         setInputFocuse(query !== '');
     }, [query]);
 
-    const renderUploadStatus = () => {
-        if (isLoading) return <div className={styles.uploadStatus}>Uploading...</div>;
-        if (error) return <div className={styles.uploadError}>Upload failed</div>;
-        return null;
-    };
-
     return (
         <>
             <div className={styles.generalContainer}>
@@ -186,7 +180,6 @@ const ChatComponent: React.FC = () => {
                                 </div>
                             ))}
                         </div>
-                        {renderUploadStatus()}
                     </div>
                     <form className={styles.inputContainer} onSubmit={onSubmit}>
                         <input 

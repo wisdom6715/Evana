@@ -2,8 +2,20 @@
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Logo from '@/app/assets/images/newLogo.png'
+import Invitation from './_components/Invitation'
+import { useEffect, useState } from 'react'
 const WelcomePage = () => {
     const router = useRouter()
+    const [showInvitation, setShowInvitation] = useState(false);
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setShowInvitation(true);
+      }, 800);
+  
+      // Cleanup timer when component unmounts
+      return () => clearTimeout(timer);
+    }, []);
   return (
     <div className='flex flex-col items-center justify-center w-[100%] h-[100vh] bg-white'>
         <div className='position: absolute left-1 top-0'>
@@ -22,8 +34,8 @@ const WelcomePage = () => {
                     </svg>
                 </div>
             </div>
+            {showInvitation && <Invitation onClose={() => setShowInvitation(false)} />}
         </div>
-
     </div>
   )
 }

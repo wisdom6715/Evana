@@ -48,7 +48,7 @@ const useCompanyRegistration = (): UseCompanyRegistrationResult => {
             );
             const companyId = response.data.company_id
             alert(`Company registered successfully! Company ID: ${response.data.company_id}`);
-            const collectionRef = collection(db, "users");
+            const collectionRef = collection(db, "companies");
             const docRef = await addDoc(collectionRef, { companyId });
             console.log(docRef.id);
             

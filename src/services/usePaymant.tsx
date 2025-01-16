@@ -153,7 +153,7 @@ const usePayment = () => {
       }, { merge: true });
 
       alert('Payment was successful! Thank you for your subscription.');
-      router.push('/dashboard/home');
+      router.push('/dashboard/settings');
     } catch (error) {
       console.error('Error updating payment information:', error);
       alert('There was an error processing your payment. Please contact support.');
