@@ -30,7 +30,12 @@ const ChatComponent: React.FC = () => {
     const chatAreaRef = useRef<HTMLDivElement>(null);
     const companyId = 'cfcfbfd2-d4db-4335-a89f-eaecbf762be2';
 
-    const [{ isLoading, error }, { handleSubmit, handleFileUpload, fileInputRef }] = useFileUpload({
+    const showPopup = (message: string): void => {
+        setPopupMessage(message);
+        setTimeout(() => setPopupMessage(null), 3000);
+    };
+
+    const [{ isLoading }, { handleSubmit, handleFileUpload, fileInputRef }] = useFileUpload({
         companyId,
         apiBaseUrl: 'http://localhost:5000/api',
         onSuccess: () => {
@@ -42,11 +47,6 @@ const ChatComponent: React.FC = () => {
         },
     } as FileUploadConfig);
 
-    const showPopup = (message: string): void => {
-        setPopupMessage(message);
-        setTimeout(() => setPopupMessage(null), 3000);
-    };
-
     const [query, setQuery] = useState<string>('');
     const WS_URL = 'ws://localhost:8765';
   
@@ -56,6 +56,26 @@ const ChatComponent: React.FC = () => {
     } = useQAForm({
         wsUrl: WS_URL
     });
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        if (e.target.files?.[0]) {
+            const mockEvent: MockFormEvent = {
+                ...new Event('submit') as any,
+                preventDefault: () => {},
+                currentTarget: Object.assign(document.createElement('form'), {
+                    files: e.target.files
+                }),
+                bubbles: true,
+                cancelable: true,
+                defaultPrevented: false,
+                isTrusted: true,
+                timeStamp: Date.now(),
+                type: 'submit',
+                target: e.target
+            } as MockFormEvent;
+            handleSubmit(mockEvent);
+        }
+    };
 
     useEffect(() => {
         if (answer) {
@@ -77,26 +97,6 @@ const ChatComponent: React.FC = () => {
         if (query.trim()) {
             handleChatting(query, companyId);
             setQuery('');
-        }
-    };
-
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        if (e.target.files?.[0]) {
-            const mockEvent: MockFormEvent = {
-                ...new Event('submit') as any,
-                preventDefault: () => {},
-                currentTarget: Object.assign(document.createElement('form'), {
-                    files: e.target.files
-                }),
-                bubbles: true,
-                cancelable: true,
-                defaultPrevented: false,
-                isTrusted: true,
-                timeStamp: Date.now(),
-                type: 'submit',
-                target: e.target
-            } as MockFormEvent;
-            handleSubmit(mockEvent);
         }
     };
     
@@ -136,9 +136,13 @@ const ChatComponent: React.FC = () => {
                                 style={{ display: 'none' }}
                                 onChange={handleFileChange}
                             />
-                            <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="20" height="20">
-                                <path d="M17.974,7.146c-.331-.066-.602-.273-.742-.569-1.55-3.271-5.143-5.1-8.734-4.438-3.272,.6-5.837,3.212-6.384,6.501-.162,.971-.15,1.943,.033,2.89,.06,.309-.073,.653-.346,.901-1.145,1.041-1.801,2.524-1.801,4.07,0,3.032,2.467,5.5,5.5,5.5h11c4.136,0,7.5-3.364,7.5-7.5,0-3.565-2.534-6.658-6.026-7.354Zm-1.474,12.854H5.5c-1.93,0-3.5-1.57-3.5-3.5,0-.983,.418-1.928,1.146-2.59,.786-.715,1.155-1.773,.963-2.763-.138-.712-.146-1.445-.024-2.181,.403-2.422,2.365-4.421,4.771-4.862,.385-.07,.768-.104,1.146-.104,2.312,0,4.405,1.289,5.422,3.434,.413,.872,1.2,1.482,2.158,1.673,2.56,.511,4.417,2.779,4.417,5.394,0,3.032-2.468,5.5-5.5,5.5Zm-1.379-7.707c.391,.391,.391,1.023,0,1.414-.195,.195-.451,.293-.707,.293s-.512-.098-.707-.293l-1.707-1.707v5c0,.553-.448,1-1,1s-1-.447-1-1v-5l-1.707,1.707c-.391,.391-1.023,.391-1.414,0s-.391-1.023,0-1.414l2.707-2.707c.386-.386,.893-.58,1.4-.583l.014-.003,.014,.003c.508,.003,1.014,.197,1.4,.583l2.707,2.707Z"/>
-                            </svg>
+                            {isLoading ? (
+                                <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-gray-900"></div>
+                            ) : (
+                                <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="20" height="20">
+                                    <path d="M17.974,7.146c-.331-.066-.602-.273-.742-.569-1.55-3.271-5.143-5.1-8.734-4.438-3.272,.6-5.837,3.212-6.384,6.501-.162,.971-.15,1.943,.033,2.89,.06,.309-.073,.653-.346,.901-1.145,1.041-1.801,2.524-1.801,4.07,0,3.032,2.467,5.5,5.5,5.5h11c4.136,0,7.5-3.364,7.5-7.5,0-3.565-2.534-6.658-6.026-7.354Zm-1.474,12.854H5.5c-1.93,0-3.5-1.57-3.5-3.5,0-.983,.418-1.928,1.146-2.59,.786-.715,1.155-1.773,.963-2.763-.138-.712-.146-1.445-.024-2.181,.403-2.422,2.365-4.421,4.771-4.862,.385-.07,.768-.104,1.146-.104,2.312,0,4.405,1.289,5.422,3.434,.413,.872,1.2,1.482,2.158,1.673,2.56,.511,4.417,2.779,4.417,5.394,0,3.032-2.468,5.5-5.5,5.5Zm-1.379-7.707c.391,.391,.391,1.023,0,1.414-.195,.195-.451,.293-.707,.293s-.512-.098-.707-.293l-1.707-1.707v5c0,.553-.448,1-1,1s-1-.447-1-1v-5l-1.707,1.707c-.391,.391-1.023,.391-1.414,0s-.391-1.023,0-1.414l2.707-2.707c.386-.386,.893-.58,1.4-.583l.014-.003,.014,.003c.508,.003,1.014,.197,1.4,.583l2.707,2.707Z"/>
+                                </svg>
+                            )}
                         </div>
                         <div className={styles.icon}>
                             <Image alt="customize icon" src={customizeIcon} height={20} />

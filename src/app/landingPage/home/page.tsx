@@ -17,7 +17,7 @@ import fetchUserData from '@/services/fetchUserData';
 
 const Page = () => {
   const router = useRouter();
-  const { userData, loading, error } = fetchUserData();
+  const { userData, loading } = fetchUserData();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
