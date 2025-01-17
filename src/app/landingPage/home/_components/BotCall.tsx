@@ -1,6 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import BotImage from './images/Bot.webp'
+import Link from 'next/link'
 
 const BotCall = () => {
   return (
@@ -18,7 +19,7 @@ const BotCall = () => {
         </div>
     
         <div className="flex justify-center sm:justify-start">
-          <button className="py-2 px-8 bg-black text-white rounded hover:bg-[#9c58ff]">Get Started</button>
+          <Link href='/auth' className="py-2 px-8 bg-black text-white rounded hover:bg-[#9c58ff]">Get Started</Link>
         </div>
       </div>
   </div>  

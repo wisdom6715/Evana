@@ -3,8 +3,6 @@ import styles from '@/_components/styles/intro.module.css'
 import DisplayDate from '../_subComponent/DisplayDate'
 import Image from 'next/image'
 import greetEmoji from '@/app/assets/images/greets.png'
-import { title } from 'process'
-import { iconNames } from 'lucide-react/dynamic'
 const Intro = () => {
     const metrics = [
         {
@@ -55,7 +53,7 @@ const Intro = () => {
                                 <h2 className={styles.metricsText}>{metric.title}</h2>
                                 <p >{metric.counts}</p>
                             </div>
-                            <p className='text-green-400 text-xs'>{metric.countVariable}% from last <br /> week</p>
+                            <p className='text-red-400 text-xs'>{metric.countVariable}% from last <br /> week</p>
                         </div>
                     </div>
                 )

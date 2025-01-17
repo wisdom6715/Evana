@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Support from '@/app/landingPage/home/_components/images/support.webp';
+import Link from 'next/link';
 
 const HumanSupport = () => {
   return (
@@ -19,9 +20,9 @@ const HumanSupport = () => {
             </div>
             </div>
             <div className="flex justify-center md:justify-start">
-            <button className="px-8 py-2 bg-black text-white rounded hover:bg-[#9c58ff]">
+            <Link href='/auth' className="px-8 py-2 bg-black text-white rounded hover:bg-[#9c58ff]">
                 Get Started
-            </button>
+            </Link>
             </div>
         </div>
     </div>

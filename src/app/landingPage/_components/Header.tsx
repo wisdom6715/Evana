@@ -39,7 +39,7 @@ const Header = () => {
         </div>
 
         {/* Desktop CTA Button */}
-        <button className="hidden md:block px-8 py-2 bg-black text-white hover:bg-[#9c58ff] transition-colors duration-300 rounded">
+        <button className="hidden md:block px-8 py-2 bg-black text-white hover:bg-[#9c58ff] transition-colors duration-300 rounded" onClick={()=> router.push('/auth')}>
           Get Started
         </button>
 
@@ -105,7 +105,7 @@ const Header = () => {
           >
             Pricing
           </Link>
-          <button className="w-full px-8 py-2 bg-black text-white hover:bg-gray-800 transition-colors rounded-md">
+          <button className="w-full px-8 py-2 bg-black text-white hover:bg-[#9c58ff] transition-colors rounded-md">
             Get Started
           </button>
         </div>

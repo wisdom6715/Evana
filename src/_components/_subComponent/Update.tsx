@@ -6,7 +6,7 @@ const Update = () => {
             <div style={{height: '80%', width: '100%'}}>
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <h2>Broadcast Message</h2>
-                    <button style={{backgroundColor: 'black', color: 'white', padding: '.2rem .3rem'}}>Broadcast</button>
+                    <button style={{backgroundColor: 'black', color: 'white', padding: '.2rem .5rem'}}>Post</button>
                 </div>
                 <div style={{width: '100%', display: 'flex', flexDirection: 'column', height: '100%', alignItems: 'center', marginTop: '1rem', justifyContent: 'center'}}>
                     <div style={{width: '80%', border: '.1rem dashed grey', height: '70%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>

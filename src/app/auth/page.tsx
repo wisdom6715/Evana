@@ -19,46 +19,59 @@ const AuthFlow = () => {
     }
 
     return (
-        <div className='flex flex-row h-[100vh] items-center justify-center  absolute inset-0 -z-10 bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem] transition-all duration-200'>
-            <Image src={AuthImage} alt='auth image' className="w-1/2 bg-gray-200 h-[90vh] rounded-tr-[1.5rem] rounded-br-[1.5rem] object-cover" />
-            <div className='w-1/2 h-[90vh] text-white flex items-center justify-center flex-col'>
-                <Image src={Logo} alt='Intuitionlabs Logo' className='w-72 h-28'/>
-                <div className='flex flex-col gap-[30px] items-center'>
-                    <div className='text-black flex flex-col items-center justify-center gap-2 w-[90%]'>
-                        <h1 style={{fontSize: '30px', fontWeight: 550}}>Welcome Back!</h1>
-                        <h2 className='text-center'>Sign up or log in by entering your email and password below</h2>
+        <div className='flex flex-col lg:flex-row min-h-screen w-full items-center justify-center bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]'>
+            <Image 
+                src={AuthImage} 
+                alt='auth image' 
+                className="hidden lg:block w-1/2 h-[90vh] object-cover rounded-tr-[1.5rem] rounded-br-[1.5rem]"
+                priority
+            />
+            
+            <div className='w-full px-4 sm:px-6 lg:w-1/2 py-8 lg:py-0 flex items-center justify-center flex-col'>
+                <Image 
+                    src={Logo} 
+                    alt='Intuitionlabs Logo' 
+                    className='w-48 sm:w-56 lg:w-72 h-auto mb-8'
+                    priority
+                />
+                
+                <div className='flex flex-col gap-6 w-full max-w-md'>
+                    <div className='text-black text-center space-y-2'>
+                        <h1 className='text-2xl sm:text-3xl font-semibold'>Welcome Back!</h1>
+                        <h2 className='text-sm sm:text-base'>Sign up or log in by entering your email and password below</h2>
                     </div>
 
-                    <div className='w-[90%] text-black text-sm flex flex-col items-center gap-[14px]'>
-                        <div 
-                            className='flex items-center w-[100%] h-[54px] gap-5 bg-white justify-center rounded-lg border border-[C3C3C3]-200 cursor-pointer' 
+                    <div className='w-full space-y-4'>
+                        <button 
+                            className='flex items-center w-full h-12 sm:h-14 gap-3 bg-white justify-center rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors duration-200'
                             onClick={handleGoogleSignIn}
                         >
                             <Image 
-                                className='w-7 h-7'
+                                className='w-6 h-6 sm:w-7 sm:h-7'
                                 alt='google logo'
                                 src={googleLogo}
                             />
-                            <p>Continue with Google</p>
-                        </div>
-                        <div 
-                            className='flex items-center w-[100%] h-[54px] gap-5 bg-white justify-center rounded-lg border border-[C3C3C3]-200 cursor-pointer' 
+                            <span className='text-sm sm:text-base'>Continue with Google</span>
+                        </button>
+                        
+                        <button 
+                            className='flex items-center w-full h-12 sm:h-14 gap-3 bg-white justify-center rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors duration-200'
                             onClick={handleMicrosoftSignin}
                         >
                             <Image 
-                                className='w-7 h-7'
+                                className='w-6 h-6 sm:w-7 sm:h-7'
                                 alt='microsoft logo'
                                 src={microsoftLogo}
                             />
-                            <p>Continue with Microsoft</p>
-                        </div>
+                            <span className='text-sm sm:text-base'>Continue with Microsoft</span>
+                        </button>
                     </div>
 
-                    <form className='flex flex-col gap-[14px] items-center w-[90%]' onSubmit={handleSubmission}>
+                    <form className='space-y-4 w-full' onSubmit={handleSubmission}>
                         <input 
                             type="text" 
                             placeholder="Email.........." 
-                            className='bg-gray-200 w-[100%] h-[54px] pl-5 rounded-lg outline-none'
+                            className='bg-gray-200 w-full h-12 sm:h-14 px-4 rounded-lg outline-none focus:ring-2 focus:ring-black transition-shadow'
                             onChange={(e) => handleInputChange('email', e.target.value)}
                             value={userInfo.email}
                             required
@@ -66,25 +79,24 @@ const AuthFlow = () => {
                         <input 
                             type="password" 
                             placeholder="Password......." 
-                            className='bg-gray-200 w-[100%] h-[54px] pl-5 rounded-lg outline-none'
+                            className='bg-gray-200 w-full h-12 sm:h-14 px-4 rounded-lg outline-none focus:ring-2 focus:ring-black transition-shadow'
                             onChange={(e) => handleInputChange('password', e.target.value)}
                             value={userInfo.password}
                             required
                         />
                         <button 
                             type="submit"
-                            className='text-white w-[100%] h-[54px] bg-black rounded-lg'
+                            className='text-white w-full h-12 sm:h-14 bg-black rounded-lg hover:bg-gray-800 transition-colors duration-200'
                             onClick={handleAuth}
                         >
                             Continue
                         </button>
-                        <div className='w-[100%] items-center flex-row'>
-                            <p className="text-black text-sm break-words text-center">
-                                By continuing you agree to IntuitionLabs <Link href={'/'}>Terms of Service</Link> <Link href={'/'}>Privacy Policies</Link>
-                            </p>
-                        </div>
+                        <p className="text-black text-xs sm:text-sm text-center">
+                            By continuing you agree to IntuitionLabs{' '}
+                            <Link href={'/'} className="underline hover:text-gray-600">Terms of Service</Link>{' '}
+                            <Link href={'/'} className="underline hover:text-gray-600">Privacy Policies</Link>
+                        </p>
                     </form>
-                    
                 </div>
             </div>
         </div>

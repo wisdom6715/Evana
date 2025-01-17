@@ -49,7 +49,7 @@ const ProductPage = () => {
               any AI Employee!
             </h2>
             <Link 
-              href="/" 
+              href="/auth" 
               className="inline-block mt-8 px-8 py-3 bg-black text-white font-semibold rounded-lg hover:bg-[#9c58ff] transition-colors"
             >
               Get Started

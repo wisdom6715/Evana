@@ -6,7 +6,6 @@ import { useFileUpload } from '@/api/useUpload';
 import useQAForm from '@/api/useChat';
 import Update from './_subComponent/Update';
 import ChatbotImage from '@/app/landingPage/_components/assets/images/AI.webp'
-import Flex from 'react-calendar/src/Flex.jsx';
 
 interface FileUploadConfig {
     companyId: string;

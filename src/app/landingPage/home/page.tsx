@@ -19,25 +19,25 @@ const Page = () => {
   const router = useRouter();
   const { userData, loading } = fetchUserData();
 
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, async (user) => {
-  //     if (!user) {
-  //       console.log('No user logged in');
-  //       return;
-  //     }
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        console.log('No user logged in');
+        return;
+      }
 
-  //     // Wait for userData to be loaded
-  //     if (!loading) {
-  //       if (userData?.subscription?.status === 'active') {
-  //         router.push('/dashboard/home');
-  //       } else {
-  //         router.push('/welcome');
-  //       }
-  //     }
-  //   });
+      // Wait for userData to be loaded
+      if (!loading) {
+        if (userData?.subscription?.status === 'active') {
+          router.push('/dashboard/home');
+        } else {
+          router.push('/welcome');
+        }
+      }
+    });
 
-  //   return () => unsubscribe();
-  // }, [router, userData, loading]);
+    return () => unsubscribe();
+  }, [router, userData, loading]);
 
   // Show loading state while checking auth and fetching user data
   if (loading) {

@@ -20,12 +20,12 @@ const WelcomePage = () => {
   return (
     <div className='flex flex-col items-center justify-center w-[100%] h-[100vh] bg-white'>
         <div className='position: absolute left-1 top-0'>
-            <Image className='w-64 h-24' src={Logo} alt='Intuitionlabs Logo'/>
+            <Image className='w-32 h-14 md:w-64 md:h-24' src={Logo} alt='Intuitionlabs Logo'/>
         </div>
         <div className='flex flex-col items-center justify-center gap-10'>
-            <div className='flex flex-col items-center justify-center w-[45%] text-center'>
+            <div className='flex flex-col items-center justify-center w-[90%] md:w-[45%] text-center'>
                 <h1 className='text-bold text-[30px] '>Welcome to IntuitionLabs!</h1>
-                <h2 className='text-[15px] text-bold'>Ready to supercharge your team’s productivity? To unlock the platform, you’ll nee d to subscribe to a plan and try it free for 7 days</h2>
+                <p className='text-[15px] text-bold w-[100%]'>Ready to supercharge your team’s productivity? To unlock the platform, you’ll nee d to subscribe to a plan and try it free for 7 days</p>
             </div>
             <div className='w-[222px] h-[48px] bg-[#F9F5F5] hover:shadow-lg transition duration-700 ease-in-out flex flex-row justify-between items-center pl-5 rounded-[20px] text-bold cursor-pointer' style={{backgroundColor: onHover ? 'black' : '#e7e9ea', color: onHover? 'white' : 'black'}} onMouseEnter={()=> setHover(true)} onMouseLeave={()=> setHover(false)} onClick={() => router.push('/pricing')}>
               <p>Subscribe Now</p>

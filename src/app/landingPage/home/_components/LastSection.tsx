@@ -1,6 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import SectionImage from './images/lastSectionImage.webp'
+import Link from 'next/link'
 const LastSection = () => {
   return (
     <div className="mt-16 flex flex-col justify-center items-center w-full gap-12">
@@ -25,7 +26,7 @@ const LastSection = () => {
             </p>
         </div>
         <div className="flex justify-center">
-            <button className="bg-[#9c58ff] py-2 px-8 text-white rounded">Get Started</button>
+            <Link href='/auth' className="bg-[#9c58ff] py-2 px-8 text-white rounded">Get Started</Link>
         </div>
     </div>
   </div>

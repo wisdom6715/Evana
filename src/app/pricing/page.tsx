@@ -81,15 +81,12 @@ const PricingPage = () => {
 
     const handlePricing = (planId: string) => {
         const billingType = isAnnual ? 'annual' : 'monthly';
-        // Find the selected tier
         const selectedTier = pricingTiers.find(tier => tier.id === planId);
         
         if (!selectedTier) return;
 
-        // Calculate the actual price based on billing type
         const price = calculatePrice(selectedTier.price);
         
-        // Create the URL with the correct plan, billing type, and calculated price
         const queryParams = new URLSearchParams({
             plan: selectedTier.name.toLowerCase(),
             billing: billingType,
@@ -97,22 +94,31 @@ const PricingPage = () => {
         });
 
         router.push(`/payment?${queryParams.toString()}`);
-        console.log(`${planId} selected - ${billingType} billing at $${price}/month`);
     };
 
     return (
-        <>
-            <div className='flex flex-col justify-center w-[100%] h-[100vh] items-center absolute inset-0 -z-10 bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem] transition-all duration-200'>
-                <div className='position: absolute top-0 left-1 '>
-                    <Image className='w-64 h-24' src={Logo} alt='Intuitionlabs Logo'/>
-                </div>
-                <div className='flex flex-col items-center gap-14'>
-                    <div className='flex flex-col items-center gap-4'>
-                        <h2 className='text-[2rem]'>Pricing Plans</h2>
-                        <p>
-                            We offer a variety of pricing plans to suit your needs. Please select your preferred plan below.
-                        </p>
-                        <label className="relative inline-flex items-center cursor-pointer">
+        <div className='min-h-screen w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem] px-4 py-1 sm:px-6 lg:px-8'>
+            {/* Logo Section */}
+            <div className='mb-8 md:mb-1'>
+                <Image 
+                    src={Logo} 
+                    alt='Intuitionlabs Logo'
+                    className='w-32 md:w-64 md:h-24 h-12'
+                    priority
+                />
+            </div>
+
+            {/* Main Content Container */}
+            <div className='max-w-7xl mx-auto'>
+                {/* Header Section */}
+                <div className='text-center mb-8 md:mb-12'>
+                    <h2 className='text-3xl sm:text-4xl font-bold mb-4'>Pricing Plans</h2>
+                    <p className='text-gray-600 max-w-2xl mx-auto mb-8'>
+                        We offer a variety of pricing plans to suit your needs. Please select your preferred plan below.
+                    </p>
+
+                    {/* Toggle Switch */}
+                    <label className="relative inline-flex items-center cursor-pointer mx-auto">
                         <input 
                             type="checkbox" 
                             className="sr-only peer"
@@ -131,61 +137,66 @@ const PricingPage = () => {
                             after:h-[36px]    
                             after:w-[96px]     
                             after:transition-all">
-                            {/* Monthly text */}
                             <span className={`absolute left-7 top-1/2 -translate-y-1/2 text-sm z-10 ${!isAnnual ? 'text-black font-semibold' : 'text-gray-400'}`}>
                                 Monthly
                             </span>
-                            {/* Yearly text */}
                             <span className={`absolute right-7 top-1/2 -translate-y-1/2 text-sm z-10 ${isAnnual ? 'text-black font-semibold' : 'text-gray-400'}`}>
                                 Yearly
                             </span>
                         </div>
                     </label>
-                    </div>
-                    <div className='flex flex-row items-center gap-20'>
-                        {pricingTiers.map((tier) => (
-                            <div key={tier.id} className='flex flex-col justify-between gap-[28px] hover:shadow-lg transition-shadow duration-300 border border-[#D9D9D9] w-[351px] h-[600px] p-5 bg-white'>
-                                <div className='flex flex-col gap-7'>
-                                    <div className='flex flex-col items-center'>
-                                        <h1 className='text-bold text-[30px]'>{tier.name}</h1>
-                                    </div>
-                                    <div>
-                                        <h2 className='text-bold text-[15px] text-lg'>
-                                            ${calculatePrice(tier.price)}/mo
-                                            {isAnnual && <span className="text-sm text-gray-500 ml-1">(billed annually)</span>}
-                                        </h2>
-                                        <p>{tier.description}</p>
-                                    </div>
+                </div>
 
-                                    <div className='flex flex-col gap-[100px]'>
-                                        <div className='flex flex-col gap-[10px]'>
-                                            {tier.features.map((feature, index) => (
-                                                <div key={index} className='flex flex-row items-center'>
-                                                    <svg className='h-6 w-6 text-green-500 mr-2' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-                                                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
-                                                    </svg>
-                                                    <p key={index}>{feature}</p>
-                                                </div>
-                                            ))}
-                                        </div>
+                {/* Pricing Cards Grid */}
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8'>
+                    {pricingTiers.map((tier) => (
+                        <div 
+                            key={tier.id} 
+                            className='flex flex-col justify-between bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow duration-300'
+                        >
+                            {/* Card Header */}
+                            <div className='space-y-6'>
+                                <div className='text-center'>
+                                    <h3 className='text-2xl font-bold mb-2'>{tier.name}</h3>
+                                    <div className='text-3xl font-bold mb-2'>
+                                        ${calculatePrice(tier.price)}
+                                        <span className='text-base font-normal text-gray-600'>/mo</span>
                                     </div>
+                                    {isAnnual && (
+                                        <span className="text-sm text-gray-500">billed annually</span>
+                                    )}
                                 </div>
-                                <div className='flex flex-col gap-[100px]'>
-                                    <div className='flex items-center justify-center'>
-                                        <button 
-                                            className=' w-[270px] h-[38px] hover:bg-[#9c58ff] text-white bg-black transition ease-in-out duration-300'
-                                            onClick={() => handlePricing(tier.id)}
-                                        >
-                                            {tier.buttonText}
-                                        </button>
-                                    </div>
+
+                                <div className='text-gray-600'>
+                                    <p className='font-medium mb-4'>{tier.description}</p>
+                                    <ul className='space-y-3'>
+                                        {tier.features.map((feature, index) => (
+                                            <li key={index} className='flex items-start'>
+                                                <svg className='h-6 w-6 text-green-500 mr-2 flex-shrink-0' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                                                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
+                                                </svg>
+                                                <span>{feature}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
                             </div>
-                        ))}
-                    </div>
+
+                            {/* Card Footer */}
+                            <div className='mt-8'>
+                                <button 
+                                    style={{backgroundColor: tier.id === 'standardPlan'? '#9c58ff' : 'black'}}
+                                    className='w-full py-3 px-4 text-white rounded transition-colors duration-200'
+                                    onClick={() => handlePricing(tier.id)}
+                                >
+                                    {tier.buttonText}
+                                </button>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

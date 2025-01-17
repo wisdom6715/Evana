@@ -1,6 +1,8 @@
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 const Intro = () => {
+  const router = useRouter()
   return (
 <div className="w-full h-full md:w-[60%] md:h-[70%] flex justify-center flex-col items-center md:items-start">
   <div className="flex flex-col gap-16">
@@ -26,7 +28,7 @@ const Intro = () => {
       </div>
     </div>
     <div className="flex justify-center md:justify-start">
-      <button className="px-8 py-2 bg-black text-white rounded hover:bg-[#9c58ff]">
+      <button className="px-8 py-2 bg-black text-white rounded hover:bg-[#9c58ff]" onClick={()=> router.push('/auth')}>
         Get Started
       </button>
     </div>

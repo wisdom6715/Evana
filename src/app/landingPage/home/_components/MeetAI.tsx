@@ -50,10 +50,6 @@ const MeetAI = () => {
             ))
             }
         </div>
-
-        <div className="flex flex-col items-center w-full">
-            <button className="py-2 px-8 bg-black text-white rounded hover:bg-[#9c58ff]">Get Started</button>
-        </div>
     </div>
   )
 }
