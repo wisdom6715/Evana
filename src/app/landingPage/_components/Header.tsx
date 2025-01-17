@@ -22,24 +22,24 @@ const Header = () => {
           onClick={() => router.push('/')} 
           src={Logo} 
           alt='intuitionlabs logo' 
-          className="cursor-pointer w-auto h-8 md:h-10"
+          className="cursor-pointer w-auto h-8 md:h-20"
         />
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-8">
-          <Link href='/' className="hover:text-gray-600 transition-colors">
+        <div className="hidden md:flex items-center gap-8  text-l font-bold">
+          <Link href='/' className="hover:text-gray-400 transition-colors">
             Home
           </Link>
-          <Link href='/landingPage/products' className="hover:text-gray-600 transition-colors">
+          <Link href='/landingPage/products' className="hover:text-gray-400 transition-colors">
             Products
           </Link>
-          <Link href='/landingPage/cost' className="hover:text-gray-600 transition-colors">
+          <Link href='/landingPage/cost' className="hover:text-gray-400 transition-colors">
             Pricing
           </Link>
         </div>
 
         {/* Desktop CTA Button */}
-        <button className="hidden md:block px-8 py-2 bg-black text-white hover:bg-gray-800 transition-colors">
+        <button className="hidden md:block px-8 py-2 bg-black text-white hover:bg-[#9c58ff] transition-colors duration-300 rounded">
           Get Started
         </button>
 

@@ -144,7 +144,7 @@ const PricingPage = () => {
                     </div>
                     <div className='flex flex-row items-center gap-20'>
                         {pricingTiers.map((tier) => (
-                            <div key={tier.id} className='flex flex-col justify-between gap-[28px] border border-[#D9D9D9] w-[351px] h-[600px] p-5 bg-white'>
+                            <div key={tier.id} className='flex flex-col justify-between gap-[28px] hover:shadow-lg transition-shadow duration-300 border border-[#D9D9D9] w-[351px] h-[600px] p-5 bg-white'>
                                 <div className='flex flex-col gap-7'>
                                     <div className='flex flex-col items-center'>
                                         <h1 className='text-bold text-[30px]'>{tier.name}</h1>
@@ -173,8 +173,7 @@ const PricingPage = () => {
                                 <div className='flex flex-col gap-[100px]'>
                                     <div className='flex items-center justify-center'>
                                         <button 
-                                            style={{ backgroundColor: 'black', color: 'white'}}
-                                            className=' w-[270px] h-[38px]'
+                                            className=' w-[270px] h-[38px] hover:bg-[#9c58ff] text-white bg-black transition ease-in-out duration-300'
                                             onClick={() => handlePricing(tier.id)}
                                         >
                                             {tier.buttonText}

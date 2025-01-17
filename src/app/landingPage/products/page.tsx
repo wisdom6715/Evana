@@ -16,13 +16,12 @@ const ProductPage = () => {
         <main className="mt-16">
           {/* Hero Section */}
           <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl font-bold text-gray sm:text-5xl lg:text-6xl">
-              About IntuitionLabs: Leading AI Solutions in CA
+            <h1 className="text-[2rem] font-bold text-gray lg:text-[2.5rem]">
+              IntuitionLabs: Commercializing AI to Drive Business Success
             </h1>
-            <p className="mt-6 text-xl text-slate-700">
-              Explore the diverse types of AI workers shaping the future of business operations 
-              from virtual assistants streamlining administrative tasks to advanced data analysts 
-              uncovering valuable insights.
+            <p className="mt-6 text-l text-slate-700">
+              Unleash the power of AI to transform your business—automate tasks, improve efficiency, 
+              and unlock actionable insights that accelerate growth and drive success
             </p>
           </div>
 
@@ -51,7 +50,7 @@ const ProductPage = () => {
             </h2>
             <Link 
               href="/" 
-              className="inline-block mt-8 px-8 py-3 bg-black text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+              className="inline-block mt-8 px-8 py-3 bg-black text-white font-semibold rounded-lg hover:bg-[#9c58ff] transition-colors"
             >
               Get Started
             </Link>

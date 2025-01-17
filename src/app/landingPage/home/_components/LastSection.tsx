@@ -6,7 +6,7 @@ const LastSection = () => {
     <div className="mt-16 flex flex-col justify-center items-center w-full gap-12">
   <div className="flex flex-col items-center text-center">
     <h1 className="text-[2rem] md:text-[2.5rem] font-bold">
-      Trusted Partners, Proven <br /> Results
+    Proven Expertise, Real <br />Results
     </h1>
     <p>
       Assign routine and repetitive tasks to digital employees. Integrating them is as simple <br />as working with your HR department
@@ -25,7 +25,7 @@ const LastSection = () => {
             </p>
         </div>
         <div className="flex justify-center">
-            <button className="bg-[#9c58ff] py-2 px-8 text-white">Get Started</button>
+            <button className="bg-[#9c58ff] py-2 px-8 text-white rounded">Get Started</button>
         </div>
     </div>
   </div>

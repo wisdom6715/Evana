@@ -104,12 +104,11 @@ const PricingPage = () => {
                 
                 <div className='mt-12 space-y-12'>
                     <div className='text-center space-y-4'>
-                        <h2 className='text-3xl font-bold sm:text-4xl'>
-                            AI Pricing Plans: Choose the Best Package for Your Business
+                        <h2 className='text-[2rem] font-bold md:text-[2.5rem]'>
+                            Choose the Ideal Package
                         </h2>
                         <p className='max-w-2xl mx-auto text-lg text-gray-600'>
-                            CortexLab offers customizable AI assistant plans to suit your specific requirements. Whether you're a small Startup or a large enterprise, 
-                            our pricing options ensure that you get the perfect solution for your needs.
+                            IntuitionLabs provides tailored AI assistant plans to fit your unique needs. Whether you're a growing startup or a large enterprise, our flexible pricing ensures the perfect solution for your business
                         </p>
                         
                         {/* Toggle Switch */}
@@ -149,7 +148,7 @@ const PricingPage = () => {
                         {pricingTiers.map((tier) => (
                             <div 
                                 key={tier.id} 
-                                className='flex flex-col justify-between border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow duration-300'
+                                className='flex flex-col justify-between border bg-white border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow duration-300'
                             >
                                 <div className='space-y-6'>
                                     <div className='text-center'>
@@ -179,7 +178,7 @@ const PricingPage = () => {
                                 
                                 <button 
                                     onClick={() => handlePricing(tier.id)}
-                                    className='mt-8 w-full bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800 transition-colors duration-200'
+                                    className='mt-8 w-full bg-black text-white py-2 px-4 rounded-md hover:bg-[#9c58ff] transition-colors duration-300'
                                 >
                                     {tier.buttonText}
                                 </button>

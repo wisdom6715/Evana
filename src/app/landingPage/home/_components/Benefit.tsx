@@ -101,7 +101,7 @@ const Benefit = () => {
                     <p className="text-[2rem] md:text-[2.5rem] font-bold">Benefits</p>
                     <p className="text-[2rem] md:text-[2.5rem] font-bold">of AI Employees</p>
                 </div>
-                <p>Assign routine and repetitive tasks to digital employees. Integrating them is as simple <br /> as working with your HR department</p>
+                <p>Offload routine and repetitive tasks to digital employees. Integration is effortless—just like collaborating with your HR team.</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {benefitsOfAI.map((item, index) => {

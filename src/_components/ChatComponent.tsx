@@ -5,6 +5,8 @@ import customizeIcon from '@/app/assets/images/customize.png';
 import { useFileUpload } from '@/api/useUpload';
 import useQAForm from '@/api/useChat';
 import Update from './_subComponent/Update';
+import ChatbotImage from '@/app/landingPage/_components/assets/images/AI.webp'
+import Flex from 'react-calendar/src/Flex.jsx';
 
 interface FileUploadConfig {
     companyId: string;
@@ -130,7 +132,7 @@ const ChatComponent: React.FC = () => {
                 )}
 
                 <div className={styles.botContainer}>
-                    <div className={styles.botImage} onClick={() => showPopup('Hi')}></div>
+                    <Image className={styles.botImage} src={ChatbotImage} alt='AI Image'/>
                     <div className={styles.iconsContainer}>
                         <div className={styles.icon} onClick={handleFileUpload}>
                             <input

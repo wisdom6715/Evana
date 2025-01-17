@@ -12,13 +12,13 @@ const BotCall = () => {
           <h1 className="text-[2rem] md:text-[2.5rem] font-bold text-center sm:text-left">
             Empower Businesses with
           </h1>
-          <p className="text-lg font-light text-center sm:text-left">
-            At IntuitionLabs, we are committed to empowering businesses with the latest AI technology. Our team of experts works tirelessly to develop innovative solutions.
+          <p className="text-l text-center sm:text-left">
+            At IntuitionLabs, we’re dedicated to empowering your business with cutting-edge AI technology. Our team of experts works relentlessly to create innovative, tailored solutions that streamline operations, enhance customer experiences, and drive growth. With our AI-powered tools, you can stay ahead of the competition and unlock new possibilities for success.
           </p>
         </div>
     
         <div className="flex justify-center sm:justify-start">
-          <button className="py-2 px-8 bg-black text-white">Get Started</button>
+          <button className="py-2 px-8 bg-black text-white rounded hover:bg-[#9c58ff]">Get Started</button>
         </div>
       </div>
   </div>  

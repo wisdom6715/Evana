@@ -3,26 +3,26 @@ import React from 'react';
 export const PlansChart = () => {
   const rows = [
     { Features: 'Price / Month', Basic: '$29.99', Stardand: '$99.99', Enterprise: '$199.99' },
-    { Features: 'Unlimited Usage', Basic: 'Maria', Stardand: 'Germany', Enterprise: 'usa' },
-    { Features: 'AI training', Basic: 'Maria', Stardand: 'Germany', Enterprise: 'usa' },
-    { Features: 'Chatbots', Basic: 'Maria', Stardand: 'Germany', Enterprise: 'usa' },
-    { Features: 'Full Customization', Basic: 'Maria', Stardand: 'Germany', Enterprise: 'usa' },
-    { Features: 'Analytics', Basic: 'Maria', Stardand: 'Germany', Enterprise: 'usa' },
-    { Features: 'Email Support', Basic: 'Maria', Stardand: 'Germany', Enterprise: 'usa' },
-    { Features: 'Chatlog', Basic: 'Maria', Stardand: 'Germany', Enterprise: 'usa' },
-    { Features: 'Message Broadcasting', Basic: 'Maria', Stardand: 'Germany', Enterprise: 'usa' },
-    { Features: 'Audio chat', Basic: 'Maria', Stardand: 'Germany', Enterprise: 'usa' },
-    { Features: 'Realtime Chat suport', Basic: 'Maria', Stardand: 'Germany', Enterprise: 'usa' },
-    { Features: 'Voice Realtime Communication', Basic: 'Maria', Stardand: 'Germany', Enterprise: 'usa' },
-    { Features: 'Image / document upload', Basic: 'Maria', Stardand: 'Germany', Enterprise: 'usa' },
-    { Features: 'Multilingual Support', Basic: 'Maria', Stardand: 'Germany', Enterprise: 'usa' },
-    { Features: 'Access to upcoming AI products', Basic: 'Maria', Stardand: 'Germany', Enterprise: 'usa' },
+    { Features: 'Unlimited Usage', Basic: '✔️', Stardand: '✔️', Enterprise: '✔️' },
+    { Features: 'AI training', Basic: '✔️', Stardand: '✔️', Enterprise: '✔️' },
+    { Features: 'Chatbots', Basic: '2', Stardand: '5', Enterprise: '10' },
+    { Features: 'Full Customization', Basic: '✔️', Stardand: '✔️', Enterprise: '✔️' },
+    { Features: 'Analytics', Basic: '✔️', Stardand: '✔️', Enterprise: '✔️' },
+    { Features: 'Email Support', Basic: '✔️', Stardand: '✔️', Enterprise: '✔️' },
+    { Features: 'Chatlog', Basic: '✔️', Stardand: '✔️', Enterprise: '✔️' },
+    { Features: 'Message Broadcasting', Basic: '➖', Stardand: '✔️', Enterprise: '✔️' },
+    { Features: 'Audio chat', Basic: '➖', Stardand: '✔️', Enterprise: '✔️' },
+    { Features: 'Realtime Chat suport', Basic: '➖', Stardand: '✔️', Enterprise: '✔️' },
+    { Features: 'Voice Realtime Communication', Basic: '➖', Stardand: '✔️', Enterprise: '✔️' },
+    { Features: 'Image / document upload', Basic: '➖', Stardand: '✔️', Enterprise: '✔️' },
+    { Features: 'Multilingual Support', Basic: '➖', Stardand: '➖', Enterprise: '✔️' },
+    { Features: 'Access to upcoming AI products', Basic: '➖', Stardand: '➖', Enterprise: '✔️' },
   ];
 
   return (
     <div className="w-full flex flex-col items-center gap-8 mt-[4rem]">
-      <h1 className="text-xl font-semibold">Select Your Plan - Get Started Today!</h1>
-      <div className="w-full overflow-x-auto">
+      <h1 className="text-[1.5rem] md:text-[2rem] font-semibold">Select Your Plan - Get Started Today!</h1>
+      <div className="w-full overflow-x-auto bg-white">
         <table className="w-full border-collapse border border-gray-300 text-left">
           <thead className="bg-gray-200">
             <tr>

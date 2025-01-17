@@ -9,19 +9,19 @@ const MeetAI = () => {
             image: ''
         },
         {
-            role: 'Data Analyst',
-            description: 'Expert in data analysis, machine learning, and predictive modeling, helping businesses make data-driven decisions.',
+            role: 'Customer Support',
+            description: 'Meet your AI-powered Customer Support Assistant—ready to handle inquiries, resolve issues, and provide fast, efficient service 24/7.',
             image: ''
         },
         {
-            role: 'Product Manager',
-            description: 'Leading the product development team, managing the development of innovative AI solutions and technologies.',
+            role: 'Sales Assistant',
+            description: 'AI-powered Sales Assistant—automating tasks, managing leads, and providing insights to help you close more deals, faster.',
             image: ''
         },
         {
             
-           role: 'Software Engineer',
-            description: 'Experienced software engineer with expertise in building AI-powered applications and systems.',
+           role: 'Appointments Manager',
+            description: 'AI-powered Appointment Manager—automating scheduling, reminders, and rescheduling to keep your calendar organized and stress-free across platforms',
             image: ''
         }
     ]
@@ -29,7 +29,7 @@ const MeetAI = () => {
     <div className="flex flex-col w-full mt-16 gap-12">
         <div className="flex flex-col items-center text-center w-full">
             <h1 className="text-[2rem] md:text-[3rem] font-bold">Meet Our AI Employees</h1>
-            <p className="w-7/10">Explore the diverse types of AI Employees shaping the future of business operations from virtual assistants streamlining administrative tasks to advanced data analysts uncovering valuable insights.</p>
+            <p className="w-[70%]">Discover the diverse AI employees transforming business operations, from virtual assistants optimizing administrative tasks to advanced sales assistant uncovering valuable insights</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -37,7 +37,7 @@ const MeetAI = () => {
             Employees.map((employee, index) => (
                 <div
                 key={index}
-                className={`flex flex-col items-center gap-8 p-4 rounded-xl border ${ishover === index ? 'border-grey-500' : 'border-none'}`}
+                className={`flex flex-col text-l items-center gap-8 p-4 rounded-xl border  ${ishover === index ? 'border-[#cb8bfa]' : 'border-none'}`}
                 onMouseEnter={() => setHoverIndex(index)}
                 onMouseLeave={() => setHoverIndex(null)}
                 >
@@ -52,7 +52,7 @@ const MeetAI = () => {
         </div>
 
         <div className="flex flex-col items-center w-full">
-            <button className="py-2 px-8 bg-black text-white">Get Started</button>
+            <button className="py-2 px-8 bg-black text-white rounded hover:bg-[#9c58ff]">Get Started</button>
         </div>
     </div>
   )

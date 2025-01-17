@@ -50,20 +50,6 @@ const Customize = () => {
             required: true
         },
         {
-            label: '🎯 Company Logo',
-            type: 'file',
-            name: 'logo',
-            placeholder: 'Upload logo',
-            styles: {
-                backgroundColor: 'rgb(225, 225, 225)',
-                width: '40%',
-                border: '.1rem dashed black',
-                height: '40px',
-                padding: '.2rem'
-            },
-            required: true
-        },
-        {
             label: '👋 Welcome Message',
             type: 'text',
             name: 'welcomeMessage',
@@ -74,6 +60,20 @@ const Customize = () => {
                 border: '.1rem solid black',
                 height: '40px',
                 padding: '0 0 0 .5rem'
+            },
+            required: true
+        },
+        {
+            label: '🎯 Company Logo',
+            type: 'file',
+            name: 'logo',
+            placeholder: 'Upload logo',
+            styles: {
+                backgroundColor: 'rgb(225, 225, 225)',
+                width: '40%',
+                border: '.1rem dashed black',
+                height: '40px',
+                padding: '.2rem'
             },
             required: true
         },

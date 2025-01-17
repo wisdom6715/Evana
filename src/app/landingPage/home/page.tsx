@@ -19,25 +19,25 @@ const Page = () => {
   const router = useRouter();
   const { userData, loading } = fetchUserData();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        console.log('No user logged in');
-        return;
-      }
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, async (user) => {
+  //     if (!user) {
+  //       console.log('No user logged in');
+  //       return;
+  //     }
 
-      // Wait for userData to be loaded
-      if (!loading) {
-        if (userData?.subscription?.status === 'active') {
-          router.push('/dashboard/home');
-        } else {
-          router.push('/welcome');
-        }
-      }
-    });
+  //     // Wait for userData to be loaded
+  //     if (!loading) {
+  //       if (userData?.subscription?.status === 'active') {
+  //         router.push('/dashboard/home');
+  //       } else {
+  //         router.push('/welcome');
+  //       }
+  //     }
+  //   });
 
-    return () => unsubscribe();
-  }, [router, userData, loading]);
+  //   return () => unsubscribe();
+  // }, [router, userData, loading]);
 
   // Show loading state while checking auth and fetching user data
   if (loading) {
@@ -50,7 +50,7 @@ const Page = () => {
 
   return (
     <div
-      className="w-[100%] h-[100vh] relative pl-[5%] pr-[5%] md:px-[16%] py-4"
+      className="w-[100%] h-[100vh] relative pl-[5%] pr-[5%] md:px-[18%] py-4"
       style={{
         backgroundImage: `url(${bgImage.src})`,
         backgroundSize: 'cover',
