@@ -1,16 +1,22 @@
-import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useEffect, Dispatch, SetStateAction } from 'react';
 import style from '../form/styles/profile.module.css';
 import useCompanyRegistration from '@/api/registerCompany';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
-import { useRouter } from 'next/navigation';
-
+import { db } from '@/lib/firebaseConfig';
+import { collection, addDoc } from "firebase/firestore";
 type CompanyTypes = {
     label: string;
     type: string;
     name: string;
     placeholder: string;
     required: boolean;
+}
+
+type ComponentType = 'Company Profile' | 'Customize chatbot' | 'Help Desks' | 'Integration' | 'Subscription Details' | 'Privacy';
+
+interface ProfileProps {
+    setActiveComponent: Dispatch<SetStateAction<ComponentType>>;
 }
 
 interface FormData {
@@ -20,9 +26,8 @@ interface FormData {
     domain_name: string;
 }
 
-const Profile = () => {
-    const { registerCompany } = useCompanyRegistration();
-    const router = useRouter();
+const Profile: React.FC<ProfileProps> = ({ setActiveComponent }) => {
+    const { registerCompany, isLoading: isRegistering, company_id } = useCompanyRegistration();
     const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState<FormData>({
         name: '',
@@ -33,7 +38,6 @@ const Profile = () => {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Fetch existing company data
     useEffect(() => {
         const fetchCompanyData = async () => {
             try {
@@ -46,7 +50,7 @@ const Profile = () => {
                     const companySnap = await getDoc(companyDoc);
 
                     if (companySnap.exists()) {
-                        const data = companySnap.data();
+                        const data = companySnap.data() as FormData;
                         setFormData({
                             name: data.name || '',
                             ai_name: data.ai_name || '',
@@ -113,9 +117,33 @@ const Profile = () => {
         setIsSubmitting(true);
         
         try {
+            const auth = getAuth();
+            const user = auth.currentUser;
+            
+            if (!user) {
+                throw new Error('No user authenticated');
+            }
+    
+            // Register company first and wait for it to complete
             await registerCompany(formData);
-            // Navigate to customize component after successful submission
-            router.push('/settings/customize');
+            
+            // Only proceed if we have a company_id
+            if (company_id) {
+                // Add to Firestore with the company_id
+                const collectionRef = collection(db, "companies");
+                await addDoc(collectionRef, {
+                    ...formData,
+                    company_id: company_id, // Use the company_id from the state
+                    user_id: user.uid,
+                    created_at: new Date(),
+                    updated_at: new Date()
+                });
+    
+                // Navigate to customize component after successful submission
+                setActiveComponent('Customize chatbot');
+            } else {
+                throw new Error('Company registration failed to generate company_id');
+            }
         } catch (error) {
             console.error('Error submitting form:', error);
         } finally {
@@ -169,7 +197,7 @@ const Profile = () => {
                     <button 
                         type="submit" 
                         className={style.submitButton}
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || isRegistering}
                     >
                         {isSubmitting ? 'Saving...' : 'Save and Continue'}
                     </button>

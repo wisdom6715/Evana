@@ -142,6 +142,7 @@ const usePayment = () => {
       const userDoc = doc(db, 'users', user.uid);
       await setDoc(userDoc, {
         subscription: paymentDetails,
+        userId: user.uid,
         lastUpdated: serverTimestamp(),
         paymentHistory: {
           [response.reference]: {

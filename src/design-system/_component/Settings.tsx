@@ -46,7 +46,7 @@ const Settings: React.FC = () => {
   const renderComponent = () => {
     switch (activeComponent) {
       case 'Company Profile':
-        return <Profile />;
+        return <Profile setActiveComponent={setActiveComponent}/>;
       case 'Customize chatbot':
         return <Customize />;
       case 'Privacy':
@@ -58,7 +58,7 @@ const Settings: React.FC = () => {
       case 'Subscription Details':
         return <Subscription />;
       default:
-        return <Profile />;
+        return <Profile setActiveComponent={setActiveComponent}/>;
     }
   };
 

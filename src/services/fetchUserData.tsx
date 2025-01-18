@@ -8,6 +8,7 @@ const db = getFirestore(app);
 
 interface UserData {
   name?: string | null;
+  uid: string | null;
   email?: string | null;
   phoneNumber?: string;
   createdAt?: string;
@@ -55,6 +56,7 @@ export default function useUserData() {
             createdAt: data.createdAt?.toDate().toISOString(),
             lastUpdated: data.lastUpdated?.toDate().toISOString(),
             subscription: data.subscription,
+            uid: data.uid,
             paymentHistory: data.paymentHistory,
           };
 

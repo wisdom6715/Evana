@@ -3,7 +3,11 @@ import styles from '@/_components/styles/intro.module.css'
 import DisplayDate from '../_subComponent/DisplayDate'
 import Image from 'next/image'
 import greetEmoji from '@/app/assets/images/greets.png'
+import useCompany from '@/services/fetchComapnyData'
+
 const Intro = () => {
+    ///// I need to pass the real company Id 
+    const { company} = useCompany('0e39dead-a759-4ca2-97c4-4ad6b7f0bbb7');
     const metrics = [
         {
             title: 'Interaction',
@@ -35,7 +39,7 @@ const Intro = () => {
         <div className={styles.introContainer}>
             <div className={styles.innerContainer}>
                 <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10}}>
-                    <h1 className={styles.headerText}>Hello BostonConsult!</h1>
+                    <h1 className={styles.headerText}>Hello {company?.name}!</h1>
                     <Image  alt='greet emoji' src={greetEmoji} height={30}/>
                 </div>
                 <DisplayDate />
