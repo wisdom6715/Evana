@@ -22,9 +22,6 @@ const Intro = () => {
         <p className="text-center md:text-left">
         Unlock the power of AI with IntuitionLabs! Our trusted solutions are here to help you boost your business, making everyday tasks smarter and more efficient
         </p>
-        <p className="text-center md:text-left">
-        Embrace the future with IntuitionLabs trusted AI solutions—designed to supercharge your business and help you stay ahead of the competition..
-        </p>
       </div>
     </div>
     <div className="flex justify-center md:justify-start">

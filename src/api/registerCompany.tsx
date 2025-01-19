@@ -25,7 +25,7 @@ interface UseCompanyRegistrationResult {
     company_id: string | null;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000';
+const API_BASE_URL = 'http://localhost:5000/api/register';
 
 const useCompanyRegistration = (): UseCompanyRegistrationResult => {
     const [isLoading, setIsLoading] = useState(false);
@@ -36,27 +36,42 @@ const useCompanyRegistration = (): UseCompanyRegistrationResult => {
         setIsLoading(true);
         setError(null);
         
+        console.log('Starting company registration with data:', data);
+        console.log('Using API URL:', `${API_BASE_URL}`);
+        
         try {
             const response = await axios.post<RegisterCompanyResponse>(
-                `${API_BASE_URL}/api/register`,
+                `${API_BASE_URL}`,
                 data,
                 {
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/json'
                     },
+                    withCredentials: true,
                 }
             );
             
-            if (response.data.company_id) {
-                setCompany_id(response.data.company_id);
-            } else {
-                throw new Error('No company_id received from registration');
+            console.log('API Response:', response.data);
+            
+            if (!response.data.company_id) {
+                throw new Error('API response missing company_id');
             }
+            
+            console.log('Setting company_id to:', response.data.company_id);
+            setCompany_id(response.data.company_id);
+            
         } catch (err) {
             const error = err as AxiosError<ApiError>;
+            console.error('Registration error:', {
+                status: error.response?.status,
+                statusText: error.response?.statusText,
+                data: error.response?.data,
+                error: error
+            });
+            
             const errorMessage = error.response?.data?.message || error.message;
             setError(errorMessage);
-            throw error; // Re-throw to handle in the component
+            alert(`Registration failed: ${errorMessage}`);
         } finally {
             setIsLoading(false);
         }
@@ -69,4 +84,5 @@ const useCompanyRegistration = (): UseCompanyRegistrationResult => {
         company_id
     };
 };
+
 export default useCompanyRegistration;

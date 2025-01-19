@@ -5,6 +5,7 @@ import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { db } from '@/lib/firebaseConfig';
 import { collection, addDoc } from "firebase/firestore";
+
 type CompanyTypes = {
     label: string;
     type: string;
@@ -17,7 +18,7 @@ type ComponentType = 'Company Profile' | 'Customize chatbot' | 'Help Desks' | 'I
 
 interface ProfileProps {
     setActiveComponent: Dispatch<SetStateAction<ComponentType>>;
-}
+  }
 
 interface FormData {
     name: string;
@@ -26,8 +27,8 @@ interface FormData {
     domain_name: string;
 }
 
-const Profile: React.FC<ProfileProps> = ({ setActiveComponent }) => {
-    const { registerCompany, isLoading: isRegistering, company_id } = useCompanyRegistration();
+const Profile:React.FC<ProfileProps> = ({setActiveComponent}) => {
+    const { registerCompany, company_id } = useCompanyRegistration();
     const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState<FormData>({
         name: '',
@@ -38,6 +39,7 @@ const Profile: React.FC<ProfileProps> = ({ setActiveComponent }) => {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    // Fetch existing company data
     useEffect(() => {
         const fetchCompanyData = async () => {
             try {
@@ -50,12 +52,12 @@ const Profile: React.FC<ProfileProps> = ({ setActiveComponent }) => {
                     const companySnap = await getDoc(companyDoc);
 
                     if (companySnap.exists()) {
-                        const data = companySnap.data() as FormData;
+                        const data = companySnap.data();
                         setFormData({
                             name: data.name || '',
                             ai_name: data.ai_name || '',
                             phone: data.phone || '',
-                            domain_name: data.domain_name || 'e-commerce'
+                            domain_name: data.domain_name || 'xyz'
                         });
                     }
                 }
@@ -101,7 +103,8 @@ const Profile: React.FC<ProfileProps> = ({ setActiveComponent }) => {
         { value: 'entertainment', label: 'Entertainment' },
         { value: 'real-estate', label: 'Real Estate' },
         { value: 'fintech', label: 'Fintech' },
-        { value: 'other', label: 'Other' }
+        { value: 'other', label: 'Other' },
+        { value: 'xyz', label: 'xyz' }
     ];
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -117,32 +120,13 @@ const Profile: React.FC<ProfileProps> = ({ setActiveComponent }) => {
         setIsSubmitting(true);
         
         try {
-            const auth = getAuth();
-            const user = auth.currentUser;
-            
-            if (!user) {
-                throw new Error('No user authenticated');
-            }
-    
-            // Register company first and wait for it to complete
             await registerCompany(formData);
-            
-            // Only proceed if we have a company_id
-            if (company_id) {
-                // Add to Firestore with the company_id
-                const collectionRef = collection(db, "companies");
-                await addDoc(collectionRef, {
-                    ...formData,
-                    company_id: company_id, // Use the company_id from the state
-                    user_id: user.uid,
-                    created_at: new Date(),
-                    updated_at: new Date()
-                });
-    
-                // Navigate to customize component after successful submission
+            // Navigate to customize component after successful submission
+            if(!company_id){
                 setActiveComponent('Customize chatbot');
-            } else {
-                throw new Error('Company registration failed to generate company_id');
+                const collectionRef = collection(db, "companies");
+                const docRef = await addDoc(collectionRef, {formData, company_id});
+                console.log(docRef.id);
             }
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -197,7 +181,7 @@ const Profile: React.FC<ProfileProps> = ({ setActiveComponent }) => {
                     <button 
                         type="submit" 
                         className={style.submitButton}
-                        disabled={isSubmitting || isRegistering}
+                        disabled={isSubmitting}
                     >
                         {isSubmitting ? 'Saving...' : 'Save and Continue'}
                     </button>
