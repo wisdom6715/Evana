@@ -5,6 +5,9 @@ import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { db } from '@/lib/firebaseConfig';
 import { collection, addDoc } from "firebase/firestore";
+import { auth } from '@/lib/firebaseConfig'
+import { onAuthStateChanged } from 'firebase/auth';
+import useCompany from '@/services/fetchComapnyData';
 
 type CompanyTypes = {
     label: string;
@@ -26,10 +29,19 @@ interface FormData {
     phone: string;
     domain_name: string;
 }
-
 const Profile:React.FC<ProfileProps> = ({setActiveComponent}) => {
+    const [user, setUser] = useState(auth.currentUser);
+    const [authLoading, setAuthLoading] = useState(true);
+    console.log(user?.uid);
+    
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setUser(user);
+            setAuthLoading(false); // Set loading to false once we have the auth state
+        });
+        return () => unsubscribe();
+    }, []);
     const { registerCompany, company_id } = useCompanyRegistration();
-    const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState<FormData>({
         name: '',
         ai_name: '',
@@ -37,40 +49,25 @@ const Profile:React.FC<ProfileProps> = ({setActiveComponent}) => {
         domain_name: 'e-commerce'
     });
 
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    // Fetch existing company data
+    const { company } = useCompany({
+        userId: user?.uid,
+        /// company is to come below for checkings
+        // companyId: 'c9969d36-908e-429d-b387-f963714baf24'
+    });
     useEffect(() => {
-        const fetchCompanyData = async () => {
-            try {
-                const auth = getAuth();
-                const user = auth.currentUser;
-                
-                if (user) {
-                    const db = getFirestore();
-                    const companyDoc = doc(db, 'companies', user.uid);
-                    const companySnap = await getDoc(companyDoc);
+        if (company) {
+            setFormData({
+                name: company.name || '',
+                ai_name: company.ai_name || '',
+                phone: company.phone || '',
+                domain_name: company.domain_name || 'e-commerce'
+            });
+        }
+        console.log(user?.uid);
+        
+    }, [company]);
 
-                    if (companySnap.exists()) {
-                        const data = companySnap.data();
-                        setFormData({
-                            name: data.name || '',
-                            ai_name: data.ai_name || '',
-                            phone: data.phone || '',
-                            domain_name: data.domain_name || 'xyz'
-                        });
-                    }
-                }
-            } catch (error) {
-                console.error('Error fetching company data:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchCompanyData();
-    }, []);
-
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const companyFields: CompanyTypes[] = [
         {
             label: 'Company Name',
@@ -120,24 +117,37 @@ const Profile:React.FC<ProfileProps> = ({setActiveComponent}) => {
         setIsSubmitting(true);
         
         try {
-            await registerCompany(formData);
-            // Navigate to customize component after successful submission
-            if(!company_id){
-                setActiveComponent('Customize chatbot');
-                const collectionRef = collection(db, "companies");
-                const docRef = await addDoc(collectionRef, {formData, company_id});
-                console.log(docRef.id);
+            const currentUser = auth.currentUser;
+            
+            if (!currentUser) {
+                throw new Error('No user logged in');
             }
+    
+            // First register the company
+            await registerCompany(formData);
+            
+            // Wait briefly for company_id to be set
+            await new Promise(resolve => setTimeout(resolve, 100));
+    
+            // Now save to Firebase with the company_id
+            const collectionRef = collection(db, "companies");
+            const docRef = await addDoc(collectionRef, {
+                ...formData,
+                company_id,
+                uid: currentUser.uid
+            });
+            
+            console.log('Document written with ID:', docRef.id);
+            console.log('Saved company_id:', company_id);
+    
+            // Navigate to next step
+            setActiveComponent('Customize chatbot');
         } catch (error) {
             console.error('Error submitting form:', error);
         } finally {
             setIsSubmitting(false);
         }
     };
-
-    if (loading) {
-        return <div className={style.loading}>Loading company data...</div>;
-    }
 
     return (
         <>
