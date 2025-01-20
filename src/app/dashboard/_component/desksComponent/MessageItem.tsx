@@ -31,6 +31,7 @@ const MessageItem: React.FC<MessageItemProps> = ({ activeStatus }) => {
     currentQuery,
     setCurrentQuery,
     loadQueries,
+    isInitialized
   } = useCustomerService();
 
   React.useEffect(() => {
@@ -42,7 +43,6 @@ const MessageItem: React.FC<MessageItemProps> = ({ activeStatus }) => {
     const [name] = email.split('@');
     return name.substring(0, 2).toUpperCase();
   };
-
   const formatDate = (timestamp: string): string => {
     try {
       return format(new Date(timestamp), 'MMM dd, yyyy HH:mm');
@@ -54,10 +54,17 @@ const MessageItem: React.FC<MessageItemProps> = ({ activeStatus }) => {
   const handleQueryClick = (query: Query): void => {
     setCurrentQuery(query);
   };
+  if(!isInitialized){
+    return(
+      <div className="w-full h-20 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-1">
-      {queries.map((query) => (
+      {queries.length > 0? queries.map((query) => (
         <div 
           key={query.id}
           onClick={() => handleQueryClick(query)}
@@ -99,7 +106,10 @@ const MessageItem: React.FC<MessageItemProps> = ({ activeStatus }) => {
             </span>
           </div>
         </div>
-      ))}
+      )) : <div className='w-full h-8 flex justify-between items-center px-2 cursor-pointer 
+            transition-colors duration-200 bg-[#F9F9F9]'>
+        <h1> No pending questions</h1>
+      </div> }
     </div>
   );
 };

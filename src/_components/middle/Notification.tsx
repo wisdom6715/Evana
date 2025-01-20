@@ -21,7 +21,7 @@ interface Query {
 }
 
 const Notification: React.FC = () => {
-  const { queries, loadQueries } = useCustomerService();
+  const { queries, loadQueries, isInitialized } = useCustomerService();
   const router = useRouter();
 
   React.useEffect(() => {
@@ -32,6 +32,14 @@ const Notification: React.FC = () => {
     const [name] = email.split('@');
     return name.substring(0, 2).toUpperCase();
   };
+
+  if(!isInitialized){
+    return(
+      <div className="w-full h-20 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    )
+  }
 
   const formatDate = (timestamp: string): string => {
     try {
@@ -44,7 +52,7 @@ const Notification: React.FC = () => {
   return (
     <div className='h-[100%]'>
       <h1 className="text-l font-bold  text-gray-800 mb-4">Notification</h1>
-      <div className="shadow" style={{height: '15rem', maxHeight: '15rem', overflowY: 'scroll', }}>
+      <div style={{height: '15rem', maxHeight: '15rem', overflowY: 'scroll', }}>
         {queries && queries.length > 0 ? (
           <ul className="space-y-2">
             {queries.map((query: Query) => (
@@ -73,7 +81,7 @@ const Notification: React.FC = () => {
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500 text-sm">No notifications available.</p>
+          <p className="text-gray-500 text-sm">You don't have any Notifications</p>
         )}
       </div>
     </div>

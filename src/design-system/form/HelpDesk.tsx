@@ -1,23 +1,129 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import useCompany from '@/services/fetchComapnyData';
+import { auth } from '@/lib/firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
+
 export const HelpDesk: React.FC = () => {
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    alert('Copied to clipboard!');
+  const [user, setUser] = useState(auth.currentUser);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState({ type: '', message: '' });
+  const [companyId, setCompanyId] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Get companyId from localStorage only on client side
+    setCompanyId(localStorage.getItem('companyId'));
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setAuthLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const { company } = useCompany({
+    userId: user?.uid,
+    companyId: companyId!
+  });
+
+  const sendInvite = async () => {
+    if (!email || !company?.company_id) return;
+    
+    setLoading(true);
+    try {
+      const response = await fetch('/api/send-invite', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          companyId: company.company_id,
+          companyName: company.name || 'Our Company'
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to send invitation');
+
+      setStatus({
+        type: 'success',
+        message: 'Invitation sent successfully!'
+      });
+      setEmail('');
+    } catch (error) {
+      setStatus({
+        type: 'error',
+        message: 'Failed to send invitation. Please try again.'
+      });
+    } finally {
+      setLoading(false);
+    }
   };
-  const companyId = `companyId`
+
+  if (authLoading) {
+    return (
+      <div className="w-full h-20 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-md mx-auto p-4">
+    <div className="w-full p-4">
       <h2 className="text-2xl font-bold mb-6">Invite Team Member</h2>
-      <div className='flex flex-col gap-3'>
-        <p>To invite others share them your companyId</p>
-        <div className='w-[60%] text-white' style={{backgroundColor: '#bdbcbd', height: '2.5rem', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: '0 1rem'}}>
-          <p>{companyId}</p>
-          <div className='flex flex-row gap-1 items-center' onClick={()=> copyToClipboard(companyId)}>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" style={{ fill: 'currentColor' }}>
-              <path d="m16,18.5v1c0,2.481-2.019,4.5-4.5,4.5h-7c-2.481,0-4.5-2.019-4.5-4.5v-7c0-2.481,2.019-4.5,4.5-4.5h1c.276,0,.5.224.5.5s-.224.5-.5.5h-1c-1.93,0-3.5,1.57-3.5,3.5v7c0,1.93,1.57,3.5,3.5,3.5h7c1.93,0,3.5-1.57,3.5-3.5v-1c0-.276.224-.5.5-.5s.5.224.5.5Zm8-14v7c0,2.481-2.019,4.5-4.5,4.5h-7c-2.481,0-4.5-2.019-4.5-4.5v-7c0-2.481,2.019-4.5,4.5-4.5h7c2.481,0,4.5,2.019,4.5,4.5Zm-1,0c0-1.93-1.57-3.5-3.5-3.5h-7c-1.93,0-3.5,1.57-3.5,3.5v7c0,1.93,1.57,3.5,3.5,3.5h7c1.93,0,3.5-1.57,3.5-3.5v-7Z"/>
-            </svg>
-            <p>Copy</p>
+      <div className="max-w-2xl bg-white rounded-lg shadow p-6">
+        <div className="space-y-4">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              Email Address
+            </label>
+            <div className="flex gap-2">
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                placeholder="colleague@company.com"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                onClick={sendInvite}
+                disabled={loading || !email || !company?.company_id}
+                className={`px-4 py-2 rounded-md text-white ${
+                  loading || !email || !company?.company_id
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-blue-500 hover:bg-blue-600'
+                }`}
+              >
+                {loading ? (
+                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
+                ) : (
+                  'Send Invite'
+                )}
+              </button>
+            </div>
           </div>
+
+          {status.message && (
+            <div
+              className={`p-4 rounded-md ${
+                status.type === 'error'
+                  ? 'bg-red-50 text-red-700 border border-red-200'
+                  : 'bg-green-50 text-green-700 border border-green-200'
+              }`}
+            >
+              {status.message}
+            </div>
+          )}
+
+          {!company?.company_id && (
+            <div className="p-4 rounded-md bg-red-50 text-red-700 border border-red-200">
+              You need admin access to invite team members.
+            </div>
+          )}
         </div>
       </div>
     </div>

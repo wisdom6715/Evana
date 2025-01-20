@@ -6,6 +6,9 @@ import { useFileUpload } from '@/api/useUpload';
 import useQAForm from '@/api/useChat';
 import Update from './_subComponent/Update';
 import ChatbotImage from '@/app/landingPage/_components/assets/images/AI.webp';
+import useCompany from '@/services/fetchComapnyData';
+import { auth } from '@/lib/firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
 
 interface FileUploadConfig {
     companyId: string;
@@ -29,11 +32,22 @@ interface Message {
 const ChatComponent: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [popupMessage, setPopupMessage] = useState<string | null>(null);
-    const [inputFocuse, setInputFocuse] = useState(false);
     const [switchToUpdate, setSwitchToUpdate] = useState(true);
     const chatAreaRef = useRef<HTMLDivElement>(null);
-    const companyId = 'cfcfbfd2-d4db-4335-a89f-eaecbf762be2';
-
+    const [user, setUser] = useState(auth.currentUser);
+  
+    useEffect(() => {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        setUser(user);
+      });
+      return () => unsubscribe();
+    }, []);
+    const company_Id = localStorage.getItem('companyId');
+    const { company } = useCompany({
+      userId: user?.uid,
+      companyId: company_Id!
+    });
+    const companyId: string | undefined = company?.company_id;
     const showPopup = (message: string): void => {
         setPopupMessage(message);
         setTimeout(() => setPopupMessage(null), 3000);
@@ -148,7 +162,7 @@ const ChatComponent: React.FC = () => {
                     timestamp: new Date()
                 }
             ]);
-            handleChatting(query, companyId);
+            handleChatting(query, companyId!);
             setQuery('');
         }
     };
@@ -217,8 +231,7 @@ const ChatComponent: React.FC = () => {
                             className="flex-1 w-[100%] pl-2 rounded-full focus:outline-none focus:border-blue-500"
                             value={query}
                             onChange={(e) => {
-                                setQuery(e.target.value);
-                                setInputFocuse(e.target.value !== '');
+                                setQuery(e.target.value)
                             }}
                         />
                         <button 

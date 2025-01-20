@@ -1,9 +1,12 @@
-// useCustomerService.tsx
 import { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+import useCompany from '@/services/fetchComapnyData';
+import { auth } from '@/lib/firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 const WS_URL = 'ws://localhost:8765';
+const INITIALIZATION_DELAY = 3000; // 3 seconds delay
 
 interface Message {
   id: string;
@@ -22,7 +25,7 @@ interface Query {
   messages?: Message[];
 }
 
-interface WebSocketMessage {
+interface WebSocketMessage { 
   type: 'new_query' | 'response' | 'typing' | 'connection';
   query_id?: string;
   response?: string;
@@ -37,58 +40,122 @@ interface ApiResponse {
   notifications: Query[];
 }
 
-export const useCustomerService = () => {
-  const companyId = 'cfcfbfd2-d4db-4335-a89f-eaecbf762be2';
+interface ErrorState {
+  message: string;
+  code?: string;
+  timestamp: number;
+}
+
+interface UseCustomerServiceReturn {
+  isOnline: boolean;
+  queries: Query[];
+  currentQuery: Query | null;
+  setCurrentQuery: (query: Query | null) => void;
+  loadQueries: (status?: 'pending' | 'resolved') => Promise<Query[]>;
+  sendResponse: (queryId: string, responseText: string) => Promise<boolean>;
+  handleTyping: (queryId: string, isTyping?: boolean) => void;
+  error: ErrorState | null;
+  isLoading: boolean;
+  isInitialized: boolean;
+  clearError: () => void;
+}
+
+export const useCustomerService = (): UseCustomerServiceReturn => {
+  const [user, setUser] = useState(auth.currentUser);
+  const [error, setError] = useState<ErrorState | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
+  const company_Id = localStorage.getItem('companyId');
+  const { company } = useCompany({
+    userId: user?.uid,
+    companyId: company_Id!
+  });
+
+  const companyId = company?.company_id;
   const [websocket, setWebsocket] = useState<WebSocket | null>(null);
   const [isOnline, setIsOnline] = useState<boolean>(false);
   const [queries, setQueries] = useState<Query[]>([]);
   const [currentQuery, setCurrentQuery] = useState<Query | null>(null);
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  const loadQueries = useCallback(async (status: 'pending' | 'resolved' = 'pending'): Promise<Query[]> => {
-    try {
-      const response = await axios.get<ApiResponse>(
-        `${API_BASE_URL}/notifications/${companyId}?status=${status}`
-      );
-      
-      const updatedQueries = response.data.notifications;
-      setQueries(updatedQueries);
-      
-      if (currentQuery) {
-        const updatedCurrentQuery = updatedQueries.find(q => q.id === currentQuery.id);
-        if (updatedCurrentQuery) {
-          setCurrentQuery(updatedCurrentQuery);
-        }
-      }
-      
-      return updatedQueries;
-    } catch (error) {
-      console.error('Failed to load queries:', error);
-      throw new Error('Failed to load queries. Please check your connection.');
+  // Initialize the hook once company data is available
+  useEffect(() => {
+    let initTimeout: NodeJS.Timeout;
+
+    if (companyId && !isInitialized) {
+      initTimeout = setTimeout(() => {
+        setIsInitialized(true);
+      }, INITIALIZATION_DELAY);
     }
-  }, [companyId, currentQuery]);
+
+    return () => {
+      if (initTimeout) {
+        clearTimeout(initTimeout);
+      }
+    };
+  }, [companyId, isInitialized]);
+
+  const handleError = useCallback((error: unknown, customMessage?: string) => {
+    const errorState: ErrorState = {
+      message: customMessage || 'An unexpected error occurred',
+      timestamp: Date.now()
+    };
+
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError<ApiResponse>;
+      
+      if (axiosError.response) {
+        errorState.code = String(axiosError.response.status);
+        errorState.message = axiosError.response.data?.message || 
+          (axiosError.response.status === 404 && !companyId 
+            ? 'Company ID is not available. Please check your connection.'
+            : `Server error: ${axiosError.response.status}`);
+      } else if (axiosError.request) {
+        errorState.code = 'NETWORK_ERROR';
+        errorState.message = 'Network error. Please check your connection.';
+      }
+    } else if (error instanceof Error) {
+      errorState.message = error.message;
+    }
+
+    setError(errorState);
+    return errorState;
+  }, [companyId]);
 
   const handleWebSocketMessage = useCallback((event: MessageEvent) => {
-    const message: WebSocketMessage = JSON.parse(event.data);
-    
-    switch (message.type) {
-      case 'new_query':
-        loadQueries('pending');
-        break;
-      case 'response':
-        if (currentQuery?.id === message.query_id) {
-          setCurrentQuery(prev => prev ? {
-            ...prev,
-            response: message.response,
-            status: 'answered'
-          } : null);
-        }
-        loadQueries('pending');
-        break;
+    try {
+      const message: WebSocketMessage = JSON.parse(event.data);
+      
+      switch (message.type) {
+        case 'new_query':
+          loadQueries('pending');
+          break;
+        case 'response':
+          if (currentQuery?.id === message.query_id) {
+            setCurrentQuery(prev => prev ? {
+              ...prev,
+              response: message.response,
+              status: 'answered'
+            } : null);
+          }
+          loadQueries('pending');
+          break;
+      }
+    } catch (error) {
+      console.error('Error handling WebSocket message:', error);
     }
-  }, [currentQuery, loadQueries]);
+  }, [currentQuery]);
 
   const initializeWebSocket = useCallback(() => {
+    if (!companyId) return;
+
     const ws = new WebSocket(WS_URL);
 
     ws.onopen = () => {
@@ -125,10 +192,63 @@ export const useCustomerService = () => {
     };
   }, [companyId, handleWebSocketMessage]);
 
-  const sendResponse = useCallback(async (queryId: string, responseText: string): Promise<boolean> => {
-    if (!queryId || !responseText?.trim()) {
-      throw new Error('Invalid query ID or response');
+  const loadQueries = useCallback(async (status: 'pending' | 'resolved' = 'pending'): Promise<Query[]> => {
+    if (!isInitialized) {
+      return Promise.resolve([]);
     }
+
+    if (!companyId) {
+      const error = handleError(new Error('Company ID not available'), 
+        'Unable to load queries: Company ID is not available');
+      return Promise.reject(error);
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await axios.get<ApiResponse>(
+        `${API_BASE_URL}/notifications/${companyId}?status=${status}`
+      );
+      
+      const updatedQueries = response.data.notifications;
+      setQueries(updatedQueries);
+      
+      if (currentQuery) {
+        const updatedCurrentQuery = updatedQueries.find(query => query.id === currentQuery.id);
+        if (updatedCurrentQuery) {
+          setCurrentQuery(updatedCurrentQuery);
+        }
+      }
+      
+      return updatedQueries;
+    } catch (error) {
+      const errorState = handleError(error);
+      throw errorState;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [companyId, currentQuery, handleError, isInitialized]);
+
+  const sendResponse = useCallback(async (queryId: string, responseText: string): Promise<boolean> => {
+    if (!isInitialized) {
+      return Promise.resolve(false);
+    }
+
+    if (!companyId) {
+      const error = handleError(new Error('Company ID not available'),
+        'Unable to send response: Company ID is not available');
+      return Promise.reject(error);
+    }
+
+    if (!queryId || !responseText?.trim()) {
+      const error = handleError(new Error('Invalid query ID or response'),
+        'Please provide both query ID and response text');
+      return Promise.reject(error);
+    }
+
+    setIsLoading(true);
+    setError(null);
 
     try {
       const result = await axios.put<ApiResponse>(
@@ -155,41 +275,52 @@ export const useCustomerService = () => {
       
       throw new Error(result.data.message || 'Failed to send response');
     } catch (error) {
-      console.error('Failed to send response:', error);
-      throw error;
+      const errorState = handleError(error);
+      throw errorState;
+    } finally {
+      setIsLoading(false);
     }
-  }, [companyId, websocket, loadQueries]);
+  }, [companyId, websocket, loadQueries, handleError, isInitialized]);
 
   const handleTyping = useCallback((queryId: string, isTyping = true): void => {
-    if (!websocket || !queryId) return;
+    if (!websocket || !queryId) {
+      console.warn('WebSocket or queryId not available for typing notification');
+      return;
+    }
 
     if (typingTimeout) {
       clearTimeout(typingTimeout);
     }
 
-    const message: WebSocketMessage = {
-      type: 'typing',
-      query_id: queryId,
-      is_typing: isTyping
-    };
-    websocket.send(JSON.stringify(message));
+    try {
+      const message: WebSocketMessage = {
+        type: 'typing',
+        query_id: queryId,
+        is_typing: isTyping
+      };
+      websocket.send(JSON.stringify(message));
 
-    if (isTyping) {
-      const timeout = setTimeout(() => {
-        const stopTypingMessage: WebSocketMessage = {
-          type: 'typing',
-          query_id: queryId,
-          is_typing: false
-        };
-        websocket.send(JSON.stringify(stopTypingMessage));
-      }, 1000);
-      
-      setTypingTimeout(timeout);
+      if (isTyping) {
+        const timeout = setTimeout(() => {
+          if (websocket.readyState === WebSocket.OPEN) {
+            const stopTypingMessage: WebSocketMessage = {
+              type: 'typing',
+              query_id: queryId,
+              is_typing: false
+            };
+            websocket.send(JSON.stringify(stopTypingMessage));
+          }
+        }, 1000);
+        
+        setTypingTimeout(timeout);
+      }
+    } catch (error) {
+      console.error('Failed to send typing status:', error);
     }
   }, [websocket, typingTimeout]);
 
   useEffect(() => {
-    if (companyId) {
+    if (isInitialized && companyId) {
       initializeWebSocket();
     }
 
@@ -201,7 +332,7 @@ export const useCustomerService = () => {
         websocket.close();
       }
     };
-  }, [companyId, initializeWebSocket, typingTimeout]);
+  }, [companyId, initializeWebSocket, typingTimeout, isInitialized]);
 
   return {
     isOnline,
@@ -210,6 +341,10 @@ export const useCustomerService = () => {
     setCurrentQuery,
     loadQueries,
     sendResponse,
-    handleTyping
+    handleTyping,
+    error,
+    isLoading,
+    isInitialized,
+    clearError: () => setError(null)
   };
 };

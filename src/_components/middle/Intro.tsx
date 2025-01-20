@@ -18,9 +18,10 @@ const Intro = () => {
         });
         return () => unsubscribe();
     }, []);
-
+    const company_Id = localStorage.getItem('companyId');
     const { company, error } = useCompany({
         userId: user?.uid,
+        companyId: company_Id!
         /// company is to come below for checkings
         // companyId: 'c9969d36-908e-429d-b387-f963714baf24'
     });
