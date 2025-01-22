@@ -48,7 +48,7 @@ const CustomerServicePage: React.FC = () => {
               <MessageItem activeStatus={activeStatus} />
             </div>
             <div className="bg-white border border-[#DFDFDF]">
-              <MessageChat />
+              <MessageChat activeStatus='open'/>
             </div>
           </div>
         </div>

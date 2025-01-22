@@ -7,7 +7,7 @@ import Milestones from '@/_components/middle/Milestones'
 import Notification from '@/_components/middle/Notification'
 const index = () => {
   return (
-    <div className='w-[100%] h-[100vh] grid grid-cols-[12%_88%] bg-[#FFFDFC] overflow-y-hidden'>
+    <div className='w-[100%] h-[100vh] grid grid-cols-[12%_88%] bg-[#FFFDFC] overflow-y-scroll'>
       {/* Navigation is component */}
       <div className='bg-[#FFFDFC] border border-l-zinc-200 grid grid-rows-[90%_10%] pl-4 pr-4'>
         <NagivationComponent />

@@ -6,14 +6,15 @@ interface APIResponse {
   answer?: string;
   message?: string;
   notification_id?: string;
+  requires_human?: boolean;
   requires_email?: boolean;
 }
 
-// Match the types from initializeWebsocket.tsx
 interface CustomerRequest {
   user_id: string;
   user_type: 'customer';
   query_id: string;
+  company_id?: string;
   message?: string;
 }
 
@@ -30,13 +31,14 @@ interface UseQAFormProps {
 
 interface UseQAFormReturn {
   handleChatting: (query: string, companyId: string) => Promise<void>;
-  handleEmailSubmission: (email: string, query: string, companyId: string) => Promise<void>;
+  handleEmailSubmission: (email: string) => Promise<void>;
   answer: string;
   connectionStatus: string;
   isLoading: boolean;
   error: string | null;
   showEmailForm: boolean;
   currentQuery: string;
+  currentCompanyId: string;
 }
 
 const useQAForm = ({ wsUrl }: UseQAFormProps): UseQAFormReturn => {
@@ -48,6 +50,7 @@ const useQAForm = ({ wsUrl }: UseQAFormProps): UseQAFormReturn => {
   const [error, setError] = useState<string | null>(null);
   const [showEmailForm, setShowEmailForm] = useState<boolean>(false);
   const [currentQuery, setCurrentQuery] = useState<string>('');
+  const [currentCompanyId, setCurrentCompanyId] = useState<string>('');
 
   const {
     connectionStatus,
@@ -66,19 +69,18 @@ const useQAForm = ({ wsUrl }: UseQAFormProps): UseQAFormReturn => {
     }
   }, [message]);
 
-  const handleEmailSubmission = async (email: string, query: string, companyId: string): Promise<void> => {
+  const handleEmailSubmission = async (email: string): Promise<void> => {
     setIsLoading(true);
     setError(null);
 
     try {
       const notificationData: EmailNotification = {
         email,
-        query,
-        company_id: companyId,
+        query: currentQuery,
+        company_id: currentCompanyId,
         customer_id: currentCustomerId
       };
 
-      // Send email notification to the API
       const response = await fetch(`${API_BASE_URL}/notifications`, {
         method: 'POST',
         headers: {
@@ -91,14 +93,17 @@ const useQAForm = ({ wsUrl }: UseQAFormProps): UseQAFormReturn => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      // Send notification through WebSocket
-      const wsMessage: CustomerRequest = {
-        user_id: currentCustomerId,
-        user_type: 'customer',
-        query_id: currentQueryId || Date.now().toString(),
-        message: `Email notification: ${email} - Query: ${query}`
-      };
-      sendMessage(wsMessage);
+      // Send notification through WebSocket if connection exists
+      if (currentQueryId) {
+        const wsMessage: CustomerRequest = {
+          user_id: currentCustomerId,
+          user_type: 'customer',
+          query_id: currentQueryId,
+          company_id: currentCompanyId,
+          message: `Email notification: ${email} - Query: ${currentQuery}`
+        };
+        sendMessage(wsMessage);
+      }
 
       setAnswer('Thank you! We\'ve received your question and will respond to your email shortly.');
       setShowEmailForm(false);
@@ -119,6 +124,8 @@ const useQAForm = ({ wsUrl }: UseQAFormProps): UseQAFormReturn => {
     setIsLoading(true);
     setError(null);
     setCurrentQuery(query);
+    setCurrentCompanyId(companyId);
+    
     const customerId = Date.now().toString();
     setCurrentCustomerId(customerId);
 
@@ -142,9 +149,13 @@ const useQAForm = ({ wsUrl }: UseQAFormProps): UseQAFormReturn => {
 
       switch (data.status) {
         case 'success':
-          setAnswer(data.answer || '');
-          setShowEmailForm(false);
-          setIsLoading(false);
+          if (data.answer) {
+            setAnswer(data.answer);
+            setShowEmailForm(false);
+          } else {
+            setShowEmailForm(true);
+            setAnswer('We need additional information to help you better.');
+          }
           break;
 
         case 'waiting_agent':
@@ -157,6 +168,7 @@ const useQAForm = ({ wsUrl }: UseQAFormProps): UseQAFormReturn => {
               user_id: customerId,
               user_type: 'customer',
               query_id: data.notification_id,
+              company_id: companyId,
               message: query
             };
             sendMessage(wsMessage);
@@ -164,20 +176,21 @@ const useQAForm = ({ wsUrl }: UseQAFormProps): UseQAFormReturn => {
           break;
 
         case 'needs_email':
+        case 'error':
           setShowEmailForm(true);
-          setAnswer('');
-          setIsLoading(false);
+          setAnswer('We need additional information to better assist you. Please provide your email and we\'ll get back to you shortly.');
           break;
 
         default:
           setShowEmailForm(true);
           setAnswer('We need additional information to help you better.');
-          setIsLoading(false);
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
       setError(`Error: ${errorMessage}`);
-      setAnswer('');
+      setShowEmailForm(true);
+      setAnswer('An error occurred. Please provide your email and we\'ll get back to you shortly.');
+    } finally {
       setIsLoading(false);
     }
   };
@@ -190,7 +203,8 @@ const useQAForm = ({ wsUrl }: UseQAFormProps): UseQAFormReturn => {
     isLoading,
     error,
     showEmailForm,
-    currentQuery
+    currentQuery,
+    currentCompanyId
   };
 };
 

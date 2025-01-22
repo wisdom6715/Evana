@@ -1,8 +1,8 @@
-// MessageItem.tsx
 'use client'
 import React from 'react';
 import { format } from 'date-fns';
 import { useCustomerService } from '@/hook/useCustomerService';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface MessageItemProps {
   activeStatus: 'open' | 'ongoing';
@@ -26,6 +26,9 @@ interface Query {
 }
 
 const MessageItem: React.FC<MessageItemProps> = ({ activeStatus }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  
   const {
     queries,
     currentQuery,
@@ -39,10 +42,22 @@ const MessageItem: React.FC<MessageItemProps> = ({ activeStatus }) => {
     loadQueries(queryStatus);
   }, [loadQueries, activeStatus]);
 
+  // Set initial current query from URL if it exists
+  React.useEffect(() => {
+    const queryId = searchParams.get('queryId');
+    if (queryId && queries.length > 0) {
+      const query = queries.find(q => q.id === queryId);
+      if (query) {
+        setCurrentQuery(query);
+      }
+    }
+  }, [queries, searchParams, setCurrentQuery]);
+
   const getInitials = (email: string): string => {
     const [name] = email.split('@');
     return name.substring(0, 2).toUpperCase();
   };
+
   const formatDate = (timestamp: string): string => {
     try {
       return format(new Date(timestamp), 'MMM dd, yyyy HH:mm');
@@ -52,19 +67,27 @@ const MessageItem: React.FC<MessageItemProps> = ({ activeStatus }) => {
   };
 
   const handleQueryClick = (query: Query): void => {
+    // Create new URLSearchParams object with current params
+    const params = new URLSearchParams(searchParams.toString());
+    // Update or add queryId parameter
+    params.set('queryId', query.id);
+    // Update the URL with new search params
+    router.push(`?${params.toString()}`);
+    // Update the current query in state
     setCurrentQuery(query);
   };
-  if(!isInitialized){
-    return(
+
+  if (!isInitialized) {
+    return (
       <div className="w-full h-20 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
-    )
+    );
   }
 
   return (
     <div className="space-y-1">
-      {queries.length > 0? queries.map((query) => (
+      {queries.length > 0 ? queries.map((query) => (
         <div 
           key={query.id}
           onClick={() => handleQueryClick(query)}
@@ -106,10 +129,12 @@ const MessageItem: React.FC<MessageItemProps> = ({ activeStatus }) => {
             </span>
           </div>
         </div>
-      )) : <div className='w-full h-8 flex justify-between items-center px-2 cursor-pointer 
-            transition-colors duration-200 bg-[#F9F9F9]'>
-        <h1> No pending questions</h1>
-      </div> }
+      )) : (
+        <div className='w-full h-8 flex justify-between items-center px-2 cursor-pointer 
+              transition-colors duration-200 bg-[#F9F9F9]'>
+          <h1>No {activeStatus} questions</h1>
+        </div>
+      )}
     </div>
   );
 };

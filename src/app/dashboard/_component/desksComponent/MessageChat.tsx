@@ -1,7 +1,7 @@
-// MessageChat.tsx
-'use client'
+"use client";
 import React, { useState, useRef, useEffect } from 'react';
 import { useCustomerService } from '@/hook/useCustomerService';
+import { useSearchParams } from 'next/navigation';
 
 interface Message {
   id: string;
@@ -20,14 +20,39 @@ interface Query {
   messages?: Message[];
 }
 
-const MessageChat: React.FC = () => {
+interface MessageChatProps {
+  activeStatus: 'open' | 'ongoing';
+}
+
+const MessageChat: React.FC<MessageChatProps> = ({ activeStatus }) => {
   const [inputMessage, setInputMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const searchParams = useSearchParams();
+
   const {
+    queries,
     currentQuery,
     sendResponse,
-    handleTyping
+    handleTyping,
+    setCurrentQuery,
+    loadQueries,
+    isInitialized
   } = useCustomerService();
+
+  useEffect(() => {
+    const queryStatus = activeStatus === 'open' ? 'pending' : 'resolved';
+    loadQueries(queryStatus);
+  }, [loadQueries, activeStatus]);
+
+  useEffect(() => {
+    const queryId = searchParams.get('queryId');
+    if (queryId && queries.length > 0) {
+      const query = queries.find(q => q.id === queryId);
+      if (query) {
+        setCurrentQuery(query);
+      }
+    }
+  }, [queries, searchParams, setCurrentQuery]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -36,6 +61,22 @@ const MessageChat: React.FC = () => {
   useEffect(() => {
     scrollToBottom();
   }, [currentQuery]);
+
+  if (!isInitialized) {
+    return (
+      <div className="w-full h-20 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (!currentQuery) {
+    return (
+      <div className="flex-1 flex items-center justify-center">
+        <p className="text-gray-500">Select a conversation to start chatting</p>
+      </div>
+    );
+  }
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || !currentQuery) return;
@@ -76,48 +117,43 @@ const MessageChat: React.FC = () => {
 
   return (
     <div className="w-full h-full grid" style={{ gridTemplateRows: '7% 86% 7%' }}>
-      {/* Header */}
-      <div className="flex gap-2 items-center bg-white px-2 border-b border-gray-200">
-        <div className="w-12 h-12 rounded-full bg-gray-500 flex items-center justify-center text-white text-2xl">
-          <p>{currentQuery ? getInitials(currentQuery.email) : '--'}</p>
-        </div>
-        <div className="flex flex-col">
-          <p className="font-medium">{currentQuery?.email || 'Select a conversation'}</p>
-          <p className="text-sm text-gray-600">{currentQuery?.query || 'No query selected'}</p>
+      <div className="flex flex-col gap-2 bg-white px-2 border-b border-gray-200">
+        <div className='flex items-center gap-4 p-2'>
+          <div className="w-12 h-12 rounded-full bg-gray-500 flex items-center justify-center text-white text-2xl">
+            <span>{getInitials(currentQuery.email)}</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-medium">{currentQuery.email}</span>
+            <span className="text-sm text-gray-600">
+              {currentQuery.status.charAt(0).toUpperCase() + currentQuery.status.slice(1)}
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Messages Container */}
       <div className="bg-[#F5F4F4] overflow-y-auto p-4 space-y-4">
-        {currentQuery && (
-          <>
-            {/* Customer's initial query */}
-            <div className="flex justify-start">
-              <div className="bg-white rounded-lg p-3 max-w-[70%] shadow-sm">
-                <p className="text-gray-800">{currentQuery.query}</p>
-                <p className="text-xs text-gray-500 mt-1">
-                  {formatTime(currentQuery.timestamp)}
-                </p>
-              </div>
+        <div className="flex justify-start">
+          <div className="bg-white rounded-lg p-3 max-w-[70%] shadow-sm">
+            <p className="text-gray-800">{currentQuery.query}</p>
+            <p className="text-xs text-gray-500 mt-1">
+              {formatTime(currentQuery.timestamp)}
+            </p>
+          </div>
+        </div>
+        
+        {currentQuery.response && (
+          <div className="flex justify-end">
+            <div className="bg-blue-500 text-white rounded-lg p-3 max-w-[70%] shadow-sm">
+              <p>{currentQuery.response}</p>
+              <p className="text-xs text-blue-100 mt-1">
+                {formatTime(currentQuery.timestamp)}
+              </p>
             </div>
-
-            {/* Agent's response if exists */}
-            {currentQuery.query && (
-              <div className="flex justify-end">
-                <div className="bg-blue-500 text-white rounded-lg p-3 max-w-[70%] shadow-sm">
-                  <p>{currentQuery.query}</p>
-                  <p className="text-xs text-blue-100 mt-1">
-                    {formatTime(currentQuery.timestamp)}
-                  </p>
-                </div>
-              </div>
-            )}
-          </>
+          </div>
         )}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Container */}
       <div className="flex items-center bg-white border-t border-gray-200">
         <div className="grid grid-cols-[95%_5%] items-center w-full h-full px-2">
           <input

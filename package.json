@@ -23,7 +23,8 @@
     "react-dom": "^19.0.0",
     "react-firebase-hooks": "^5.1.1",
     "react-paystack": "^6.0.0",
-    "recharts": "^2.15.0"
+    "recharts": "^2.15.0",
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@types/node": "^20",

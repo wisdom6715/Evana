@@ -35,7 +35,9 @@ const ChatComponent: React.FC = () => {
     const [switchToUpdate, setSwitchToUpdate] = useState(true);
     const chatAreaRef = useRef<HTMLDivElement>(null);
     const [user, setUser] = useState(auth.currentUser);
-  
+    const [email, setEmail] = useState('');
+    const [query, setQuery] = useState<string>('');
+    
     useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, (user) => {
         setUser(user);
@@ -84,11 +86,17 @@ const ChatComponent: React.FC = () => {
             handleFileSubmit(mockEvent);
         }
     };
-
-    const [query, setQuery] = useState<string>('');
     const WS_URL = 'ws://localhost:8765';
   
-    const { handleChatting, answer } = useQAForm({ wsUrl: WS_URL });
+    const { 
+        handleChatting, 
+        handleEmailSubmission, 
+        answer, 
+        connectionStatus, 
+        isLoading: chatLoading, 
+        error: chatError,
+        showEmailForm
+    } = useQAForm({ wsUrl: WS_URL });
 
     useEffect(() => {
         if (answer) {
@@ -151,9 +159,10 @@ const ChatComponent: React.FC = () => {
         );
     };
 
-    const handleSubmit = (e: FormEvent) => {
+
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        if (query.trim()) {
+        if (!showEmailForm && query.trim()) {
             setMessages(prev => [
                 ...prev,
                 {
@@ -162,10 +171,63 @@ const ChatComponent: React.FC = () => {
                     timestamp: new Date()
                 }
             ]);
-            handleChatting(query, companyId!);
+            await handleChatting(query, companyId!);
             setQuery('');
+        } else if (showEmailForm && email.trim()) {
+            await handleEmailSubmission(email);
+            setEmail('');
         }
     };
+
+    const EmailForm = () => (
+        <form onSubmit={handleSubmit} className="border-t bg-white p-4">
+            <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Please provide your email for a detailed response
+                </label>
+                <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required
+                />
+            </div>
+            <button
+                type="submit"
+                className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
+            >
+                Submit
+            </button>
+        </form>
+    );
+
+    const ChatForm = () => (
+        <form 
+            className="border-t bg-white grid grid-cols-[80%_20%] items-center gap-1"
+            onSubmit={handleSubmit}
+        >
+            <input 
+                type="text" 
+                placeholder="Type a message..." 
+                className="flex-1 w-[100%] pl-2 rounded-full focus:outline-none focus:border-blue-500"
+                value={query}
+                onChange={(e) => {
+                    setQuery(e.target.value)
+                }}
+            />
+            <button 
+                type="submit"
+                style={{width: '60%', height: '60%', backgroundColor: '#0c0e0e'}}
+                className="flex items-center justify-center rounded-full text-white transition-colors"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+            </button>
+        </form>
+    );
 
     return (
         <div className={styles.generalContainer}>
@@ -219,6 +281,35 @@ const ChatComponent: React.FC = () => {
                             {messages.map((message, index) => (
                                 <MessageBubble key={index} message={message} />
                             ))}
+                            <div>{showEmailForm ?  
+                                <form 
+                                    className="border-t bg-white flex flex-col items-center gap-1"
+                                    onSubmit={handleSubmit}
+                                >   
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Please provide your email for a detailed response
+                                </label>
+                                <div className='flex flex-row'>
+                                    <input 
+                                        type="email" 
+                                        placeholder="Type a message..." 
+                                        className="flex-1 w-[100%] pl-2 rounded-full focus:outline-none focus:border-blue-500 bg-gray-300"
+                                        value={email}
+                                        onChange={(e) => {
+                                            setEmail(e.target.value)
+                                        }}
+                                    />
+                                    <div>
+                                        <button 
+                                            type="submit"
+                                            style={{width: '100%', height: '100%', backgroundColor: '#0c0e0e'}}
+                                            className="flex items-center justify-center rounded-full text-white transition-colors"
+                                        >
+                                            send
+                                        </button>
+                                    </div>
+                                </div>
+                            </form> : ''} </div>
                         </div>
                     </div>
                     <form 
