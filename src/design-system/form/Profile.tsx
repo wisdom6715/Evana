@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect, Dispatch, SetStateAction } from 'react';
 import style from '../form/styles/profile.module.css';
-import useCompanyRegistration from '@/api/registerCompany';
+import useCompanyRegistration from '@/hook/registerCompany';
 import { db } from '@/lib/firebaseConfig';
 import { collection, addDoc } from "firebase/firestore";
 import { auth } from '@/lib/firebaseConfig';

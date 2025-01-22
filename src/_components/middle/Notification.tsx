@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCustomerService } from '@/api/useCustomerService';
+import { useCustomerService } from '@/hook/useCustomerService';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 

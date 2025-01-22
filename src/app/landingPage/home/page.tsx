@@ -1,6 +1,5 @@
 'use client';
-
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import bgImage from '@/app/landingPage/home/_components/images/backgroundImage.webp';
 import Header from '../_components/Header';
 import Intro from './_components/Intro';
@@ -14,10 +13,20 @@ import { auth } from '@/lib/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import fetchUserData from '@/services/fetchUserData';
-
+import useCompany from '@/services/fetchComapnyData';
 const Page = () => {
   const router = useRouter();
   const { userData, loading } = fetchUserData();
+  const [companyId, setCompanyId] = useState<string | null>(null);
+  
+  useEffect(() => {
+    // Get companyId from localStorage only on client side
+    setCompanyId(localStorage.getItem('companyId'));
+  }, []);
+
+  const { company } = useCompany({
+    companyId: companyId!
+  });
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -30,7 +39,10 @@ const Page = () => {
       if (!loading) {
         if (userData?.subscription?.status === 'active') {
           router.push('/dashboard/home');
-        } else {
+        } 
+        else if (company?.company_id === companyId){
+          router.push('/dashboard/home');
+        }else {
           router.push('/welcome');
         }
       }

@@ -2,7 +2,7 @@
 'use client'
 import React from 'react';
 import { format } from 'date-fns';
-import { useCustomerService } from '@/api/useCustomerService';
+import { useCustomerService } from '@/hook/useCustomerService';
 
 interface MessageItemProps {
   activeStatus: 'open' | 'ongoing';

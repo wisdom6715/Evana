@@ -1,7 +1,7 @@
 // MessageChat.tsx
 'use client'
 import React, { useState, useRef, useEffect } from 'react';
-import { useCustomerService } from '@/api/useCustomerService';
+import { useCustomerService } from '@/hook/useCustomerService';
 
 interface Message {
   id: string;
