@@ -9,6 +9,7 @@ import ChatbotImage from '@/app/landingPage/_components/assets/images/AI.webp';
 import useCompany from '@/services/fetchComapnyData';
 import { auth } from '@/lib/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
+import { PopFunction } from './_subComponent/usePopUp';
 
 interface FileUploadConfig {
     companyId: string;
@@ -92,7 +93,7 @@ const ChatComponent: React.FC = () => {
         handleChatting, 
         handleEmailSubmission, 
         answer, 
-        connectionStatus, 
+        // connectionStatus, 
         isLoading: chatLoading, 
         error: chatError,
         showEmailForm
@@ -179,62 +180,13 @@ const ChatComponent: React.FC = () => {
         }
     };
 
-    const EmailForm = () => (
-        <form onSubmit={handleSubmit} className="border-t bg-white p-4">
-            <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Please provide your email for a detailed response
-                </label>
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                />
-            </div>
-            <button
-                type="submit"
-                className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors"
-            >
-                Submit
-            </button>
-        </form>
-    );
-
-    const ChatForm = () => (
-        <form 
-            className="border-t bg-white grid grid-cols-[80%_20%] items-center gap-1"
-            onSubmit={handleSubmit}
-        >
-            <input 
-                type="text" 
-                placeholder="Type a message..." 
-                className="flex-1 w-[100%] pl-2 rounded-full focus:outline-none focus:border-blue-500"
-                value={query}
-                onChange={(e) => {
-                    setQuery(e.target.value)
-                }}
-            />
-            <button 
-                type="submit"
-                style={{width: '60%', height: '60%', backgroundColor: '#0c0e0e'}}
-                className="flex items-center justify-center rounded-full text-white transition-colors"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                </svg>
-            </button>
-        </form>
-    );
-
     return (
         <div className={styles.generalContainer}>
-            {popupMessage && (
-                <div className="absolute top-[3%] left-1/2 transform -translate-x-1/2 p-2 px-8 bg-white border rounded-md shadow-md z-50">
-                    <p className="text-black m-0 text-base">{popupMessage}</p>
-                </div>
+            {popupMessage &&(
+              <PopFunction 
+                message={popupMessage} 
+                type={popupMessage.includes('error') ? 'error' : 'success'}
+              />
             )}
             
             <div className={styles.botContainer}>
@@ -270,7 +222,7 @@ const ChatComponent: React.FC = () => {
                 </div>
             </div>
 
-            <>
+            <div className='w-[100%]'>
             {switchToUpdate ? (
                 <div className={styles.chatContainer}>
                     <div className={styles.chatArea} ref={chatAreaRef}>
@@ -337,7 +289,7 @@ const ChatComponent: React.FC = () => {
                     </form>
                 </div>
             ) : <Update />}
-            </>
+            </div>
         </div>
     );
 };

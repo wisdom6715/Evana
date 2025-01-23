@@ -1,112 +1,64 @@
-import { useState, useCallback } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
 
-interface RegistrationConfig {
-  chatbotName: string;
-  welcomeMessage?: string;
-  icon?: File;
+interface UploadedItem {
+  text: string;
+  image_url: string;
+  timestamp: string;
 }
 
-interface UseRegistrationForm {
-  companyId: string;
-  apiBaseUrl?: string;
-}
-
-interface RegistrationResponse {
+interface ApiResponse {
   status: 'success' | 'error';
   message?: string;
-  config?: {
-    name: string;
-    welcome_message?: string;
-    icon_path?: string;
-  };
+  data?: UploadedItem[];
 }
 
-export const useCutomize = ({ 
-  companyId,
-  apiBaseUrl = 'http://127.0.0.1:5000/api/chatbot'
-}: UseRegistrationForm) => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-  const [currentConfig, setCurrentConfig] = useState<RegistrationResponse['config']>();
+export const useFileUpload = () => {
+  const [responseMessage, setResponseMessage] = useState<string>('');
+  const [uploadedData, setUploadedData] = useState<UploadedItem[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // Load current configuration
-  const loadCurrentConfig = useCallback(async () => {
+  const uploadFile = async (formData: FormData) => {
+    setIsLoading(true);
     try {
-      setLoading(true);
-      const response = await axios.get<RegistrationResponse>(
-        `${apiBaseUrl}/${companyId}/config`
-      );
-      
-      if (response.data.config) {
-        setCurrentConfig(response.data.config);
+      const response = await fetch('http://127.0.0.1:5000/api/form/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      const result: ApiResponse = await response.json();
+
+      if (result.status === 'success') {
+        setResponseMessage(result.message || 'Upload successful');
+        await fetchUploadedData();
+      } else {
+        setResponseMessage(result.message || 'Error uploading data');
       }
-      setError(null);
-    } catch (err) {
-      setError('Failed to load current configuration');
-      console.error('Error loading config:', err);
+    } catch (error) {
+      setResponseMessage('Network error occurred');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
-  }, [apiBaseUrl, companyId]);
+  };
 
-  // Update configuration
-  const updateConfig = async (data: RegistrationConfig) => {
+  const fetchUploadedData = async () => {
     try {
-        setLoading(true);
-        setError(null);
-        setSuccess(null);
+      const response = await fetch('http://127.0.0.1:5000/api/form/data/7267d6c7-1f4b-49b1-878d-39ab30884e8d');
+      const result: ApiResponse = await response.json();
 
-        const formData = new FormData();
-        formData.append('chatbot_name', data.chatbotName);
-        
-        if (data.welcomeMessage) {
-            formData.append('welcome_message', data.welcomeMessage);
-        }
-        
-        if (data.icon) {
-            formData.append('icon', data.icon);
-        }
-
-        // Add detailed error logging
-        const response = await axios.post(
-            `${apiBaseUrl}/${companyId}/config`,
-            formData,
-            {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }
-        ).catch(error => {
-            if (error.response) {
-                console.error('Server Error Response:', error.response.data);
-                throw new Error(`Server Error: ${error.response.data.message || 'Unknown server error'}`);
-            }
-            throw error;
-        });
-
-        if (response.data.status === 'success') {
-            setSuccess('Configuration updated successfully');
-            await loadCurrentConfig();
-        } else {
-            throw new Error(response.data.message || 'Failed to update configuration');
-        }
-    } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Failed to update configuration';
-        setError(errorMessage);
-        console.error('Error updating config:', err);
-    } finally {
-        setLoading(false);
+      if (result.status === 'success') {
+        setUploadedData(result.data || []);
+      } else {
+        setResponseMessage('Error loading data');
+      }
+    } catch (error) {
+      setResponseMessage('Network error occurred');
     }
   };
 
   return {
-    loading,
-    error,
-    success,
-    currentConfig,
-    updateConfig,
-    loadCurrentConfig,
+    uploadFile,
+    fetchUploadedData,
+    responseMessage,
+    uploadedData,
+    isLoading
   };
 };

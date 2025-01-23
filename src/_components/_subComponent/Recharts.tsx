@@ -8,46 +8,58 @@ import {
   PointElement,
   Tooltip,
   Legend,
+  Filler,  // Add this
 } from 'chart.js';
 
-ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend);
+ChartJS.register(
+  LineElement, 
+  CategoryScale, 
+  LinearScale, 
+  PointElement, 
+  Tooltip, 
+  Legend,
+  Filler  // Register this
+);
 
 const data = {
-  labels: [400, 300, 200, 278, 189, 239, 349], // Use X-axis values as labels
-  datasets: [
-    {
-      label: 'UV Data',
-      data: [400, 300, 200, 278, 189, 239, 349],
-      borderColor: '#8884d8',
-      borderWidth: 2,
-      tension: 0.4, // Curve style
-    },
-  ],
+  labels: [400, 300, 200, 278, 189, 239, 349],
+  datasets: [{
+    label: 'UV Data',
+    data: [400, 300, 200, 278, 189, 239, 349],
+    borderColor: '#8884d8',
+    backgroundColor: 'rgba(136, 132, 216, 0.2)',
+    fill: true,
+    borderWidth: 2,
+    tension: 0.4,
+  }],
 };
 
 const options = {
   responsive: true,
-  maintainAspectRatio: false, // Ensures it adapts to parent container
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       display: true,
     },
+    filler: {
+      propagate: true
+    }
   },
   scales: {
     x: {
       grid: {
-        display: false, // Optional: Hide gridlines on X-axis
+        display: false,
       },
     },
     y: {
-      display: false, // Remove Y-axis
+      display: false,
     },
   },
 };
 
 const ResponsiveChart = () => {
   return (
-    <div style={{ width: '100%', height: '100%', backgroundColor: '#e8f5e9' }}>
+    <div style={{ height: '100%', width: '100%' }}>
       <Line data={data} options={options} />
     </div>
   );

@@ -10,6 +10,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 
 const Intro = () => {
     const [user, setUser] = useState(auth.currentUser);
+    const [company_Id, setCompanyId] = useState<string | null >(null)
     console.log(user?.uid);
     
     useEffect(() => {
@@ -18,12 +19,14 @@ const Intro = () => {
         });
         return () => unsubscribe();
     }, []);
-    const company_Id = localStorage.getItem('companyId');
+    useEffect(()=>{
+        const company_Id = localStorage.getItem('companyId');
+        setCompanyId(company_Id);
+    },[])
+    
     const { company, error } = useCompany({
         userId: user?.uid,
         companyId: company_Id!
-        /// company is to come below for checkings
-        // companyId: 'c9969d36-908e-429d-b387-f963714baf24'
     });
     console.error(error);
     const metrics = [
@@ -59,7 +62,7 @@ const Intro = () => {
             <div className={styles.introContainer}>
                 <div className={styles.innerContainer}>
                     <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10}}>
-                        <h1 className={styles.headerText}>Hello {company?.name}!</h1>
+                        <h1 className={styles.headerText}>Hello {company?.name}</h1>
                         <Image alt='greet emoji' src={greetEmoji} height={30}/>
                     </div>
                     <DisplayDate />

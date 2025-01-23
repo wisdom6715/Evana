@@ -33,12 +33,10 @@ const Notification: React.FC = () => {
     return name.substring(0, 2).toUpperCase();
   };
 
-  if(!isInitialized){
-    return(
-      <div className="w-full h-20 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    )
+  if(!isInitialized) {
+    return (
+      <div className="w-full h-full animate-bg-theme"></div>
+    );
   }
 
   const formatDate = (timestamp: string): string => {

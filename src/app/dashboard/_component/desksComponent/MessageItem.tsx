@@ -3,7 +3,7 @@ import React from 'react';
 import { format } from 'date-fns';
 import { useCustomerService } from '@/hook/useCustomerService';
 import { useRouter, useSearchParams } from 'next/navigation';
-
+import Loader from '@/_components/_subComponent/usePopUp'
 interface MessageItemProps {
   activeStatus: 'open' | 'ongoing';
 }
@@ -77,14 +77,11 @@ const MessageItem: React.FC<MessageItemProps> = ({ activeStatus }) => {
     setCurrentQuery(query);
   };
 
-  if (!isInitialized) {
-    return (
-      <div className="w-full h-20 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
+    if(!isInitialized) {
+      return (
+        <div className="w-full h-full animate-bg-theme"></div>
+      );
+    }
   return (
     <div className="space-y-1">
       {queries.length > 0 ? queries.map((query) => (

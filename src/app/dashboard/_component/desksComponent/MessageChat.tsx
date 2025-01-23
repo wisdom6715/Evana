@@ -2,6 +2,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useCustomerService } from '@/hook/useCustomerService';
 import { useSearchParams } from 'next/navigation';
+import Image from 'next/image';
+import Logo from '@/app/assets/images/favicon.png'
 
 interface Message {
   id: string;
@@ -64,16 +66,18 @@ const MessageChat: React.FC<MessageChatProps> = ({ activeStatus }) => {
 
   if (!isInitialized) {
     return (
-      <div className="w-full h-20 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <div className=" w-full h-full flex flex-col items-center justify-center">
+        <Image src={Logo} alt="companys logo" height={100} width={100}/>
+        <p className="text-xl text-gray-800">Making Customer Support seamless</p>
       </div>
     );
   }
 
   if (!currentQuery) {
     return (
-      <div className="flex-1 flex items-center justify-center">
-        <p className="text-gray-500">Select a conversation to start chatting</p>
+      <div className=" w-full h-full flex flex-col items-center justify-center">
+        <Image src={Logo} alt="companys logo" height={100} width={100}/>
+        <p className="text-xl text-gray-800">Making Customer Support seamless</p>
       </div>
     );
   }
