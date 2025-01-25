@@ -25,7 +25,7 @@ const Intro = () => {
       </div>
     </div>
     <div className="flex justify-center md:justify-start">
-      <button className="px-8 py-2 bg-black text-white rounded hover:bg-[#9c58ff]" onClick={()=> router.push('/auth')}>
+      <button className="px-8 py-2 bg-black text-white rounded hover:bg-[#9c58ff] transition duration-700 ease-in-out" onClick={()=> router.push('/auth')}>
         Get Started
       </button>
     </div>

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { useFileUpload } from '@/hook/useCustomize'
+import { useFileUpload } from '@/hook/useUpdate'
 import { PopFunction } from './usePopUp'
 const Update = () => {
   const [message, setMessage] = useState('')

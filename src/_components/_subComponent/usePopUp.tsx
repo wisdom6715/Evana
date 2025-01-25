@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 interface ToastProps {
-  message: string
+  message: string | null
   type?: 'success' | 'error' | 'info'
   duration?: number
 }

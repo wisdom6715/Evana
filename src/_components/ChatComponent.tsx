@@ -10,6 +10,7 @@ import useCompany from '@/services/fetchComapnyData';
 import { auth } from '@/lib/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
 import { PopFunction } from './_subComponent/usePopUp';
+import fetchUserData from '@/services/fetchUserData';
 
 interface FileUploadConfig {
     companyId: string;
@@ -38,6 +39,7 @@ const ChatComponent: React.FC = () => {
     const [user, setUser] = useState(auth.currentUser);
     const [email, setEmail] = useState('');
     const [query, setQuery] = useState<string>('');
+    const { userData} = fetchUserData()
     
     useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -179,7 +181,6 @@ const ChatComponent: React.FC = () => {
             setEmail('');
         }
     };
-
     return (
         <div className={styles.generalContainer}>
             {popupMessage &&(
@@ -207,9 +208,11 @@ const ChatComponent: React.FC = () => {
                             </svg>
                         )}
                     </div>
-                    <div className={styles.icon} onClick={() => setSwitchToUpdate(prevstate => !prevstate)}>
+                    {userData?.subscription?.planType === 'basic' ? 
+                    '' : <button className={styles.icon} onClick={() => setSwitchToUpdate(prevstate => !prevstate)}>
                         <Image alt="customize icon" src={customizeIcon} height={20} />
-                    </div>
+                    </button>}
+
                     <div className={styles.icon}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="24" height="24">
                             <g>
@@ -235,17 +238,17 @@ const ChatComponent: React.FC = () => {
                             ))}
                             <div>{showEmailForm ?  
                                 <form 
-                                    className="border-t bg-white flex flex-col items-center gap-1"
+                                    className="border-t bg-gray-200 rounded-lg p-3 flex flex-col items-center gap-1"
                                     onSubmit={handleSubmit}
                                 >   
                                 <label className="block text-sm font-medium text-gray-700 mb-2">
                                     Please provide your email for a detailed response
                                 </label>
-                                <div className='flex flex-row'>
+                                <div className='flex flex-row gap-1'>
                                     <input 
                                         type="email" 
                                         placeholder="Type a message..." 
-                                        className="flex-1 w-[100%] pl-2 rounded-full focus:outline-none focus:border-blue-500 bg-gray-300"
+                                        className="flex-1 w-[100%] pl-2 focus:outline-none focus:border-blue-500 bg-gray-300"
                                         value={email}
                                         onChange={(e) => {
                                             setEmail(e.target.value)
@@ -255,7 +258,7 @@ const ChatComponent: React.FC = () => {
                                         <button 
                                             type="submit"
                                             style={{width: '100%', height: '100%', backgroundColor: '#0c0e0e'}}
-                                            className="flex items-center justify-center rounded-full text-white transition-colors"
+                                            className="flex items-center justify-center text-white transition-colors"
                                         >
                                             send
                                         </button>

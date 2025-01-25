@@ -73,10 +73,10 @@ export const HelpDesk: React.FC = () => {
 
   return (
     <div className="w-full p-4">
-      <h2 className="text-2xl font-bold mb-6">Invite Team Member</h2>
-      <div className="max-w-2xl bg-white rounded-lg shadow p-6">
+      <div className="max-w-2xl bg-white rounded-lg shadow flex flex-col gap-5">
+        <h2 className="text-xl">Invite Team Member</h2>
         <div className="space-y-4">
-          <div>
+          <div className='flex gap-2 flex-col'>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
               Email Address
             </label>
@@ -95,7 +95,7 @@ export const HelpDesk: React.FC = () => {
                 className={`px-4 py-2 rounded-md text-white ${
                   loading || !email || !company?.company_id
                     ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-blue-500 hover:bg-blue-600'
+                    : 'bg-black hover:bg-gray-500'
                 }`}
               >
                 {loading ? (

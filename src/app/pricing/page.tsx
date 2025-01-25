@@ -186,7 +186,7 @@ const PricingPage = () => {
                             <div className='mt-8'>
                                 <button 
                                     style={{backgroundColor: tier.id === 'standardPlan'? '#9c58ff' : 'black'}}
-                                    className='w-full py-3 px-4 text-white rounded transition-colors duration-200'
+                                    className='w-full py-3 px-4 text-white rounded transition-colors duration-200 hover:bg-[#9c58ff]'
                                     onClick={() => handlePricing(tier.id)}
                                 >
                                     {tier.buttonText}

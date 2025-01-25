@@ -15,7 +15,7 @@ type CompanyTypes = {
     required: boolean;
 }
 
-type ComponentType = 'Company Profile' | 'Customize chatbot' | 'Help Desks' | 'Integration' | 'Subscription Details' | 'Privacy';
+type ComponentType = 'Company' | 'Customize' | 'Help Desks' | 'Integration' | 'Subscription' | 'Privacy';
 
 interface ProfileProps {
     setActiveComponent: Dispatch<SetStateAction<ComponentType>>;
@@ -135,7 +135,7 @@ const Profile: React.FC<ProfileProps> = ({ setActiveComponent }) => {
                 console.log('Document written with ID:', docRef.id);
                 console.log('Saved company_id:', company_id);
 
-                setActiveComponent('Customize chatbot');
+                setActiveComponent('Customize');
             }
         } catch (error) {
             console.error('Error submitting form:', error);

@@ -12,6 +12,7 @@ interface Company {
   phone?: string;
   ai_name?: string;
   domain_name?: string;
+  response?: {}
 }
 
 interface UseCompanyReturn {

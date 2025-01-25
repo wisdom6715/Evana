@@ -26,7 +26,7 @@ const LastSection = () => {
             </p>
         </div>
         <div className="flex justify-center">
-            <Link href='/auth' className="bg-[#9c58ff] py-2 px-8 text-white rounded">Get Started</Link>
+            <Link href='/auth' className="bg-[#9c58ff] hover:bg-[#ac74ff] py-2 px-8 text-white rounded transition duration-700 ease-in-out">Get Started</Link>
         </div>
     </div>
   </div>

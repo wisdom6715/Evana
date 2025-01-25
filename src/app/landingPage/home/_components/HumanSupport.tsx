@@ -20,7 +20,7 @@ const HumanSupport = () => {
             </div>
             </div>
             <div className="flex justify-center md:justify-start">
-            <Link href='/auth' className="px-8 py-2 bg-black text-white rounded hover:bg-[#9c58ff]">
+            <Link href='/auth' className="px-8 py-2 bg-black text-white rounded hover:bg-[#9c58ff] transition duration-700 ease-in-out">
                 Get Started
             </Link>
             </div>

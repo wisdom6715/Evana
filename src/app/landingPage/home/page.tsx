@@ -36,16 +36,16 @@ const Page = () => {
       }
 
       // Wait for userData to be loaded
-      if (!loading) {
-        if (userData?.subscription?.status === 'active') {
-          router.push('/dashboard/home');
-        } 
-        else if (company?.company_id === companyId){
-          router.push('/dashboard/home');
-        }else {
-          router.push('/welcome');
-        }
-      }
+      // if (!loading) {
+      //   if (userData?.subscription?.status === 'active') {
+      //     router.push('/dashboard/home');
+      //   } 
+      //   else if (company?.company_id === companyId){
+      //     router.push('/dashboard/home');
+      //   }else {
+      //     router.push('/welcome');
+      //   }
+      // }
     });
 
     return () => unsubscribe();
