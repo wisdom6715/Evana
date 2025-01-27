@@ -34,7 +34,7 @@ const Tutorial = () => {
     alert('Copied to clipboard!');
   };
   return (
-    <div className='bg-white p-2 flex flex-col gap-5 border border-zinc-200 overflow-y-scroll'>
+    <div className='bg-white p-2 flex flex-col gap-5 border border-zinc-200 w-[70%] h-[95%]'>
         <div className='bg-gray-200 h-14 flex items-center justify-center '>
             <h1 className='text-lg font-bold'>Integration Help</h1>
         </div>

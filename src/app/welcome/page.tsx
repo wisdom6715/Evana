@@ -5,7 +5,7 @@ import Logo from '@/app/assets/images/newLogo.png'
 import Invitation from './_components/Invitation'
 import { useEffect, useState } from 'react'
 import { getAuth } from 'firebase/auth';
-
+import useCheckAuth from '@/app/dashboard/check'
 // Get the token when the user logs in or their state changes
 
 const WelcomePage = () => {
@@ -32,6 +32,14 @@ const WelcomePage = () => {
       // Cleanup timer when component unmounts
       return () => clearTimeout(timer);
     }, []);
+      const { loading} = useCheckAuth()
+      if(loading) {
+        return (
+          <div className="w-full h-screen flex items-center justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        )
+      }
   return (
     <div className='flex flex-col items-center justify-center w-[100%] h-[100vh] bg-white'>
         <div className='position: absolute left-1 top-0'>

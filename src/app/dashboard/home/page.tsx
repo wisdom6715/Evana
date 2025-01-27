@@ -6,23 +6,16 @@ import ChatComponent from '@/_components/ChatComponent'
 import Intro from '@/_components/middle/Intro'
 import Milestones from '@/_components/middle/Milestones'
 import Notification from '@/_components/middle/Notification'
-// import useFreeTrial from '@/services/useFreeTrial'
-// import { auth } from '@/lib/firebaseConfig';
-// import { onAuthStateChanged } from 'firebase/auth';
+import useCheckAuth from '../check'
 const index = () => {
-  // const [user, setUser] = useState(auth.currentUser);
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //     setUser(user);
-  //   });
-  //   return () => unsubscribe();
-  // }, []);
-  // const { isTrialActive, daysLeft, endTrial } = useFreeTrial(user?.uid!);
-  // const handleSubscription = () => {
-  //   endTrial();
-  //   // Redirect to the Paystack subscription page
-  //   window.location.href = '/pricicing';
-  // };
+    const { loading} = useCheckAuth()
+    if(loading) {
+      return (
+        <div className="w-full h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      )
+    }
   return (
     <div className='w-[100%] h-[100vh] grid grid-cols-[12%_88%] bg-[#FFFDFC] overflow-y-hidden'>
       {/* Navigation is component */}
@@ -37,20 +30,6 @@ const index = () => {
             <Notification />
           </div>
         </div>
-        {/* Removed free trial calll */}
-        {/* {isTrialActive ? (
-            <div className="fixed top-1 left-0 flex justify-center right-0 transform -translate-x-1/2 z-[9999] bg-red-400">
-              <h1>Welcome to Your Free Trial!</h1>
-              <p>Your trial expires in {daysLeft} days.</p>
-              <button onClick={handleSubscription}>Subscribe Now</button>
-            </div>
-          ) : (
-            <div>
-              <h1>Your trial has ended</h1>
-              <p>Subscribe to continue enjoying premium features.</p>
-              <button onClick={handleSubscription}>Subscribe Now</button>
-            </div>
-        )} */}
         <div className='bg-[#FFFDFC] border border-l-zinc-200'>
           <ChatComponent />
 

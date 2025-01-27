@@ -13,7 +13,7 @@ import secureIcon from '@/app/assets/images/secureIcon.png'
 import Logo from '@/app/assets/images/Screenshot 2025-01-11 090739.png'
 import {auth} from '@/lib/firebaseConfig'
 import DisplayDate from '@/_components/_subComponent/DisplayDate'
-
+import useCheckAuth from '@/app/dashboard/check'
 // Dynamically import PaystackButton to prevent SSR issues
 const DynamicPaystackButton = dynamic(() => 
   import('react-paystack').then((mod) => mod.PaystackButton), 
@@ -25,7 +25,14 @@ const PaymentContent = () => {
   const router = useRouter()
   const {isClient, componentProps, queryParams} = usePaymant();
   const user = auth.currentUser;
-
+  const { loading} = useCheckAuth()
+  if(loading) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    )
+  }
   return (
     <div className='w-full bg-yellow-100 grid grid-rows-[5%_92%_3%] h-screen'>
       <div className='bg-white h-full border-b border-gray-200 flex items-center'>
