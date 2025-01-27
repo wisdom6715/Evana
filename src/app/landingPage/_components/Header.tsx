@@ -30,7 +30,7 @@ const Header = () => {
         <div className="hidden md:flex items-center gap-8 text-l font-bold">
           {/* Home Link */}
           <Link
-            href="/landingPage/home"
+            href="/"
             className="relative group text-gray-800"
           >
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-gray-600 to-black">
@@ -38,7 +38,7 @@ const Header = () => {
             </span>
             <span
               className={`absolute bottom-[-5px] left-0 h-[4px] bg-gradient-to-r from-[#e498fc] to-[#fbf1ff] transition-all duration-500 ${
-                pathname === '/landingPage/home'
+                pathname === '/'
                   ? 'w-full'
                   : 'w-0 group-hover:w-full'
               }`}

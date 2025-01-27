@@ -1,5 +1,5 @@
-"use client"; // important for Next.js client components
-import React, { useEffect, useState } from 'react';
+"use client";
+import { useEffect, useState } from 'react';
 import { auth } from '@/lib/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
 import useCompany from '@/services/fetchComapnyData';

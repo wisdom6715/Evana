@@ -80,21 +80,8 @@ const PricingPage = () => {
         return basePrice;
     };
 
-    const handlePricing = (planId: string) => {
-        const billingType = isAnnual ? 'annual' : 'monthly';
-        const selectedTier = pricingTiers.find(tier => tier.id === planId);
-        
-        if (!selectedTier) return;
-
-        const price = calculatePrice(selectedTier.price);
-        
-        const queryParams = new URLSearchParams({
-            plan: selectedTier.name.toLowerCase(),
-            billing: billingType,
-            price: price.toString()
-        });
-
-        router.push(`/payment?${queryParams.toString()}`);
+    const handlePricing = () => {
+        router.push('/auth');
     };
 
     return (
@@ -177,7 +164,7 @@ const PricingPage = () => {
                                 </div>
                                 
                                 <button 
-                                    onClick={() => handlePricing(tier.id)}
+                                    onClick={() => handlePricing()}
                                     className='mt-8 w-full bg-black text-white py-2 px-4 rounded-md hover:bg-[#9c58ff] transition-colors duration-300'
                                 >
                                     {tier.buttonText}

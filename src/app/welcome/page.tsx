@@ -4,11 +4,26 @@ import Image from 'next/image'
 import Logo from '@/app/assets/images/newLogo.png'
 import Invitation from './_components/Invitation'
 import { useEffect, useState } from 'react'
+import { getAuth } from 'firebase/auth';
+
+// Get the token when the user logs in or their state changes
+
 const WelcomePage = () => {
     const router = useRouter()
     const [showInvitation, setShowInvitation] = useState(false);
-    const [onHover, setHover] = useState(false);
-
+    const [onHover, setHover] = useState(false);  
+    const auth = getAuth();
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const token = await user.getIdToken();
+    
+        // Send the token to the middleware via a cookie
+        document.cookie = `authToken=${token}; Path=/; Secure; HttpOnly;`;
+      } else {
+        // Clear the token if the user logs out
+        document.cookie = 'authToken=; Path=/; Max-Age=0;';
+      }
+    });
     useEffect(() => {
       const timer = setTimeout(() => {
         setShowInvitation(true);
