@@ -10,23 +10,23 @@ const MeetAI = () => {
         {
             role: 'Virtual Assistant',
             description: 'AI expert with expertise in virtual assistants and AI-powered customer support.',
-            image: avatar1
+            image: avatar4
         },
         {
             role: 'Customer Support',
             description: 'Meet your AI-powered Customer Support Assistant—ready to handle inquiries, resolve issues, and provide fast, efficient service 24/7.',
-            image: avatar2
+            image: avatar3
         },
         {
             role: 'Sales Assistant',
             description: 'AI-powered Sales Assistant—automating tasks, managing leads, and providing insights to help you close more deals, faster.',
-            image: avatar3
+            image: avatar2
         },
         {
             
            role: 'Appointments Manager',
             description: 'AI-powered Appointment Manager—automating scheduling, reminders to keep your calendar organized and stress-free across platforms',
-            image: avatar4
+            image: avatar1
         }
     ]
   return (

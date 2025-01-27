@@ -12,20 +12,12 @@ const index = () => {
   const [user, setUser] = useState(auth.currentUser);
   const [companyId, setCompanyId] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const { loading} = useCheckAuth()
 
   useEffect(() => {
     // Get companyId from localStorage only on client side
     setCompanyId(localStorage.getItem('companyId'));
   }, []);
-
-    const { loading} = useCheckAuth()
-    if(loading) {
-      return (
-        <div className="w-full h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-        </div>
-      )
-    }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -63,6 +55,13 @@ const index = () => {
       <div className='bg-[#FFFDFC] border border-l-zinc-200 grid grid-rows-[90%_10%] pl-4 pr-4'>
         <NagivationComponent />
       </div>
+      {
+        loading &&(
+          <div className="w-full h-screen flex items-center justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        )
+      }
       <Summary  setSelectedDate={setSelectedDate} handleExportPDF={handleExportPDF} handleFetchSummary={handleFetchSummary}/>
     </div>
   )

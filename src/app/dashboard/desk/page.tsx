@@ -8,19 +8,19 @@ import useCheckAuth from '../check'
 const CustomerServicePage: React.FC = () => {
   const [activeStatus, setActiveStatus] = useState<'open' | 'ongoing'>('open');
     const { loading} = useCheckAuth()
-    if(loading) {
-      return (
-        <div className="w-full h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-        </div>
-      )
-    }
   return (
     <div className="w-full h-[100vh] border border-l-zinc-200 overflow-y-hidden grid grid-cols-[12%_88%] bg-[#FFFDFC]">
       {/* Navigation component */}
       <div className="bg-[#FFFDFC] border border-l-zinc-200 grid grid-rows-[90%_10%] px-4">
         <NagivationComponent />
       </div>
+      {
+        loading &&(
+          <div className="w-full h-screen flex items-center justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        )
+      }
       
       <div className="w-full h-screen flex items-center justify-center"> 
         <div className="w-[90%] h-[97%] grid grid-rows-[7%_92%] gap-[0.8%]">
