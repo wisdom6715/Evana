@@ -19,5 +19,4 @@ NotFound.getInitialProps = ({ res }: NextPageContext) => {
   }
   return {};
 };
-
 export default NotFound;

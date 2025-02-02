@@ -49,8 +49,8 @@ export const useFileUpload = () => {
       } else {
         setResponseMessage('Error loading data');
       }
-    } catch (error) {
-      setResponseMessage('Network error occurred');
+    } catch (error: any) {
+      setResponseMessage(`Network error occurred ${error}`);
     }
   };
 
