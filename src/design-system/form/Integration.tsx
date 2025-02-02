@@ -1,4 +1,7 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import { auth } from '@/lib/firebaseConfig';
+import useCompany from '@/services/fetchComapnyData';
+import { onAuthStateChanged } from 'firebase/auth';
 
 interface CodeBlockProps {
   code: string;
@@ -6,13 +9,37 @@ interface CodeBlockProps {
 }
 
 const Integration = () => {
-  const iframeCode = `<iframe
-  src="https://www.chatbase.co/chatbot-iframe/ZGELHoFeKfpqQZGlrUUt9"
-  width="100%"
-  style="height: 100%; min-height: 700px"
-  frameborder="0"
-></iframe>`;
+  const [user, setUser] = useState(auth.currentUser);
+  const [authLoading, setAuthLoading] = useState(true);
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setAuthLoading(false); // Set loading to false once we have the auth state
+    });
+    return () => unsubscribe();
+  }, []);
+
+   const company_Id = localStorage.getItem('companyId');
+  const { company } = useCompany({
+    userId: user?.uid,
+    companyId: company_Id!
+  });
+  console.log(user?.uid, user?.displayName)
+  const iframeCode = `<iframe
+    src= https://www.chatbase.co/chatbot-iframe/${company?.company_id}
+    width="100%"
+    style="height: 100%; min-height: 700px"
+    frameborder="0"
+  ></iframe>`;
+
+  if(authLoading){
+    return(
+      <div className="w-full h-20 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    )
+  }
   const headerScript = `<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://chatbot-theta-vert.vercel.app/; frame-src https://chatbot-theta-vert.vercel.app/; script-src 'self' 'unsafe-inline' https://chatbot-theta-vert.vercel.app/; style-src 'self' 'unsafe-inline' https://chatbot-theta-vert.vercel.app/; img-src 'self' https://chatbot-theta-vert.vercel.app/ data:;">`;
 
   const copyToClipboard = (text: string) => {
@@ -76,7 +103,7 @@ const Integration = () => {
         color: '#4b5563', 
         marginBottom: '24px' 
       }}>
-        To integrate Intuitionlabs with your website, copy the following iframe code and header script to your website's HTML file.
+        To integrate Intuitionlabs with your website, copy the following iframe code and header script to your website's HTML.
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>

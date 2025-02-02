@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Logo from '@/app/assets/images/newLogo.png'
+import useCheckAuth from '@/app/dashboard/check'
 
 interface PricingTier {
   id: string;
@@ -95,7 +96,14 @@ const PricingPage = () => {
 
         router.push(`/payment?${queryParams.toString()}`);
     };
-
+     const { loading} = useCheckAuth()
+      if(loading) {
+        return (
+          <div className="w-full h-screen flex items-center justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        )
+      }
     return (
         <div className='min-h-screen w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem] px-4 py-1 sm:px-6 lg:px-8'>
             {/* Logo Section */}
@@ -186,7 +194,7 @@ const PricingPage = () => {
                             <div className='mt-8'>
                                 <button 
                                     style={{backgroundColor: tier.id === 'standardPlan'? '#9c58ff' : 'black'}}
-                                    className='w-full py-3 px-4 text-white rounded transition-colors duration-200'
+                                    className='w-full py-3 px-4 text-white rounded transition-colors duration-200 hover:bg-[#9c58ff]'
                                     onClick={() => handlePricing(tier.id)}
                                 >
                                     {tier.buttonText}

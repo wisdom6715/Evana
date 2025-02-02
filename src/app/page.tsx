@@ -9,8 +9,6 @@ export default function Home() {
     <div>
       {/* Render the initial page only without context */}
       <Page/>
-      
-      {/* After authentication, wrap the app in the BillingProvider */}
     </div>
   );
 }

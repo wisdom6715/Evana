@@ -19,7 +19,7 @@ const BotCall = () => {
         </div>
     
         <div className="flex justify-center sm:justify-start">
-          <Link href='/auth' className="py-2 px-8 bg-black text-white rounded hover:bg-[#9c58ff]">Get Started</Link>
+          <Link href='/auth' className="py-2 px-8 bg-black text-white rounded hover:bg-[#9c58ff] transition duration-700 ease-in-out">Get Started</Link>
         </div>
       </div>
   </div>  

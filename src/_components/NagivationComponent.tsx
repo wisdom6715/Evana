@@ -5,12 +5,13 @@ import customizeIcon from '@/app/assets/images/customize.png'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
-
+import fetchUserData from '@/services/fetchUserData';
 import Logo from '@/app/assets/images/Screenshot 2025-01-11 090739.png'
 const NagivationComponent = () => {
     const [activeNav, setActiveNav] = useState<string>('')
     const router = useRouter()
     const pathname = usePathname();
+    const {userData} = fetchUserData()
 
     useEffect(() => {
         const path = pathname?.split('/')[2]; // Get the second segment of the path
@@ -58,10 +59,11 @@ const NagivationComponent = () => {
                 </div>
 
                 {/* call to action to upgrade to standard version */}
-                <div className={styles.upgradeCAll}>
-                    <p>upgrade to advance cutomer service AI tool</p>
-                    <button className={styles.upgradeButton}>Upgrade</button>
-                </div>
+                {userData?.subscription?.planType ===  'basic' ?
+                    <div className={styles.upgradeCAll}>
+                        <p>upgrade to advance cutomer service AI tool</p>
+                        <button className={styles.upgradeButton}>Upgrade</button>
+                    </div> : ''}
             </div>
         </div>
 

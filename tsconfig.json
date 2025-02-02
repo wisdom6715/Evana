@@ -25,6 +25,6 @@
   "rules": {
     "@typescript-eslint/no-unused-vars": "off",
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/design-system/form/Subscription.tsx"],
   "exclude": ["node_modules"]
 }

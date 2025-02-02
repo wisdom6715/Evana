@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import axios, { AxiosError } from 'axios';
-import { db } from '@/lib/firebaseConfig';
-import { collection, addDoc } from "firebase/firestore";
 
 interface RegisterCompanyData {
     name: string;
@@ -24,36 +22,53 @@ interface UseCompanyRegistrationResult {
     registerCompany: (data: RegisterCompanyData) => Promise<void>;
     isLoading: boolean;
     error: string | null;
+    company_id: string | null;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000';
+const API_BASE_URL = 'http://localhost:5000/api/register';
 
 const useCompanyRegistration = (): UseCompanyRegistrationResult => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [company_id, setCompany_id] = useState<string | null>(null);
 
     const registerCompany = async (data: RegisterCompanyData): Promise<void> => {
         setIsLoading(true);
         setError(null);
         
+        console.log('Starting company registration with data:', data);
+        console.log('Using API URL:', `${API_BASE_URL}`);
+        
         try {
             const response = await axios.post<RegisterCompanyResponse>(
-                `${API_BASE_URL}/api/register`,
+                `${API_BASE_URL}`,
                 data,
                 {
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/json'
                     },
+                    withCredentials: true,
                 }
             );
-            const companyId = response.data.company_id
-            alert(`Company registered successfully! Company ID: ${response.data.company_id}`);
-            const collectionRef = collection(db, "companies");
-            const docRef = await addDoc(collectionRef, { companyId });
-            console.log(docRef.id);
+            
+            console.log('API Response:', response.data);
+            
+            if (!response.data.company_id) {
+                throw new Error('API response missing company_id');
+            }
+            
+            console.log('Setting company_id to:', response.data.company_id);
+            setCompany_id(response.data.company_id);
             
         } catch (err) {
             const error = err as AxiosError<ApiError>;
+            console.error('Registration error:', {
+                status: error.response?.status,
+                statusText: error.response?.statusText,
+                data: error.response?.data,
+                error: error
+            });
+            
             const errorMessage = error.response?.data?.message || error.message;
             setError(errorMessage);
             alert(`Registration failed: ${errorMessage}`);
@@ -66,6 +81,7 @@ const useCompanyRegistration = (): UseCompanyRegistrationResult => {
         registerCompany,
         isLoading,
         error,
+        company_id
     };
 };
 

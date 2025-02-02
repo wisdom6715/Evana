@@ -13,7 +13,7 @@ import secureIcon from '@/app/assets/images/secureIcon.png'
 import Logo from '@/app/assets/images/Screenshot 2025-01-11 090739.png'
 import {auth} from '@/lib/firebaseConfig'
 import DisplayDate from '@/_components/_subComponent/DisplayDate'
-
+import useCheckAuth from '@/app/dashboard/check'
 // Dynamically import PaystackButton to prevent SSR issues
 const DynamicPaystackButton = dynamic(() => 
   import('react-paystack').then((mod) => mod.PaystackButton), 
@@ -25,7 +25,14 @@ const PaymentContent = () => {
   const router = useRouter()
   const {isClient, componentProps, queryParams} = usePaymant();
   const user = auth.currentUser;
-
+  const { loading} = useCheckAuth()
+  if(loading) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    )
+  }
   return (
     <div className='w-full bg-yellow-100 grid grid-rows-[5%_92%_3%] h-screen'>
       <div className='bg-white h-full border-b border-gray-200 flex items-center'>
@@ -39,7 +46,7 @@ const PaymentContent = () => {
               <div className='flex flex-col gap-4'>
                 <div className='flex flex-col gap-2'>
                   <p className='text-lg text-black'>Step 1 of 2</p>
-                  <h2 className='text-2xl text-black'>Enter payment info to start your free trial</h2>
+                  <h2 className='text-2xl text-black'>Enter payment info to start</h2>
                 </div>
 
                 <div className='flex flex-col gap-2'>
@@ -102,7 +109,7 @@ const PaymentContent = () => {
               <div className='flex flex-col gap-8 border border-gray-300 rounded-lg p-3 h-[135px]'>
                 <div className='flex flex-row justify-between'>
                   <h1>IntuitionLabs</h1>
-                  <p>7 days free trial</p>
+                  {/* <p>7 days free trial</p> */}
                 </div>
                 <div className='flex flex-col gap-1'>
                   <h1>Subscription</h1>
@@ -121,21 +128,21 @@ const PaymentContent = () => {
               </div>
               <div className='flex flex-row justify-between items-start'>
                 <div className='flex flex-col justify-between'>
-                  <DisplayDate daysToAdd={7} className='text-l'/>
-                  <p>7 days trial ends</p>
+                  <DisplayDate daysToAdd={0} className='text-l'/>
+                  {/* <p>7 days trial ends</p> */}
                 </div>
                 <p>${queryParams.price?.toLocaleString('en-us')}</p>
               </div>
             </div>
 
             <div className='flex flex-col gap-1 p-3'>
-              <p>Free trial terms</p>
+              <p>Subscription Terms</p>
               <div className='flex flex-col justify-between items-start border-t border-gray-300 gap-5 p-3'>
                 <div className='flex flex-row items-center'>
                   <svg className='h-6 w-6 text-green-500 mr-2' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
                       <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
                   </svg>
-                  <p>Free trial ends in 7 days</p>
+                  <p>You have the ability to issue money back guaranteed</p>
                 </div>
                 <div className='flex flex-row items-center'>
                   <svg className='h-6 w-6 text-green-500 mr-2' fill='none' viewBox='0 0 24 24' stroke='currentColor'>

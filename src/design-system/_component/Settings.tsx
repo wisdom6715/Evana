@@ -11,17 +11,17 @@ interface NavProperty {
   plan?: string;
 }
 
-type ComponentType = 'Company Profile' | 'Customize chatbot' | 'Help Desks' | 'Integration' | 'Subscription Details' | 'Privacy';
+type ComponentType = 'Company' | 'Customize' | 'Help Desks' | 'Integration' | 'Subscription' | 'Privacy';
 
 const Settings: React.FC = () => {
-  const [activeComponent, setActiveComponent] = useState<ComponentType>('Company Profile');
+  const [activeComponent, setActiveComponent] = useState<ComponentType>('Company');
 
   const navProperties: NavProperty[] = [
     {
-      title: 'Company Profile'
+      title: 'Company'
     },
     {
-      title: 'Customize chatbot'
+      title: 'Customize'
     },
     {
       title: 'Help Desks',
@@ -31,7 +31,7 @@ const Settings: React.FC = () => {
       title: 'Integration'
     },
     {
-      title: 'Subscription Details'
+      title: 'Subscription'
     },
     {
       title: 'Privacy'
@@ -45,9 +45,9 @@ const Settings: React.FC = () => {
 
   const renderComponent = () => {
     switch (activeComponent) {
-      case 'Company Profile':
-        return <Profile />;
-      case 'Customize chatbot':
+      case 'Company':
+        return <Profile setActiveComponent={setActiveComponent}/>;
+      case 'Customize':
         return <Customize />;
       case 'Privacy':
         return <Privacy />;
@@ -55,10 +55,10 @@ const Settings: React.FC = () => {
         return <HelpDesk />;
       case 'Integration':
         return <Integration />;
-      case 'Subscription Details':
+      case 'Subscription':
         return <Subscription />;
       default:
-        return <Profile />;
+        return <Profile setActiveComponent={setActiveComponent}/>;
     }
   };
 

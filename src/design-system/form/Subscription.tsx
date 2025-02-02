@@ -1,16 +1,16 @@
-// // app/components/UserData.tsx
+'use client'
 import { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, collection } from 'firebase/firestore';
 import app from '@/lib/firebaseConfig'; // Adjust this path to where your firebase config is
 
-// Initialize Firebase services
 const auth = getAuth(app);
 const db = getFirestore(app);
 
 interface UserData {
   name?: string;
   email?: string;
+  uid?: string;
   // Add other fields as needed
 }
 
@@ -76,18 +76,10 @@ export default function UserData() {
       <div className="space-y-2">
         <p><span className="font-medium">Name:</span> {userData.name}</p>
         <p><span className="font-medium">Email:</span> {userData.email}</p>
+        <p>userId: {userData?.uid}</p>
         {/* Add more fields as needed */}
       </div>
     </div>
   );
 }
 
-// import React from 'react'
-
-// const Subscription = () => {
-//   return (
-//     <div>Subscription</div>
-//   )
-// }
-
-// export default Subscription

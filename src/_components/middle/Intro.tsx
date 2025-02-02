@@ -3,7 +3,32 @@ import styles from '@/_components/styles/intro.module.css'
 import DisplayDate from '../_subComponent/DisplayDate'
 import Image from 'next/image'
 import greetEmoji from '@/app/assets/images/greets.png'
+import useCompany from '@/services/fetchComapnyData'
+import { auth } from '@/lib/firebaseConfig'
+import { useEffect, useState } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+
 const Intro = () => {
+    const [user, setUser] = useState(auth.currentUser);
+    const [company_Id, setCompanyId] = useState<string | null >(null)
+    console.log(user?.uid);
+    
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setUser(user);
+        });
+        return () => unsubscribe();
+    }, []);
+    useEffect(()=>{
+        const company_Id = localStorage.getItem('companyId');
+        setCompanyId(company_Id);
+    },[])
+    
+    const { company, error } = useCompany({
+        userId: user?.uid,
+        companyId: company_Id!
+    });
+    console.error(error);
     const metrics = [
         {
             title: 'Interaction',
@@ -17,7 +42,7 @@ const Intro = () => {
             title: 'Progress',
             counts: 0,
             countVariable: 0,
-            icon:<svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width={30} height={30}>
+            icon: <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width={30} height={30}>
                     <path d="m13.914,19.45c.051.176.086.358.086.55,0,1.105-.895,2-2,2s-2-.895-2-2,.895-2,2-2c.164,0,.321.025.474.062l3.795-3.795c.391-.391,1.023-.391,1.414,0s.391,1.023,0,1.414l-3.768,3.769Zm7.086-7.338v-6.035l1.293,1.293c.195.195.451.293.707.293s.512-.098.707-.293c.391-.391.391-1.023,0-1.414l-2.427-2.428c-.706-.702-1.854-.704-2.561,0l-2.426,2.427c-.391.391-.391,1.023,0,1.414s1.023.391,1.414,0l1.293-1.293v4.196c-1.581-1.152-3.436-1.919-5.417-2.173-.194-.025-.388-.028-.583-.043V3.078l1.293,1.293c.195.195.451.293.707.293s.512-.098.707-.293c.391-.391.391-1.023,0-1.414l-2.427-2.428c-.705-.702-1.854-.704-2.561,0l-2.426,2.427c-.391.391-.391,1.023,0,1.414s1.023.391,1.414,0l1.293-1.293v4.969c-2.162.184-4.236.947-6,2.213v-4.182l1.293,1.293c.195.195.451.293.707.293s.512-.098.707-.293c.391-.391.391-1.023,0-1.414l-2.427-2.428c-.705-.702-1.854-.704-2.561,0L.293,5.957c-.391.391-.391,1.023,0,1.414s1.023.391,1.414,0l1.293-1.293v6.001c-1.916,2.179-3,4.988-3,7.921v.121c.023,2.139,1.818,3.879,4.002,3.879h2.998c.552,0,1-.447,1-1s-.448-1-1-1h-2.998c-1.093,0-1.99-.853-2.002-2,0-2.496.937-4.888,2.598-6.719,2.479-2.593,5.806-3.576,8.73-3.195,2.3.295,4.43,1.46,5.988,3.137.954,1.037,1.705,2.279,2.168,3.666.351,1.05.524,2.125.515,3.194-.009,1.057-.908,1.917-2.003,1.917h-2.996c-.552,0-1,.447-1,1s.448,1,1,1h2.996c2.188,0,3.984-1.749,4.003-3.899.011-1.292-.197-2.586-.619-3.847-.518-1.551-1.341-2.95-2.381-4.141Z"/>
                 </svg>
         },
@@ -29,38 +54,40 @@ const Intro = () => {
                     <path d="M24,23c0,.552-.448,1-1,1H3c-1.654,0-3-1.346-3-3V1C0,.448,.448,0,1,0s1,.448,1,1V21c0,.551,.449,1,1,1H23c.552,0,1,.448,1,1Zm-3-18h-4c-.552,0-1,.448-1,1s.448,1,1,1h3.563l-4.857,4.707c-.377,.378-1.036,.378-1.413,0-.041-.04-1.239-.893-1.239-.893-1.138-1.073-3.077-1.033-4.162,.051l-4.586,4.414c-.398,.383-.41,1.016-.027,1.414,.197,.204,.458,.307,.721,.307,.25,0,.5-.093,.693-.279l4.6-4.428c.377-.378,1.036-.378,1.413,0,.041,.04,1.239,.893,1.239,.893,1.139,1.074,3.076,1.036,4.164-.054l4.89-4.74v3.607c0,.552,.448,1,1,1s1-.448,1-1v-4c0-1.654-1.346-3-3-3Z"/>
                 </svg>
         }
-    ]
-  return (
-    <div className={styles.mainContainer}>
-        <div className={styles.introContainer}>
-            <div className={styles.innerContainer}>
-                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10}}>
-                    <h1 className={styles.headerText}>Hello BostonConsult!</h1>
-                    <Image  alt='greet emoji' src={greetEmoji} height={30}/>
-                </div>
-                <DisplayDate />
-            </div>
-            <p className={styles.subHeaderText}>Track Zia progress and milestones</p>
-        </div>
+    ];
 
-        <div className={styles.metricsIntroContainer}>
-            {metrics.map((metric, index) =>{
-                return (
-                    <div key={index} className={styles.metricsContainer1}>
-                        {metric.icon}
-                        <div className='flex flex-col'>
-                            <div className='flex flex-col'>
-                                <h2 className={styles.metricsText}>{metric.title}</h2>
-                                <p >{metric.counts}</p>
-                            </div>
-                            <p className='text-red-400 text-xs'>{metric.countVariable}% from last <br /> week</p>
-                        </div>
+    // Show the full component once auth is loaded
+    return (
+        <div className={styles.mainContainer}>
+            <div className={styles.introContainer}>
+                <div className={styles.innerContainer}>
+                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 10}}>
+                        <h1 className={styles.headerText}>Hello {company?.name}</h1>
+                        <Image alt='greet emoji' src={greetEmoji} height={30}/>
                     </div>
-                )
-            })}
+                    <DisplayDate />
+                </div>
+                <p className={styles.subHeaderText}>Track Zia progress and milestones</p>
+            </div>
+
+            <div className={styles.metricsIntroContainer}>
+                {metrics.map((metric, index) => {
+                    return (
+                        <div key={index} className={styles.metricsContainer1}>
+                            {metric.icon}
+                            <div className='flex flex-col'>
+                                <div className='flex flex-col'>
+                                    <h2 className={styles.metricsText}>{metric.title}</h2>
+                                    <p>{metric.counts}</p>
+                                </div>
+                                <p className='text-red-400 text-xs'>{metric.countVariable}% from last <br /> week</p>
+                            </div>
+                        </div>
+                    )
+                })}
+            </div>
         </div>
-    </div>
-  )
+    )
 }
 
 export default Intro

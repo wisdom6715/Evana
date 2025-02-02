@@ -108,7 +108,7 @@ const Benefit = () => {
                 return (
                 <div
                     key={index}
-                    className={`flex flex-col items-center gap-8 p-4 border rounded-xl ${hoverIndex === index ? 'border-[#cb8bfa]' : 'border-white'}`}
+                    className={`flex flex-col md:w-[85%] items-center gap-8 border p-4 rounded-xl ${hoverIndex === index ? 'border-[#cb8bfa]' : 'border-white'} transition duration-700 ease-in-out`}
                     onMouseEnter={() => setHoverIndex(index)}
                     onMouseLeave={() => setHoverIndex(null)}
                 >

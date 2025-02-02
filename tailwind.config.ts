@@ -19,6 +19,15 @@ export default {
         'xl': '1280px',
         '2xl': '1536px',
       },
+      keyframes: {
+        'bg-theme': {
+          '0%, 100%': { backgroundColor: 'white' },
+          '50%': { backgroundColor: '#e4e7e6' },
+        },
+      },
+      animation: {
+        'bg-theme': 'bg-theme 2s infinite alternate',
+      },
     },
   },
   plugins: [],

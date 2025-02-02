@@ -1,192 +1,165 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
-import style from '../form/styles/customize.module.css';
+'use client';
+
+import { useState, FormEvent, useEffect } from 'react';
+import { useCustomization } from '@/hook/useCustomization';
 import PreviewAgent from './PreviewAgent';
+import useCompany from '@/services/fetchComapnyData';
+import { onAuthStateChanged } from 'firebase/auth';
+import { db } from '@/lib/firebaseConfig';
+import { collection, updateDoc } from "firebase/firestore";
+import { auth } from '@/lib/firebaseConfig';
+import { query, where, getDocs } from "firebase/firestore";
+import { PopFunction } from '@/_components/_subComponent/usePopUp'
+export default function ChatbotConfigPage() {
+  const [aiName, setAiName] = useState('');
+  const [themeColor, setThemeColor] = useState('#007bff');
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [responseText, setResponseText] = useState('');
+  const [user, setUser] = useState(auth.currentUser);
+  const [companyId, setCompanyId] = useState<string | null>(null);
 
-type InputField = {
-    label: string;
-    type: string;
-    name: keyof CustomizationTypes;
-    placeholder: string;
-    styles: {
-        backgroundColor: string;
-        width: string;
-        border: string;
-        height: string;
-        padding: string;
-    };
-    required: boolean;
-};
+  useEffect(() => {
+    setCompanyId(localStorage.getItem('companyId'));
+  }, []);
 
-type CustomizationTypes = {
-    chatbotName: string;
-    logo: File | null;
-    welcomeMessage: string;
-    theme: string;
-};
-
-const Customize = () => {
-    const [formData, setFormData] = useState<CustomizationTypes>({
-        chatbotName: 'Maria',
-        logo: null,
-        welcomeMessage: '',
-        theme: '#000000'
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
     });
+    return () => unsubscribe();
+  }, []);
 
-    const [isSubmitting, setIsSubmitting] = useState(false);
+  const { company } = useCompany({
+    userId: user?.uid,
+    companyId: companyId!
+  });
 
-    const inputFields: InputField[] = [
-        {
-            label: '🤖 Chatbot Name',
-            type: 'text',
-            name: 'chatbotName',
-            placeholder: 'Enter chatbot name',
-            styles: {
-                backgroundColor: 'rgb(225, 225, 225)',
-                width: '90%',
-                border: '.1rem solid black',
-                height: '40px',
-                padding: '0 0 0 .5rem'
-            },
-            required: true
-        },
-        {
-            label: '👋 Welcome Message',
-            type: 'text',
-            name: 'welcomeMessage',
-            placeholder: 'Enter welcome message',
-            styles: {
-                backgroundColor: 'rgb(225, 225, 225)',
-                width: '90%',
-                border: '.1rem solid black',
-                height: '40px',
-                padding: '0 0 0 .5rem'
-            },
-            required: true
-        },
-        {
-            label: '🎯 Company Logo',
-            type: 'file',
-            name: 'logo',
-            placeholder: 'Upload logo',
-            styles: {
-                backgroundColor: 'rgb(225, 225, 225)',
-                width: '40%',
-                border: '.1rem dashed black',
-                height: '40px',
-                padding: '.2rem'
-            },
-            required: true
-        },
-        {
-            label: '🎨 Theme',
-            type: 'color',
-            name: 'theme',
-            placeholder: 'Select theme color',
-            styles: {
-                backgroundColor: 'rgb(225, 225, 225)',
-                width: '20%',
-                border: '.1rem solid black',
-                height: '40px',
-                padding: '.2rem'
-            },
-            required: true
-        },
-    ];
+  const { 
+    // updateConfig, 
+    fetchConfig, 
+    loading, 
+  } = useCustomization();
 
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, type, value, files } = e.target;
-        
-        if (type === 'file' && files) {
-            setFormData(prev => ({
-                ...prev,
-                [name]: files[0]
-            }));
-        } else {
-            setFormData(prev => ({
-                ...prev,
-                [name]: value
-            }));
-        }
-    };
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setIsSubmitting(true);
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-        try {
-            const formDataToSend = new FormData();
-            Object.entries(formData).forEach(([key, value]) => {
-                if (value instanceof File || typeof value === 'string') {
-                    formDataToSend.append(key, value);
-                }
-            });
+    const formData = new FormData();
+    formData.append('ai_name', aiName);
+    formData.append('theme_color', themeColor);
+    if (logoFile) {
+      formData.append('logo', logoFile);
+    }
 
-            console.log('Form submitted:', formDataToSend);
-            // await submitCustomization(formDataToSend);
-        } catch (error) {
-            console.error('Error submitting form:', error);
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
+    try {
+      if (!company?.company_id) {
+        console.error("Invalid company_id or company object.");
+        setResponseText("Invalid company_id.");
+        return;
+      }
 
-    const renderInput = (field: InputField) => {
-        if (field.type === 'file') {
-            return (
-                <input
-                    type="file"
-                    style={field.styles}
-                    name={field.name}
-                    onChange={handleInputChange}
-                    placeholder={field.placeholder}
-                    accept="image/*"
-                    required={field.required}
-                />
-            );
-        }
+      const companiesCollection = collection(db, "companies");
+      const q = query(companiesCollection, where("company_id", "==", company.company_id));
+      const querySnapshot = await getDocs(q);
 
-        return (
-            <input
-                type={field.type}
-                style={field.styles}
-                name={field.name}
-                value={formData[field.name] as string}
-                onChange={handleInputChange}
-                placeholder={field.placeholder}
-                required={field.required}
+      if (!querySnapshot.empty) {
+        const docRef = querySnapshot.docs[0].ref;
+
+        await updateDoc(docRef, {
+          response: "Your custom response here",
+          ai_name: aiName,
+          theme_color: themeColor,
+          logo: logoFile ? logoFile.name : null,
+        });
+
+        console.log("Document updated successfully:", docRef.id);
+      } else {
+        console.error("No matching document found for company_id:", company.company_id);
+      }
+    } catch (err) {
+      console.error("Error writing to the database:", err);
+      setResponseText(`${err}`);
+    }
+  };
+
+
+  const handleFetchConfig = async () => {
+    try {
+      const fetchedConfig = await fetchConfig(company?.company_id!);
+      if (fetchedConfig) {
+        setAiName(fetchedConfig.ai_name || '');
+        setThemeColor(fetchedConfig.theme_color || '#007bff');
+        setResponseText(JSON.stringify(fetchedConfig, null, 2));
+      }
+    } catch (err) {
+      setResponseText(`Error: ${err}`);
+    }
+  };
+
+  return (
+    <div className="w-full h-full bg-white gap-5 flex flex-col pl-5">
+      <h1 className="text-l">Chatbot Customization</h1>
+      {responseText &&(
+        <PopFunction 
+          message={responseText} 
+          type={responseText.includes('error') ? 'error' : 'success'}
+        />
+      )}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }} className='grid h-full'>
+        <form onSubmit={handleSubmit} className="space-y-4">
+
+          <div className='flex flex-col gap-2'>
+            <label className="block mb-2">AI Name</label>
+            <input 
+              type="text" 
+              placeholder='Enter AI Name'
+              value={aiName}
+              onChange={(e) => setAiName(e.target.value)}
+              required 
+              className="w-full px-3 py-2 border rounded-md"
             />
-        );
-    };
+          </div>
 
-    return (
-        <div className={style.customizationContainer}>
-            <form className={style.formContainer} onSubmit={handleSubmit}>
-                {inputFields.map((field) => (
-                    <div key={field.name} className={style.inputContainer}>
-                        <label htmlFor={field.name}>{field.label}</label>
-                        {renderInput(field)}
-                    </div>
-                ))}
-                <div>
-                    <button 
-                        type="submit" 
-                        className={style.submitButton}
-                        disabled={isSubmitting}
-                    >
-                        {isSubmitting ? 'Saving...' : 'Save and Continue'}
-                    </button>
-                </div>
-            </form>
-            <div className={style.customizationPreview}>
-                <PreviewAgent 
-                    logo={formData.logo} 
-                    welcomeMessage={formData.welcomeMessage} 
-                    chatbotName={formData.chatbotName} 
-                    theme={formData.theme} 
-                />
-            </div>
+          <div className='flex flex-col gap-2'>
+            <label className="block mb-2">Theme Color</label>
+            <input 
+              type="color" 
+              value={themeColor}
+              onChange={(e) => setThemeColor(e.target.value)}
+              className="w-full h-10 border rounded-md"
+            />
+          </div>
+
+          <div className='flex flex-col gap-2'>
+            <label className="block mb-2">Company Logo</label>
+            <input 
+              type="file" 
+              accept="image/*"
+              onChange={(e) => setLogoFile(e.target.files?.[0] || null)}
+              className="w-full px-3 py-2 border rounded-md"
+            />
+          </div>
+
+          <div className="flex flex-row mt-5 gap-5 items-center">
+            <button 
+              type="submit" 
+              disabled={loading}
+              className="flex-1 bg-black px-2 text-white py-2 rounded-md hover:bg-green-600"
+            >
+              {loading ? 'Loading' : 'Customize'}
+            </button>
+            <button type="button" onClick={handleFetchConfig} className='hover:underline-offset-8'>Fetch Config</button>
+          </div>
+        </form>
+
+        <div className='h-full w-[100%] flex justify-center'>
+          <PreviewAgent 
+            logo={logoFile} 
+            chatbotName={aiName} 
+            theme={themeColor} 
+          />
         </div>
-    );
-};
-
-export default Customize;
+      </div>
+    </div>
+  );
+}

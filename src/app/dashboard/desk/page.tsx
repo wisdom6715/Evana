@@ -1,39 +1,67 @@
+// page.tsx
 'use client'
-import React from 'react'
-import NagivationComponent from '@/_components/NagivationComponent'
-// import styles from '../_component/styles/desk.module.css'
-import MessageItem from '../_component/desksComponent/MessageItem'
-import MessageChat from '../_component/desksComponent/MessageChat'
-const page = () => {
+import React, { useState } from 'react';
+import NagivationComponent from '@/_components/NagivationComponent';
+import MessageItem from '../_component/desksComponent/MessageItem';
+import MessageChat from '../_component/desksComponent/MessageChat';
+import useCheckAuth from '../check'
+const CustomerServicePage: React.FC = () => {
+  const [activeStatus, setActiveStatus] = useState<'open' | 'ongoing'>('open');
+    const { loading} = useCheckAuth()
   return (
-    <div className='w-[100%] h-[100vh] grid grid-cols-[12%_88%] bg-[#FFFDFC]'>
-      {/* Navigation is component */}
-      <div className='bg-[#FFFDFC] border border-l-zinc-200 grid grid-rows-[90%_10%] pl-4 pr-4'>
+    <div className="w-full h-[100vh] border border-l-zinc-200 overflow-y-hidden grid grid-cols-[12%_88%] bg-[#FFFDFC]">
+      {/* Navigation component */}
+      <div className="bg-[#FFFDFC] border border-l-zinc-200 grid grid-rows-[90%_10%] px-4">
         <NagivationComponent />
       </div>
-      <div className='w-[100%] h-[100vh] flex items-center justify-center'> 
-        <div style={{width: '90%', height: '97%', display: 'grid', gridTemplateRows: '7% 92%', gap: '.8%' }}>
-            <div style={{backgroundColor: 'white', gap: '.2rem', display: 'flex', flexDirection: 'column'}}>
-                <div style={{display: 'flex', flexDirection: 'row', gap: '.5rem', color: 'black', height: '2rem'}}>
-                    <p>Open</p>
-                    <p>Ongoing</p>
-                </div>
-                <div style={{backgroundColor: '#F9F9F9', height: '2rem', color: 'black', borderStyle: 'solid', borderWidth: '.1rem', borderColor: '#E3E3E3', paddingLeft: '.5rem'}}>
-                    <p>Customers</p>
-                </div>
+      {
+        loading &&(
+          <div className="w-full h-screen flex items-center justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        )
+      }
+      
+      <div className="w-full h-screen flex items-center justify-center"> 
+        <div className="w-[90%] h-[97%] grid grid-rows-[7%_92%] gap-[0.8%]">
+          <div className="bg-white flex flex-col gap-0.5">
+            <div className="flex flex-row gap-2 h-8">
+              <button 
+                onClick={() => setActiveStatus('open')}
+                className={`px-3 rounded transition-colors
+                  ${activeStatus === 'open' 
+                    ? 'text-blue-500 bg-blue-50' 
+                    : 'text-black hover:bg-gray-100'}`}
+              >
+                Open
+              </button>
+              <button 
+                onClick={() => setActiveStatus('ongoing')}
+                className={`px-3 rounded transition-colors
+                  ${activeStatus === 'ongoing' 
+                    ? 'text-blue-500 bg-blue-50' 
+                    : 'text-black hover:bg-gray-100'}`}
+              >
+                Ongoing
+              </button>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '40% 59%', gap: '1%', backgroundColor: 'white'}}>
-                <div style={{backgroundColor: 'white',  borderStyle: 'solid', borderWidth: '.1rem', borderColor: '#DFDFDF', overflowY: 'scroll'}}>
-                  <MessageItem />
-                </div>
-                <div style={{backgroundColor: 'white',  borderStyle: 'solid', borderWidth: '.1rem', borderColor: '#DFDFDF'}}>
-                  <MessageChat />
-                </div>
+
+            <div className="bg-[#F9F9F9] h-8 text-black border border-[#E3E3E3] pl-2 flex items-center">
+              <p>Customers</p>
             </div>
+          </div>
+          <div className="grid grid-cols-[40%_59%] gap-[1%] bg-white">
+            <div className="bg-white border border-[#DFDFDF] overflow-y-auto">
+              <MessageItem activeStatus={activeStatus} />
+            </div>
+            <div className="bg-white border border-[#DFDFDF]">
+              <MessageChat activeStatus='open'/>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default CustomerServicePage;

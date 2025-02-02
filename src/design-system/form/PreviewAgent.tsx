@@ -1,13 +1,13 @@
 import React from 'react'
 import Image from 'next/image';
-import sampleLogo from '@/app/assets/images/chatbot.jpeg'
+import sampleLogo from '@/app/assets/images/favicon.png'
+import ChatBotLogo from '@/app/landingPage/_components/assets/images/AI.webp'
 type PreviewAgentProps = {
   logo: File | null;
-  welcomeMessage: string;
   chatbotName: string;
   theme: string;
 };
-const PreviewAgent: React.FC<PreviewAgentProps> = ({ logo, welcomeMessage, chatbotName, theme }) => {
+const PreviewAgent: React.FC<PreviewAgentProps> = ({ logo, chatbotName, theme }) => {
   const logoUrl = logo ? URL.createObjectURL(logo) : sampleLogo;
   return (
     <div style={{
@@ -41,11 +41,13 @@ const PreviewAgent: React.FC<PreviewAgentProps> = ({ logo, welcomeMessage, chatb
                   {/* <!-- company's logo tag to be replaced with image tag --> */}
                   <Image width={30} height={30} style={{width: '2.5rem', height: '2.5rem', borderRadius: '50%', backgroundColor: 'blueviolet'}} src={logoUrl} alt="company's logo"/>
                   {/* <!-- chatbot avatar logo tag to be replaced with image tag --> */}
-                  <div style={{width: '2.5rem', height: '2.5rem', borderRadius: '50%', backgroundColor: 'blueviolet'}}></div>
+                  <div style={{width: '2.5rem', height: '2.5rem', borderRadius: '50%', backgroundColor: 'blueviolet'}}>
+                    <Image width={30} height={30} style={{width: '2.5rem', height: '2.5rem', borderRadius: '50%', backgroundColor: 'blueviolet'}} src={ChatBotLogo} alt="AI's logo"/>
+                  </div>
               </div>
               <div style={{paddingTop: '1rem'}}>
-                  <h2 style={{color: 'white'}}>Hi, I'm {chatbotName}</h2>
-                  <p style={{color: 'white', maxWidth: '15rem', }}>{welcomeMessage || "I'm here to help with questions about our services."}</p>
+                  <h2 style={{color: 'white'}}>Hi, I'm {chatbotName || 'Evana'}</h2>
+                  <p style={{color: 'white', maxWidth: '15rem', }}>I'm here to help with questions about our services.</p>
             </div>
           </div>
           <div style={{

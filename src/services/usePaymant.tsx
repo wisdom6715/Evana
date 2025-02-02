@@ -116,7 +116,7 @@ const usePayment = () => {
     }
   }, [user, db]);
 
-  const publicKey = 'pk_test_0f6dbe5cfc910acdd8e996e823a74fefc66b2d79';
+  const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_LIVE_KEY!;
   const amount = queryParams.price || 0;
 
   const handlePaymentSuccess = async (response: PaystackResponse) => {
@@ -142,6 +142,7 @@ const usePayment = () => {
       const userDoc = doc(db, 'users', user.uid);
       await setDoc(userDoc, {
         subscription: paymentDetails,
+        userId: user.uid,
         lastUpdated: serverTimestamp(),
         paymentHistory: {
           [response.reference]: {

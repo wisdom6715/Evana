@@ -27,9 +27,10 @@ const ProductPage = () => {
 
           {/* Product Sections */}
           <div className="mt-20 space-y-32">
-            {sections.map((type) => (
+            {sections.map((type, index) => (
+              index % 2 === 0 ?
               <section 
-                key={type}
+                key={index}
                 className="grid lg:grid-cols-2 gap-12 items-center"
               >
                 <div className="lg:pr-8">
@@ -38,7 +39,19 @@ const ProductPage = () => {
                 <div className="lg:pl-8">
                   <ChatDemo type={type} />
                 </div>
-              </section>
+              </section> :
+              <section 
+              key={index}
+              className="grid lg:grid-cols-2 gap-12 items-center"
+            >
+              <div className="lg:pl-8">
+                <ChatDemo type={type} />
+              </div>
+              
+              <div className="lg:pr-8">
+                <DemoBenefits type={type} />
+              </div>
+            </section>
             ))}
           </div>
 
@@ -50,7 +63,7 @@ const ProductPage = () => {
             </h2>
             <Link 
               href="/auth" 
-              className="inline-block mt-8 px-8 py-3 bg-black text-white font-semibold rounded-lg hover:bg-[#9c58ff] transition-colors"
+              className="inline-block mt-8 px-8 py-3 bg-black text-white font-semibold rounded-lg hover:bg-[#9c58ff] transition duration-700 ease-in-out"
             >
               Get Started
             </Link>
