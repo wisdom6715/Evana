@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, doc, getDoc, collection } from 'firebase/firestore';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import app from '@/lib/firebaseConfig'; // Adjust this path to where your firebase config is
 
 const auth = getAuth(app);

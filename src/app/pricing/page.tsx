@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Logo from '@/app/assets/images/newLogo.png'
-import useCheckAuth from '@/app/dashboard/check'
+import useCheckAuth from '@/app/dashboard/useCheck'
 
 interface PricingTier {
   id: string;

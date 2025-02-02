@@ -1,57 +1,29 @@
 import React from 'react';
-import { useCustomerService } from '@/hook/useCustomerService';
-import { format } from 'date-fns';
-import { useRouter } from 'next/navigation';
-
-interface Message {
-  id: string;
-  text: string;
-  isUser: boolean;
-  timestamp: string;
-}
-
-interface Query {
-  id: string;
-  email: string;
-  query: string;
-  status: 'pending' | 'resolved' | 'answered';
-  timestamp: string;
-  response?: string;
-  messages?: Message[];
-}
+// import { format } from 'date-fns';
+// import { useRouter } from 'next/navigation';
 
 const Notification: React.FC = () => {
-  const { queries, loadQueries, isInitialized } = useCustomerService();
-  const router = useRouter();
+  // const router = useRouter();
 
-  React.useEffect(() => {
-    loadQueries();
-  }, [loadQueries]);
+  // const getInitials = (email: string): string => {
+  //   const [name] = email.split('@');
+  //   return name.substring(0, 2).toUpperCase();
+  // };
 
-  const getInitials = (email: string): string => {
-    const [name] = email.split('@');
-    return name.substring(0, 2).toUpperCase();
-  };
 
-  if(!isInitialized) {
-    return (
-      <div className="w-full h-full animate-bg-theme"></div>
-    );
-  }
-
-  const formatDate = (timestamp: string): string => {
-    try {
-      return format(new Date(timestamp), 'MMM dd, yyyy HH:mm');
-    } catch (error) {
-      return 'Invalid date';
-    }
-  };
+  // const formatDate = (timestamp: string): string => {
+  //   try {
+  //     return format(new Date(timestamp), 'MMM dd, yyyy HH:mm');
+  //   } catch (error) {
+  //     return 'Invalid date';
+  //   }
+  // };
 
   return (
     <div className='h-[100%]'>
       <h1 className="text-l font-bold  text-gray-800 mb-4">Notification</h1>
       <div style={{height: '15rem', maxHeight: '15rem', overflowY: 'scroll', }}>
-        {queries && queries.length > 0 ? (
+        {/* {queries && queries.length > 0 ? (
           <ul className="space-y-2">
             {queries.map((query: Query) => (
               <li key={query.id} className="flex items-center justify-between p-4 border-b last:border-none bg-gray-100 cursor-pointer" onClick={()=> router.replace('/dashboard/desk')}>
@@ -80,7 +52,7 @@ const Notification: React.FC = () => {
           </ul>
         ) : (
           <p className="text-gray-500 text-sm">You don't have any Notifications</p>
-        )}
+        )} */}
       </div>
     </div>
   );

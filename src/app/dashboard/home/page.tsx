@@ -6,8 +6,8 @@ import ChatComponent from '@/_components/ChatComponent'
 import Intro from '@/_components/middle/Intro'
 import Milestones from '@/_components/middle/Milestones'
 import Notification from '@/_components/middle/Notification'
-import useCheckAuth from '../check'
-const index = () => {
+import useCheckAuth from '../useCheck'
+const Index = () => {
     const { loading} = useCheckAuth()
   return (
     <div className='w-[100%] h-[100vh] grid grid-cols-[12%_88%] bg-[#FFFDFC] overflow-y-hidden'>
@@ -40,4 +40,4 @@ const index = () => {
   )
 }
 
-export default index
+export default Index

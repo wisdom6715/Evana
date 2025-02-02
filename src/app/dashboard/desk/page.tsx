@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import NagivationComponent from '@/_components/NagivationComponent';
 import MessageItem from '../_component/desksComponent/MessageItem';
 import MessageChat from '../_component/desksComponent/MessageChat';
-import useCheckAuth from '../check'
+import useCheckAuth from '../useCheck'
 const CustomerServicePage: React.FC = () => {
   const [activeStatus, setActiveStatus] = useState<'open' | 'ongoing'>('open');
     const { loading} = useCheckAuth()

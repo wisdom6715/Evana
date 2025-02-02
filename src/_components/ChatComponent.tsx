@@ -2,28 +2,11 @@ import React, { useState, FormEvent, useEffect, useRef } from 'react';
 import styles from '@/_components/styles/chatStyle.module.css';
 import Image from 'next/image';
 import customizeIcon from '@/app/assets/images/customize.png';
-import { useFileUpload } from '@/hook/useUpload';
-import useQAForm from '@/hook/useChat';
-import Update from './_subComponent/Update';
 import ChatbotImage from '@/app/landingPage/_components/assets/images/AI.webp';
 import useCompany from '@/services/fetchComapnyData';
 import { auth } from '@/lib/firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
-import { PopFunction } from './_subComponent/usePopUp';
 import fetchUserData from '@/services/fetchUserData';
-
-interface FileUploadConfig {
-    companyId: string;
-    apiBaseUrl: string;
-    onSuccess: () => void;
-    onError: () => void;
-}
-
-interface MockFormEvent extends FormEvent<HTMLFormElement> {
-    currentTarget: HTMLFormElement & {
-        files?: FileList | null;
-    };
-}
 
 interface Message {
     type: 'answer' | 'query';
@@ -33,11 +16,9 @@ interface Message {
 
 const ChatComponent: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([]);
-    const [popupMessage, setPopupMessage] = useState<string | null>(null);
     const [switchToUpdate, setSwitchToUpdate] = useState(true);
     const chatAreaRef = useRef<HTMLDivElement>(null);
     const [user, setUser] = useState(auth.currentUser);
-    const [email, setEmail] = useState('');
     const [query, setQuery] = useState<string>('');
     const { userData} = fetchUserData()
     
@@ -52,67 +33,13 @@ const ChatComponent: React.FC = () => {
       userId: user?.uid,
       companyId: company_Id!
     });
-    const companyId: string | undefined = company?.company_id;
-    const showPopup = (message: string): void => {
-        setPopupMessage(message);
-        setTimeout(() => setPopupMessage(null), 3000);
-    };
 
-    const [{ isLoading }, { handleSubmit: handleFileSubmit, handleFileUpload, fileInputRef }] = useFileUpload({
-        companyId,
-        apiBaseUrl: 'http://localhost:5000/api',
-        onSuccess: () => {
-            showPopup('File Successfully Uploaded!');
-            console.log('uploaded');
-        },
-        onError: () => {
-            showPopup('File Failed to Upload');
-        },
-    } as FileUploadConfig);
-
+    console.log(company);
+    
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         if (e.target.files?.[0]) {
-            const mockEvent: MockFormEvent = {
-                ...new Event('submit') as any,
-                preventDefault: () => {},
-                currentTarget: Object.assign(document.createElement('form'), {
-                    files: e.target.files
-                }),
-                bubbles: true,
-                cancelable: true,
-                defaultPrevented: false,
-                isTrusted: true,
-                timeStamp: Date.now(),
-                type: 'submit',
-                target: e.target
-            } as MockFormEvent;
-            handleFileSubmit(mockEvent);
         }
     };
-    const WS_URL = 'ws://localhost:8765';
-  
-    const { 
-        handleChatting, 
-        handleEmailSubmission, 
-        answer, 
-        // connectionStatus, 
-        isLoading: chatLoading, 
-        error: chatError,
-        showEmailForm
-    } = useQAForm({ wsUrl: WS_URL });
-
-    useEffect(() => {
-        if (answer) {
-            setMessages(prev => [
-                ...prev,
-                { 
-                    type: 'answer', 
-                    content: answer,
-                    timestamp: new Date()
-                }
-            ]);
-        }
-    }, [answer]);
 
     useEffect(() => {
         if (chatAreaRef.current) {
@@ -165,42 +92,20 @@ const ChatComponent: React.FC = () => {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        if (!showEmailForm && query.trim()) {
-            setMessages(prev => [
-                ...prev,
-                {
-                    type: 'query',
-                    content: query.trim(),
-                    timestamp: new Date()
-                }
-            ]);
-            await handleChatting(query, companyId!);
-            setQuery('');
-        } else if (showEmailForm && email.trim()) {
-            await handleEmailSubmission(email);
-            setEmail('');
-        }
     };
     return (
         <div className={styles.generalContainer}>
-            {popupMessage &&(
-              <PopFunction 
-                message={popupMessage} 
-                type={popupMessage.includes('error') ? 'error' : 'success'}
-              />
-            )}
             
             <div className={styles.botContainer}>
                 <Image className={styles.botImage} src={ChatbotImage} alt='AI Image'/>
                 <div className={styles.iconsContainer}>
-                    <div className={styles.icon} onClick={handleFileUpload}>
+                    <div className={styles.icon} >
                         <input
                             type="file"
-                            ref={fileInputRef}
                             style={{ display: 'none' }}
                             onChange={handleFileChange}
                         />
-                        {isLoading ? (
+                        { 1 ? (
                             <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-gray-900"></div>
                         ) : (
                             <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="20" height="20">
@@ -236,7 +141,7 @@ const ChatComponent: React.FC = () => {
                             {messages.map((message, index) => (
                                 <MessageBubble key={index} message={message} />
                             ))}
-                            <div>{showEmailForm ?  
+                            {/* <div>{showEmailForm ?  
                                 <form 
                                     className="border-t bg-gray-200 rounded-lg p-3 flex flex-col items-center gap-1"
                                     onSubmit={handleSubmit}
@@ -264,7 +169,7 @@ const ChatComponent: React.FC = () => {
                                         </button>
                                     </div>
                                 </div>
-                            </form> : ''} </div>
+                            </form> : ''} </div> */}
                         </div>
                     </div>
                     <form 

@@ -5,7 +5,7 @@ import Logo from '@/app/assets/images/newLogo.png'
 import Invitation from './_components/Invitation'
 import { useEffect, useState } from 'react'
 import { getAuth } from 'firebase/auth';
-import useCheckAuth from '@/app/dashboard/check'
+import useCheckAuth from '@/app/dashboard/useCheck'
 // Get the token when the user logs in or their state changes
 
 const WelcomePage = () => {

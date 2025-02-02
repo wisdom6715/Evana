@@ -6,7 +6,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import NagivationComponent from '@/_components/NagivationComponent'
 import Summary from '../_component/chatlogComponent/Summary'
 import { useDailyAnalytics } from '@/_components/_subComponent/useChatlog'
-import useCheckAuth from '../check'
+import useCheckAuth from '../useCheck'
 const index = () => {
   const { fetchDailySummary, queryTypes, summary, exportPDF} = useDailyAnalytics()
   const [user, setUser] = useState(auth.currentUser);

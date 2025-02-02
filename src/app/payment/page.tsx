@@ -13,7 +13,7 @@ import secureIcon from '@/app/assets/images/secureIcon.png'
 import Logo from '@/app/assets/images/Screenshot 2025-01-11 090739.png'
 import {auth} from '@/lib/firebaseConfig'
 import DisplayDate from '@/_components/_subComponent/DisplayDate'
-import useCheckAuth from '@/app/dashboard/check'
+import useCheckAuth from '@/app/dashboard/useCheck'
 // Dynamically import PaystackButton to prevent SSR issues
 const DynamicPaystackButton = dynamic(() => 
   import('react-paystack').then((mod) => mod.PaystackButton), 

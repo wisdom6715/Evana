@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import useCheckAuth from './check';
+import useCheckAuth from './useCheck';
 
 export default function DashboardLayout({
   children,

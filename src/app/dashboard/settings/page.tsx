@@ -2,7 +2,7 @@
 import React from 'react'
 import NagivationComponent from '@/_components/NagivationComponent'
 import Settings from '@/design-system/_component/Settings'
-import useCheckAuth from '../check'
+import useCheckAuth from '../useCheck'
 const index = () => {
     const { loading} = useCheckAuth()
   return (

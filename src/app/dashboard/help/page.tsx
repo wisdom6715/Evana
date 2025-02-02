@@ -2,8 +2,8 @@
 import React from 'react'
 import NagivationComponent from '@/_components/NagivationComponent'
 import Tutorial from './_component/Tutorial'
-import useCheckAuth from '../check'
-const page = () => {
+import useCheckAuth from '../useCheck'
+const Page = () => {
   const { loading} = useCheckAuth()
   return (
     <div className='w-[100%] h-[100vh] grid grid-cols-[12%_88%] bg-[#FFFDFC] overflow-y-hidden'>
@@ -25,4 +25,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
