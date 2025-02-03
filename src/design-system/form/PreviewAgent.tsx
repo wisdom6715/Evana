@@ -2,13 +2,39 @@ import React from 'react'
 import Image from 'next/image';
 import sampleLogo from '@/app/assets/images/favicon.png'
 import ChatBotLogo from '@/app/landingPage/_components/assets/images/AI.webp'
+
 type PreviewAgentProps = {
   logo: File | null;
   chatbotName: string;
   theme: string;
+  welcomeMessage: string;
+  fetchedData?: {
+    ai_name?: string;
+    welcome_message?: string;
+    company_logo?: string;
+    theme?: string;
+  };
 };
-const PreviewAgent: React.FC<PreviewAgentProps> = ({ logo, chatbotName, theme }) => {
-  const logoUrl = logo ? URL.createObjectURL(logo) : sampleLogo;
+
+const PreviewAgent: React.FC<PreviewAgentProps> = ({ 
+  logo, 
+  chatbotName, 
+  theme, 
+  welcomeMessage,
+  fetchedData 
+}) => {
+  // Use fetched data if available, otherwise use form data or defaults
+  const displayName = fetchedData?.ai_name || chatbotName || 'Evana';
+  const displayMessage = fetchedData?.welcome_message || welcomeMessage || "I'm here to help with questions about our services.";
+  const displayTheme = fetchedData?.theme || theme;
+  
+  // Handle logo priority: new uploaded logo > fetched logo > sample logo
+  const logoUrl = logo 
+    ? URL.createObjectURL(logo) 
+    : fetchedData?.company_logo 
+      ? fetchedData.company_logo 
+      : sampleLogo;
+
   return (
     <div style={{
       width: '65%', 
@@ -22,7 +48,7 @@ const PreviewAgent: React.FC<PreviewAgentProps> = ({ logo, chatbotName, theme })
         gridTemplateRows: '40% 60%'
       }}>
         <div style={{
-          background: `linear-gradient(to bottom,${theme} , #fffa)`,
+          background: `linear-gradient(to bottom,${displayTheme} , #fffa)`,
           borderTopLeftRadius: '1.2rem',
           borderTopRightRadius: '1.2rem',
           display: 'flex',
@@ -38,16 +64,14 @@ const PreviewAgent: React.FC<PreviewAgentProps> = ({ logo, chatbotName, theme })
             flexDirection: 'column',
           }}>
               <div style={{width: '100%', height: '80%', paddingTop: '2rem', backgroundColor: 'transparent', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                  {/* <!-- company's logo tag to be replaced with image tag --> */}
                   <Image width={30} height={30} style={{width: '2.5rem', height: '2.5rem', borderRadius: '50%', backgroundColor: 'blueviolet'}} src={logoUrl} alt="company's logo"/>
-                  {/* <!-- chatbot avatar logo tag to be replaced with image tag --> */}
                   <div style={{width: '2.5rem', height: '2.5rem', borderRadius: '50%', backgroundColor: 'blueviolet'}}>
                     <Image width={30} height={30} style={{width: '2.5rem', height: '2.5rem', borderRadius: '50%', backgroundColor: 'blueviolet'}} src={ChatBotLogo} alt="AI's logo"/>
                   </div>
               </div>
               <div style={{paddingTop: '1rem'}}>
-                  <h2 style={{color: 'white'}}>Hi, I'm {chatbotName || 'Evana'}</h2>
-                  <p style={{color: 'white', maxWidth: '15rem', }}>I'm here to help with questions about our services.</p>
+                  <h2 style={{color: 'white'}}>Hi, I'm {displayName}</h2>
+                  <p style={{color: 'white', maxWidth: '15rem', }}>{displayMessage}</p>
             </div>
           </div>
           <div style={{
@@ -130,4 +154,4 @@ const PreviewAgent: React.FC<PreviewAgentProps> = ({ logo, chatbotName, theme })
   )
 }
 
-export default PreviewAgent
+export default PreviewAgent;

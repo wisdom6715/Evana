@@ -8,7 +8,7 @@ import Milestones from '@/_components/middle/Milestones'
 import Notification from '@/_components/middle/Notification'
 import useCheckAuth from '../useCheck'
 const Index = () => {
-    const { loading} = useCheckAuth()
+    // const { loading} = useCheckAuth()
   return (
     <div className='w-[100%] h-[100vh] grid grid-cols-[12%_88%] bg-[#FFFDFC] overflow-y-hidden'>
       {/* Navigation is component */}
@@ -16,13 +16,13 @@ const Index = () => {
         <NagivationComponent />
       </div>
 
-      {
+      {/* {
         loading && (
           <div className="w-full h-screen flex items-center justify-center">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
           </div>
         )
-      }
+      } */}
       <div className='w-[100%] h-[100vh] grid grid-cols-[80%_20%] bg-[#fffff]'> 
         <div className='flex flex-col w-[100%] items-center'>
           <div className='grid grid-rows-[23%_40%_29%] w-[90%] h-[100%] gap-[3%]'>

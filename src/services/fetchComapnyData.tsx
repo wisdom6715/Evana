@@ -5,14 +5,13 @@ import { db } from '@/lib/firebaseConfig';
 
 interface Company {
   id: string;
-  name: string;
-  description: string;
+  company_name: string;
+  company_address: string;
   company_id?: string;
   user_id?: string;
-  phone?: string;
-  ai_name?: string;
-  domain_name?: string;
-  response?: {}
+  company_contact?: string;
+  company_email?: string;
+  company_industry?: string;
 }
 
 interface UseCompanyReturn {
