@@ -1,26 +1,22 @@
-// page.tsx
 'use client'
 import React, { useState } from 'react';
 import NagivationComponent from '@/_components/NagivationComponent';
 import MessageItem from '../_component/desksComponent/MessageItem';
 import MessageChat from '../_component/desksComponent/MessageChat';
-import useCheckAuth from '../useCheck'
+
 const CustomerServicePage: React.FC = () => {
   const [activeStatus, setActiveStatus] = useState<'open' | 'ongoing'>('open');
-    // const { loading} = useCheckAuth()
+  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
+
+  const handleSessionSelect = (sessionId: string) => {
+    setSelectedSessionId(sessionId);
+  };
+
   return (
     <div className="w-full h-[100vh] border border-l-zinc-200 overflow-y-hidden grid grid-cols-[12%_88%] bg-[#FFFDFC]">
-      {/* Navigation component */}
       <div className="bg-[#FFFDFC] border border-l-zinc-200 grid grid-rows-[90%_10%] px-4">
         <NagivationComponent />
       </div>
-      {/* {
-        loading &&(
-          <div className="w-full h-screen flex items-center justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-          </div>
-        )
-      } */}
       
       <div className="w-full h-screen flex items-center justify-center"> 
         <div className="w-[90%] h-[97%] grid grid-rows-[7%_92%] gap-[0.8%]">
@@ -52,10 +48,10 @@ const CustomerServicePage: React.FC = () => {
           </div>
           <div className="grid grid-cols-[40%_59%] gap-[1%] bg-white">
             <div className="bg-white border border-[#DFDFDF] overflow-y-auto">
-              <MessageItem activeStatus={activeStatus} />
+              <MessageItem onSessionSelect={handleSessionSelect} />
             </div>
             <div className="bg-white border border-[#DFDFDF]">
-              <MessageChat activeStatus='open'/>
+              <MessageChat sessionId={selectedSessionId || undefined} />
             </div>
           </div>
         </div>
