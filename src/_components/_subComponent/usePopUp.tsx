@@ -30,7 +30,7 @@ export const PopFunction: React.FC<ToastProps> = ({
   }
 
   return (
-    <div className="fixed top-1 left-0 flex justify-center right-0 transform w-translate-x-1/2 z-[9999] bg-gray-00">
+    <div className="fixed top-[1rem] left-0 flex justify-center right-0 transform w-translate-x-1/2 z-[9999] bg-transparent">
       <div className={`
         ${typeStyles[type]} 
         px-6 py-3 
@@ -40,6 +40,7 @@ export const PopFunction: React.FC<ToastProps> = ({
         max-w-md 
         w-full
         animate-bounce
+        bg-white
       `}>
         {message}
       </div>

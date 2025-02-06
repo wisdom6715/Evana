@@ -4,12 +4,17 @@ import NagivationComponent from '@/_components/NagivationComponent';
 import MessageItem from '../_component/desksComponent/MessageItem';
 import MessageChat from '../_component/desksComponent/MessageChat';
 
+interface Session {
+  sessionId: string;
+  user_id?: string;
+}
+
 const CustomerServicePage: React.FC = () => {
   const [activeStatus, setActiveStatus] = useState<'open' | 'ongoing'>('open');
-  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
+  const [selectedSession, setSelectedSession] = useState<Session | null>(null);
 
-  const handleSessionSelect = (sessionId: string) => {
-    setSelectedSessionId(sessionId);
+  const handleSessionSelect = (session: Session) => {
+    setSelectedSession(session);
   };
 
   return (
@@ -51,7 +56,7 @@ const CustomerServicePage: React.FC = () => {
               <MessageItem onSessionSelect={handleSessionSelect} />
             </div>
             <div className="bg-white border border-[#DFDFDF]">
-              <MessageChat sessionId={selectedSessionId || undefined} />
+              <MessageChat session={selectedSession || undefined} />
             </div>
           </div>
         </div>

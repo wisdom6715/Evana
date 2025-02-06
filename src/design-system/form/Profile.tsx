@@ -12,6 +12,7 @@ interface ProfileProps {
 // Industry options relevant for AI chatbot applications
 const industryOptions = [
   { value: '', label: 'Select an industry' },
+  { value: 'agritech', label: 'Tech/SAAS' },
   { value: 'agritech', label: 'AgriTech' },
   { value: 'edtech', label: 'EdTech' },
   { value: 'fintech', label: 'FinTech' },

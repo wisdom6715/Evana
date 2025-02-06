@@ -6,7 +6,7 @@ import ChatComponent from '@/_components/ChatComponent'
 import Intro from '@/_components/middle/Intro'
 import Milestones from '@/_components/middle/Milestones'
 import Notification from '@/_components/middle/Notification'
-import useCheckAuth from '../useCheck'
+// import useCheckAuth from '../useCheck'
 const Index = () => {
     // const { loading} = useCheckAuth()
   return (

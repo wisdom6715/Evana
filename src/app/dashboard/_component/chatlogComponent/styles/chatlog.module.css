@@ -1,0 +1,42 @@
+/* Example: markdown.css */
+.markdown h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.markdown {
+    width: 90%;
+    height: 100%;
+    background-color: white;
+    padding: 1rem;
+    overflow-y: scroll;
+}
+.markdown h3 {
+  font-size: 1.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.markdown p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.markdown ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.markdown ol {
+  list-style-type: decimal;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.markdown hr {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 2rem 0;
+}
