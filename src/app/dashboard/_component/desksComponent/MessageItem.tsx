@@ -14,18 +14,40 @@ const MessageItem: React.FC<MessageItemProps> = ({ onSessionSelect }) => {
   
   useEffect(() => {
     const fetchSessions = async () => {
+      setIsLoading(true)
       try {
-        setIsLoading(true);
+        ////Company ID is hardcoded for now coming tomorrow from firebase!!!!!!!!!
         const response = await fetch(`http://localhost:5001/chat/sessions/b0c2997a-9cea-454b-bcb1-f4709055713a`);
         const data = await response.json();
-        setSessions(data.data);
+        
+        // Create a Map to store the most recent session for each unique user
+        const uniqueSessions = new Map();
+  
+        data.data.forEach((session: any) => {
+          const key = session.user_id;
+          const currentSession = session;
+  
+          // Keep only the most recent session for each user
+          const existingSession = uniqueSessions.get(key);
+          if (!existingSession || 
+              (currentSession.timestamp && 
+               new Date(currentSession.timestamp) > new Date(existingSession.timestamp))) {
+            uniqueSessions.set(key, currentSession);
+          }
+        });
+  
+        // Convert the Map values to an array of sessions
+        const filteredSessions = Array.from(uniqueSessions.values());
+  
+        setSessions(filteredSessions);
+  
       } catch (error) {
         console.error('Error fetching sessions:', error);
       } finally {
         setIsLoading(false);
       }
     };
-
+  
     fetchSessions();
   }, []);
   
@@ -58,8 +80,8 @@ const MessageItem: React.FC<MessageItemProps> = ({ onSessionSelect }) => {
     <div className="space-y-1">
        {sessions && sessions.length > 0 ? (
           <ul className="space-y-2">
-            {sessions.map((session) => (
-              <li key={session.id} className="flex items-center justify-between p-4 border-b last:border-none bg-gray-100 cursor-pointer" onClick={()=> router.replace('/dashboard/desk')}>
+            {sessions.map((session, index) => (
+              <li key={index} className="flex items-center justify-between p-4 border-b last:border-none bg-gray-100 cursor-pointer" onClick={()=> router.replace('/dashboard/desk')}>
                 <div className="flex items-center h-5 gap-3 cursor-pointer" onClick={() => handleSessionSelect(session)}>
                   <div style={{width: '2.5rem', height: '2.5rem'}} className="flex items-center justify-center bg-blue-500 text-white rounded-full mr-4">
                     {getInitials(session.user_id)}

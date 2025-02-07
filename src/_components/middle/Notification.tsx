@@ -27,15 +27,35 @@ const Notification: React.FC = () => {
         try {
           const response = await fetch(`http://localhost:5001/chat/sessions/b0c2997a-9cea-454b-bcb1-f4709055713a`);
           const data = await response.json();
-          setSessions(data.data);
-
-        }catch (error) {
+          
+          // Create a Map to store the most recent session for each unique user
+          const uniqueSessions = new Map();
+    
+          data.data.forEach((session: any) => {
+            const key = session.user_id;
+            const currentSession = session;
+    
+            // Keep only the most recent session for each user
+            const existingSession = uniqueSessions.get(key);
+            if (!existingSession || 
+                (currentSession.timestamp && 
+                new Date(currentSession.timestamp) > new Date(existingSession.timestamp))) {
+              uniqueSessions.set(key, currentSession);
+            }
+          });
+    
+          // Convert the Map values to an array of sessions
+          const filteredSessions = Array.from(uniqueSessions.values());
+    
+          setSessions(filteredSessions);
+    
+        } catch (error) {
           console.error('Error fetching sessions:', error);
-        }finally {
+        } finally {
           setIsLoading(false);
         }
       };
-  
+    
       fetchSessions();
     }, []);
 
