@@ -116,7 +116,7 @@ const usePayment = () => {
     }
   }, [user, db]);
 
-  const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_LIVE_KEY!;
+  const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_TEST_KEY!;
   const amount = queryParams.price || 0;
 
   const handlePaymentSuccess = async (response: PaystackResponse) => {

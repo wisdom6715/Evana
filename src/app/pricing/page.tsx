@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Logo from '@/app/assets/images/newLogo.png'
 import useCheckAuth from '@/app/dashboard/useCheck'
+import useDeviceCheck from '../useDevice'
 
 interface PricingTier {
   id: string;
@@ -68,9 +69,12 @@ const pricingTiers: PricingTier[] = [
 ];
 
 const PricingPage = () => {
+    // All hooks are called at the top level, before any conditional logic
     const router = useRouter();
     const [isAnnual, setIsAnnual] = useState(false);
-    
+    const isMobile = useDeviceCheck();
+    const { loading } = useCheckAuth();
+
     const calculatePrice = (basePrice: number) => {
         if (isAnnual) {
             const annualPrice = basePrice * 12;
@@ -96,14 +100,36 @@ const PricingPage = () => {
 
         router.push(`/payment?${queryParams.toString()}`);
     };
-     const { loading} = useCheckAuth()
-      if(loading) {
+
+    // Loading state
+    if (loading) {
         return (
-          <div className="w-full h-screen flex items-center justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-          </div>
-        )
-      }
+            <div className="w-full h-screen flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+        );
+    }
+
+    // Mobile state
+    if (isMobile) {
+        return (
+            <div className="w-full h-screen flex items-center justify-center bg-gray-100">
+                <div className="bg-white p-6 rounded-lg flex flex-col items-center gap-5 shadow-lg text-center">
+                    <Image src={Logo} alt='Intuitionlabs logo' className='md:w-80 md:h-20 w-36 h-12'/>
+                    <div>
+                        <h2 className="text-xl font-bold text-red-500">
+                            🚫 Mobile Not Supported
+                        </h2>
+                        <p className="text-gray-700 mt-2">
+                            Please use a <strong>laptop</strong> or <strong>desktop</strong> for the best experience.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Main content
     return (
         <div className='min-h-screen w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem] px-4 py-1 sm:px-6 lg:px-8'>
             {/* Logo Section */}

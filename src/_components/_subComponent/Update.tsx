@@ -1,62 +1,78 @@
 import React, { useRef } from "react";
-import useBroadcastManagement from '@/hook/useBroadcast'; // Import the custom hook
+import useBroadcastManagement from '@/hook/useBroadcast';
+import Image from "next/image";
+import { PopFunction } from "./usePopUp";
 
 const BroadCastUpdate = () => {
   const {
+    isSuccess,
     broadcastText,
     broadcastImage,
     handleTextChange,
     handleFileChange,
     sendBroadcast
-  } = useBroadcastManagement(); // Use the custom hook
+  } = useBroadcastManagement();
 
-  // Reference for the file input
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Open file picker programmatically
   const openFileExplorer = () => {
-    fileInputRef.current?.click(); // Trigger the file input programmatically
+    fileInputRef.current?.click();
   };
 
   return (
-    <div
-      className="border-t bg-white w-full h-full"
-      style={{ display: "grid", gridTemplateRows: "5% 92%", gap: "3%" }}
-    >
-      <div className="flex flex-row items-center justify-between bg-white">
-        <p>Broadcast</p>
-        <p onClick={sendBroadcast} className="cursor-pointer px-2 py-1 bg-black text-white">Post</p>
+    <div className="border-t bg-white w-full h-full flex flex-col gap-3">
+      {isSuccess &&(
+        <PopFunction message={isSuccess} type="success" duration={4000}/>
+      )
+      }
+      <div className="flex flex-row items-center justify-between bg-white p-4">
+        <p className="font-medium">Broadcast</p>
+        <button 
+          onClick={sendBroadcast} 
+          className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors"
+        >
+          Post
+        </button>
       </div>
-      <div style={{ display: "grid", gridTemplateRows: "85% 15%" }}>
-        <div className="w-full flex items-center justify-center  border border-dashed" onClick={openFileExplorer}>
-          {/* File input hidden */}
+      
+      <div className="flex flex-col flex-grow">
+        <div 
+          className="flex-grow flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 transition-colors"
+          onClick={openFileExplorer}
+        >
           <input
-            ref={fileInputRef} // Assigning the ref to the input element
+            ref={fileInputRef}
             type="file"
-            className="w-full"
-            style={{ display: "none" }} // Hides the file input
-            onChange={handleFileChange} // Trigger the file change handler
+            accept="image/*"
+            className="hidden"
+            onChange={handleFileChange}
           />
 
-          {/* Display the image uploaded */}
-          <div className="mt-3 border border-dashed">
+          <div className="flex flex-col items-center p-6">
             {broadcastImage ? (
-              <img
-                src={URL.createObjectURL(broadcastImage)}
-                alt="Uploaded preview"
-                className="w-32 h-32 object-cover" // Adjust size and styling as needed
-              />
+              <div className="relative w-64 h-64">
+                <Image
+                  src={URL.createObjectURL(broadcastImage)}
+                  alt="Uploaded preview"
+                  className="object-contain"
+                  height={300}
+                  width={250}
+                />
+              </div>
             ) : (
-              <p>Click to upload an image</p> // Placeholder text when no image is uploaded
+              <div className="text-center">
+                <p className="text-gray-500">Click to upload an image</p>
+                <p className="text-sm text-gray-400 mt-1">PNG, JPG, GIF up to 5MB</p>
+              </div>
             )}
           </div>
         </div>
-        {/* Broadcast message */}
+        
         <textarea
           placeholder="Enter broadcast message..."
           value={broadcastText}
           onChange={handleTextChange}
-          className="w-full bg-gray-50 border"
+          className="mt-4 w-full p-3 bg-gray-50 border border-gray-200 rounded-lg resize-none h-32 focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all"
         />
       </div>
     </div>

@@ -12,6 +12,14 @@ interface Company {
   company_contact?: string;
   company_email?: string;
   company_industry?: string;
+  userData?:{
+    amount: number;
+    billingCycle: string;
+    expiryDate: string;
+    paymentDate: string;
+    planType: string;
+    status: string;
+  }
 }
 
 interface UseCompanyReturn {

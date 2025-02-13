@@ -13,6 +13,7 @@ export interface CustomizationData {
 
 export const useCustomization = () => {
   const [user, setUser] = useState(auth.currentUser);
+  const[storedCompanyId, setStoredCompanyId] = useState('')
   
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -21,7 +22,9 @@ export const useCustomization = () => {
     return () => unsubscribe();
   }, []);
 
-  const storedCompanyId = localStorage.getItem('companyId') || '';
+  useEffect(()=>{
+    setStoredCompanyId(localStorage.getItem('companyId') || '')
+  },[])
   const { company } = useCompany({
     userId: user?.uid || '',
     companyId: storedCompanyId
@@ -75,7 +78,7 @@ export const useCustomization = () => {
     formData.append("welcome_message", welcome_message);
 
     try {
-      const response = await fetch(`http://localhost:5001/customization/${company_id}`, {
+      const response = await fetch(`http://localhost:5001/customization/${company?.company_id}`, {
         method: "PUT",
         body: formData,
       });

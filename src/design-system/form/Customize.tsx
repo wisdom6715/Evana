@@ -3,7 +3,7 @@ import React, { ChangeEvent, FormEvent, useState } from 'react';
 import PreviewAgent from './PreviewAgent';
 import { useCompanyRegistration } from '@/hook/useRegistration';
 import { useCustomization, CustomizationData } from '@/hook/useCustomization';
-import useCompany from '@/services/fetchComapnyData';
+
 // Define the local form state interface for your UI fields
 interface ChatbotConfigForm {
   chatbotName: string;
@@ -31,33 +31,14 @@ const ChatbotConfigPage: React.FC = () => {
 
   // Local state for UI form
   const [formData, setFormData] = useState<ChatbotConfigForm>({
-    chatbotName: '',
+    chatbotName: '' ,
     welcomeMessage: '',
     logo: null,
     theme: '#000000'
   });
 
-  const company_Id = localStorage.getItem('companyId');
-  const { company } = useCompany({
-    userId: user?.uid,
-    companyId: company_Id!
-  });
 
-  const [fetchedData, setFetchedData] = useState()
-  const apiUrl = `http://localhost:5001/customization/${encodeURIComponent(company?.company_id!)}`;
-  async function fetchData() {
-    try {
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-      setFetchedData(data)
-    } catch (error: any) {
-      console.log(`${error.message}`);
-      ;
-    }
-  }
-  // Call the function
-  fetchData();
-
+  // Update customization data when form changes
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const target = e.target as HTMLInputElement;
     const { name, value } = target;
@@ -119,7 +100,7 @@ const ChatbotConfigPage: React.FC = () => {
   }
 
   return (
-    <div className="w-full h-full bg-white gap-5 grid grid-cols-2">
+    <div className="w-full h-full bg-white gap-5" style={{display: 'grid', gridTemplateColumns: '1fr 1fr'}}>
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <h1 className="text-2xl font-bold">
           Customize your Chatbot agent to your company brand
@@ -196,7 +177,7 @@ const ChatbotConfigPage: React.FC = () => {
       </form>
 
       <PreviewAgent
-        logo={formData.logo}
+        logo={formData.logo }
         chatbotName={formData.chatbotName}
         theme={formData.theme}
         welcomeMessage={formData.welcomeMessage}

@@ -49,7 +49,7 @@ const Page = () => {
     });
 
     return () => unsubscribe();
-  }, [router, userData, loading]);
+  }, [router, userData, loading, companyId, company]);
 
   // Show loading state while checking auth and fetching user data
   if (loading) {

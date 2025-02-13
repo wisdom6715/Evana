@@ -3,7 +3,6 @@ import { useFileUpload } from "@/hook/useFileUpload";
 import customizeIcon from "@/app/assets/images/customize.png";
 import ChatbotImage from "@/app/landingPage/_components/assets/images/AI.webp";
 import Image from "next/image";
-import fetchUserData from "@/services/fetchUserData";
 import React, { useState, useRef, useEffect } from 'react';
 import { auth } from '@/lib/firebaseConfig';
 import useCompany from '@/services/fetchComapnyData';
@@ -16,25 +15,19 @@ interface SwitchFeatureProps {
 
 const ChatProfile: React.FC<SwitchFeatureProps> = ({ setSwitchFeature }) => {
   const { message, isLoading, uploadFile } = useFileUpload(); // Hook for file upload
-  const { userData } = fetchUserData();
-  const [switchToUpdate, setSwitchToUpdate] = useState(true);
-  const [file, setFile] = useState<File | null>(null); // Store selected file
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files?.[0]) {
       const selectedFile = e.target.files[0];
-      setFile(selectedFile); // Store the selected file
       handleFileUpload(selectedFile); // Automatically upload the file after selection
     }
   };
 
   const [user, setUser] = useState(auth.currentUser);
-  const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
-      setAuthLoading(false); // Set loading to false once we have the auth state
     });
     return () => unsubscribe();
   }, []);
@@ -93,7 +86,7 @@ const ChatProfile: React.FC<SwitchFeatureProps> = ({ setSwitchFeature }) => {
             </svg>
           )}
         </div>
-        {userData?.subscription?.planType === "basic" ? (
+        {company?.userData?.planType === "basic" ? (
           ""
         ) : (
           <button

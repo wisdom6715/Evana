@@ -5,10 +5,10 @@ const Intro = () => {
   const router = useRouter()
   return (
 <div className="w-full h-full md:w-[60%] md:h-[70%] flex justify-center flex-col items-center md:items-start">
-  <div className="flex flex-col gap-16">
+  <div className="flex flex-col gap-10">
     <div className="flex flex-col gap-6">
       <div className="flex flex-col">
-        <h1 className="text-[2rem] md:text-[2.5rem] font-bold text-center md:text-left">
+        <h1 className="text-[2rem] md:text-[2rem] font-bold text-center md:text-left">
           IntuitionLabs: <br className='hidden md:block'/> Empowering businesses with AI
         </h1>
         <p className="text-center text-l md:text-left">with AI Employee Supporting Your Team 24/7</p>

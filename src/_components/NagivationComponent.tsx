@@ -63,7 +63,8 @@ const NagivationComponent = () => {
                     <div className={styles.upgradeCAll}>
                         <p>upgrade to advance cutomer service AI tool</p>
                         <button className={styles.upgradeButton}>Upgrade</button>
-                    </div> : ''}
+                    </div> : ''
+                }
             </div>
         </div>
 

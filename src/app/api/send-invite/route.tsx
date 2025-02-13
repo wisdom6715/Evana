@@ -1,86 +1,138 @@
-import { NextResponse } from 'next/server';
-import { google } from 'googleapis';
-import { OAuth2Client } from 'google-auth-library';
+"use server";
+import nodemailer from "nodemailer";
 
-// Initialize OAuth2 client
-const oauth2Client = new OAuth2Client({
-  clientId: process.env.GMAIL_CLIENT_ID,
-  clientSecret: process.env.GMAIL_CLIENT_SECRET,
-  redirectUri: 'https://developers.google.com/oauthplayground'
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.NEXT_PUBLIC_SENDER_EMAIL, // Ensure consistency
+    pass: process.env.NEXT_PUBLIC_APP_PASSWORD, // Should NOT be NEXT_PUBLIC_
+  },
 });
 
-// Set credentials with refresh token
-oauth2Client.setCredentials({
-  access_token: process.env.GMAIL_ACCESS_TOKEN,
-  refresh_token: 'otru clys mack rykl',
-  token_type: 'Bearer',
-  scope: 'https://www.googleapis.com/auth/gmail.send'
-});
-
-const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
-
-export async function POST(request: Request) {
+// Ensure correct Next.js API export
+export async function POST(request: Request): Promise<Response> {
   try {
-    const { email, companyId, companyName } = await request.json();
-    
-    if (!email || !companyId || !companyName) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    let inviteeEmail: string | null = null;
+    let inviteeName: string | null = null;
+    let companyName: string | null = null;
+    let companyId: string | null = null;
+
+    const contentType = request.headers.get("content-type") || "";
+
+    if (contentType.includes("application/json")) {
+      // Handle JSON request body
+      const body = await request.json();
+      inviteeEmail = body.inviteeEmail;
+      inviteeName = body.inviteeName;
+      companyId = body.companyId;
+      companyName = body.companyName;
+    } else if (contentType.includes("multipart/form-data") || contentType.includes("application/x-www-form-urlencoded")) {
+      // Handle FormData
+      const formData = await request.formData();
+      inviteeEmail = formData.get("inviteeEmail")?.toString() || null;
+      inviteeName = formData.get("inviteeName")?.toString() || null;
+      companyId = formData.get("companyId")?.toString() || null;
+      companyName = formData.get("companyName")?.toString() || null;
+    } else {
+      return new Response(JSON.stringify({ success: false, message: "Unsupported Content-Type" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
-    // Try to refresh the access token
-    try {
-      await oauth2Client.refreshAccessToken();
-    } catch (refreshError) {
-      console.error('Token refresh error:', refreshError);
-      return NextResponse.json({ error: 'Authentication failed' }, { status: 401 });
+    // Validate required fields
+    if (!inviteeEmail || !inviteeName || !companyName || !companyId) {
+      return new Response(JSON.stringify({ success: false, message: "Missing required form data" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
-    const message = [
-      'From: "Your Company" <your-gmail@gmail.com>',
-      `To: ${email}`,
-      `Subject: Join ${companyName} on Our Platform`,
-      'Content-Type: text/html; charset=utf-8',
-      'MIME-Version: 1.0',
-      '',
-      `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h1 style="color: #333;">You've been invited to join ${companyName}!</h1>
-        <p>You've been invited to join your team on our platform. To get started:</p>
-        <ol>
-          <li>Click the button below to create your account</li>
-          <li>Enter this company ID during signup: <strong>${companyId}</strong></li>
-          <li>Set up your profile and start collaborating with your team</li>
-        </ol>
-        <div style="text-align: center; margin: 30px 0;">
-          <a href="${process.env.NEXT_PUBLIC_APP_URL}/signup?companyId=${companyId}" 
-             style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px;">
-            Create Your Account
-          </a>
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: inviteeEmail,
+      subject: `You've beeen invited by - ${companyName}`,
+      html: `
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .content {
+            font-size: 16px;
+            color: #555;
+            margin: 20px 0;
+        }
+        .btn {
+          display: inline-block;
+          background-color: #007bff;
+          color: #fdfffe !important;
+          padding: 12px 24px;
+          text-decoration: none;
+          border-radius: 4px;
+          font-size: 16px;
+          font-weight: bold;
+        }
+        .companyId{
+          font-weight: bold;
+          color: #007bff;
+        }
+        .footer {
+            font-size: 14px;
+            color: #777;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">You’re Invited to Join Our Team! 🎉</div>
+        <div class="content">
+            <p>Dear <strong>${inviteeName}</strong>,</p>
+            <p>We’re excited to invite you to join our team at <strong>${companyName}</strong>!</p>
+            <p>Your skills and expertise would be a valuable addition, and we can’t wait to collaborate with you.</p>
+            p>Click the button below to accept the invitation and get started:</p>
+            <a href="https://intuitionlabs.com.ng/auth" class="btn">Join the Team</a>
+            <p>After logging in, enter this company ID <span class='companyId'>${companyId}</span> to access the dashboard.</p>
         </div>
-        <p style="color: #666; font-size: 14px;">
-          If you have any questions, please contact your team administrator.
-        </p>
-      </div>`
-    ].join('\n');
+        <div class="footer">
+          Best regards, <br />
+          ${companyName}
+        </div>
+    </div>
+</body>
+      `,
+    };
 
-    const encodedMessage = Buffer.from(message)
-      .toString('base64')
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=+$/, '');
+    await transporter.sendMail(mailOptions);
+    console.log(`✅ Email sent successfully to ${inviteeEmail}`);
 
-    const res = await gmail.users.messages.send({
-      userId: 'me',
-      requestBody: {
-        raw: encodedMessage
-      }
+    return new Response(JSON.stringify({ success: true, message: "Email sent successfully" }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
     });
-
-    return NextResponse.json({ success: true, messageId: res.data.id });
   } catch (error: any) {
-    console.error('Gmail API Error:', error);
-    return NextResponse.json(
-      { error: 'Failed to send invitation', details: error.message },
-      { status: 500 }
-    );
+    console.error("❌ Error sending email:", error);
+    return new Response(JSON.stringify({ success: false, message: error.message }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 }

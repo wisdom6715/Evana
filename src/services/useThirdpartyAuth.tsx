@@ -6,11 +6,13 @@ import {
     AuthError 
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import fetchUserdata from '@/services/fetchUserData'
 
 const useThirdpartyAuth = () => {
     const router = useRouter();
     const providerGoogle = new GoogleAuthProvider();
     const providerMicrosoft = new OAuthProvider('microsoft.com');
+    const { userData } = fetchUserdata()
     
     const auth = getAuth();
 
@@ -19,15 +21,16 @@ const useThirdpartyAuth = () => {
         try {
             const result = await signInWithPopup(auth, providerGoogle);
             const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential?.accessToken;
-            
-            // The signed-in user info.
+            const token = credential?.accessToken
             const user = result.user;
-            router.push('/welcome')
             // Additional user info provided by the sign-in provider.
             // IdP data available using getAdditionalUserInfo(result)
-            // You can add any additional info handling here
-            router.replace('/welcome')
+            if(userData?.subscription?.status === 'active') {
+                router.replace('/dashboard/home');
+            }else{
+                router.replace('/welcome')
+                console.log('user not paid!!!')
+            }
             console.log(user, token);
         } catch (error) {
             // Type assertion to handle Firebase authentication errors
@@ -59,8 +62,11 @@ const useThirdpartyAuth = () => {
             // If necessary, use these tokens for additional handling or logging
             console.log("Microsoft Access Token:", accessToken);
             console.log("Microsoft ID Token:", idToken);
-
-            router.replace('/welcome');
+            if(userData?.subscription?.status === 'active') {
+                router.replace('/dashboard/home');
+            }else{
+                router.replace('/welcome');
+            }
         } catch (error) {
             // Type assertion to handle Firebase authentication errors
             const authError = error as AuthError;

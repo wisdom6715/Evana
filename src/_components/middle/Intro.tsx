@@ -50,7 +50,7 @@ const Intro = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:5001/daily-chats/b0c2997a-9cea-454b-bcb1-f4709055713a');
+                const response = await fetch(`http://localhost:5001/daily-chats/${company?.company_id}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch data');
                 }
@@ -100,12 +100,12 @@ const Intro = () => {
       
         // Cleanup interval on component unmount
         return () => clearInterval(interval);
-    }, []);
+    }, [company?.company_id]);
 
 
     function getRandomResponseTime(): number {
         // Generates a random integer between 1 and 10 (inclusive)
-        return Math.floor(Math.random() * 10) + 1;
+        return Math.floor(Math.random() * 4) + 1;
     }
     
     // Check if the response time has been set before and if 24 hours have passed
@@ -134,7 +134,7 @@ const Intro = () => {
     // Call the function to check and set the response time
     const fetchCustomization = async () => {
         try {
-            const response = await fetch('http://localhost:5001/customization/b0c2997a-9cea-454b-bcb1-f4709055713a');
+            const response = await fetch(`http://localhost:5001/customization/${company?.company_id}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch data');
             }
@@ -148,7 +148,7 @@ const Intro = () => {
     useEffect(() => {
         checkAndSetResponseTime();
         fetchCustomization()
-    }, []);
+    });
     
     const metrics: Metric[] = [
         {

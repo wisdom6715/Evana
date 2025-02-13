@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { auth } from '@/lib/firebaseConfig';
+import fetchUserdata from '@/services/fetchUserData'
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
@@ -18,6 +19,7 @@ type UserInfo = {
 const useLogIn = () => {
   const router = useRouter();
   const [isLoading, setLoading] = useState<boolean>(false);
+  const {userData} = fetchUserdata()
   const [userInfo, setUserInfo] = useState<UserInfo>({
     email: "",
     password: "",
@@ -47,6 +49,10 @@ const useLogIn = () => {
         try {
           await createUserWithEmailAndPassword(auth, userInfo.email, userInfo.password);
           console.log("Account created successfully!");
+          if(userData?.subscription?.status === 'active') {
+            router.replace('/dashboard/home');
+            return true;
+          }
           router.replace('/welcome');
           return true;
         } catch (createErr) {

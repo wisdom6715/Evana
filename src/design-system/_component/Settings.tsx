@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import Customize from '@/design-system/form/Customize';
 import Profile from '../form/Profile';
 import HelpDesk from '../form/HelpDesk';
-import Privacy from '../form/Privacy';
 import Integration from '../form/Integration';
 import Subscription from '../form/Subscription';
 
 interface NavProperty {
   title: string;
-  plan?: string;
 }
 
 type ComponentType = 'Company' | 'Customize' | 'Help Desks' | 'Integration' | 'Subscription' | 'Privacy';
@@ -25,16 +23,12 @@ const Settings: React.FC = () => {
     },
     {
       title: 'Help Desks',
-      plan: 'stardand'
     },
     {
       title: 'Integration'
     },
     {
       title: 'Subscription'
-    },
-    {
-      title: 'Privacy'
     }
   ];
 
@@ -49,12 +43,10 @@ const Settings: React.FC = () => {
         return <Profile setActiveComponent={setActiveComponent}/>;
       case 'Customize':
         return <Customize />;
-      case 'Privacy':
-        return <Privacy />;
       case 'Help Desks':
         return <HelpDesk />;
       case 'Integration':
-        return <Integration />;
+        return <Integration/>;
       case 'Subscription':
         return <Subscription />;
       default:

@@ -23,7 +23,7 @@ const pricingTiers: PricingTier[] = [
     features: [
       'unlimited usage',
       'AI training',
-      '2 chatbots',
+      '1 chatbots',
       'Full Customization',
       'Basic Analytics',
       'Simple integrations',
@@ -41,9 +41,8 @@ const pricingTiers: PricingTier[] = [
     features: [
       'Audio chat',
       'Realtime chat support',
-      '5 chatbots',
-      '5 desks for real time chat',
-      'Voice Realtime Conversation',
+      '3 chatbots',
+      '3 desks for real time chat',
       'Conversation categorization',
       'Message broadcasting (widget, in-app and email)',
       'image/document upload on the real time chat feature'
@@ -56,7 +55,7 @@ const pricingTiers: PricingTier[] = [
     price: 199.99,
     description: 'Enterprise plan offers all features plus:',
     features: [
-      '10 Chatbots',
+      '5 Chatbots',
       'Multilingual AI support ',
       '10 desks for realtime chat support',
       'Advanced Analytics',

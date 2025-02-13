@@ -1,10 +1,29 @@
-import { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
+import { auth } from '@/lib/firebaseConfig';
+import useCompany from '@/services/fetchComapnyData';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const useBroadcastManagement = () => {
   // States to handle the company ID, broadcast text, and image file
   const [broadcastText, setBroadcastText] = useState<string>('');
   const [broadcastImage, setBroadcastImage] = useState<File | null>(null);
-  const [broadcasts, setBroadcasts] = useState<any[]>([]);
+  const [isSuccess, setIsSuccess] = useState<string>('');
+
+  const [user, setUser] = useState(auth.currentUser);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
+
+   const company_Id = localStorage.getItem('companyId');
+  const { company } = useCompany({
+    userId: user?.uid,
+    companyId: company_Id!
+  });
+  console.log(user?.uid, user?.displayName)
 
   // Handle text change for the broadcast message
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -17,40 +36,16 @@ const useBroadcastManagement = () => {
       setBroadcastImage(e.target.files[0]);
     }
   };
-  const companyId = 'b0c2997a-9cea-454b-bcb1-f4709055713a'
-
-  // Fetch broadcasts based on company ID
-  const fetchBroadcasts = async () => {
-    if (!companyId) {
-      alert("❌ Please enter a Company ID to fetch broadcasts!");
-      return;
-    }
-
-    try {
-      const response = await fetch(`http://localhost:5001/broadcast/${companyId}`);
-      const data = await response.json();
-
-      if (data?.data?.length) {
-        setBroadcasts(data.data);
-      } else {
-        setBroadcasts([]);
-        alert("❌ No announcements yet.");
-      }
-    } catch (error) {
-      console.error("❌ Fetch Broadcasts Error:", error);
-      alert("❌ Error fetching broadcasts.");
-    }
-  };
 
   // Send the broadcast message and image
   const sendBroadcast = async () => {
-    if (!companyId) {
+    if (!company?.company_id) {
       alert("❌ Please enter a Company ID!");
       return;
     }
 
     const formData = new FormData();
-    formData.append("company_id", companyId);
+    formData.append("company_id", company?.company_id);
     if (broadcastText) formData.append("text", broadcastText);
     if (broadcastImage) formData.append("image", broadcastImage);
 
@@ -60,9 +55,9 @@ const useBroadcastManagement = () => {
         body: formData,
       });
       const data = await response.json();
-      alert("✅ Broadcast sent successfully!");
+      setIsSuccess('Broadcast sent successfully!')
+      console.log("�� Broadcast sent:", data);
 
-      fetchBroadcasts(); // Refresh the broadcast list
       setBroadcastText("")
       setBroadcastImage(null);
     } catch (error) {
@@ -71,18 +66,11 @@ const useBroadcastManagement = () => {
     }
   };
 
-  // Fetch broadcasts on component mount or when companyId changes
-  useEffect(() => {
-    if (companyId) {
-      fetchBroadcasts();
-    }
-  }, [companyId]);
 
   return {
-    companyId,
     broadcastText,
+    isSuccess,
     broadcastImage,
-    broadcasts,
     setBroadcastText,
     setBroadcastImage,
     handleTextChange,

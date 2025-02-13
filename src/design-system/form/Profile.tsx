@@ -1,4 +1,3 @@
-// Profile.tsx
 import React from 'react';
 import { useCompanyRegistration } from '@/hook/useRegistration';
 
@@ -12,7 +11,7 @@ interface ProfileProps {
 // Industry options relevant for AI chatbot applications
 const industryOptions = [
   { value: '', label: 'Select an industry' },
-  { value: 'agritech', label: 'Tech/SAAS' },
+  { value: 'Tech/SAAS', label: 'Tech/SAAS' },
   { value: 'agritech', label: 'AgriTech' },
   { value: 'edtech', label: 'EdTech' },
   { value: 'fintech', label: 'FinTech' },
@@ -88,7 +87,7 @@ const Profile: React.FC<ProfileProps> = ({ setActiveComponent }) => {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-      <h1 className="text-2xl font-bold">Enter Your Company's Information</h1>
+      <h1 className="text-l font-bold">Enter Your Company's Information</h1>
 
       {message && <div className="text-green-500 font-bold">{message}</div>}
       {apiError && <div className="text-red-500 font-bold">{apiError}</div>}

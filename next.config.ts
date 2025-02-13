@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
+/** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {
-  /* config options here */
   async rewrites() {
     return [
       {
@@ -11,6 +11,18 @@ const nextConfig: NextConfig = {
     ]
   },
   reactStrictMode: true,
-};
+  webpack: (config, { isServer }) => {
+    // Increase the memory limit
+    if (!isServer) {
+      config.performance = {
+        ...config.performance,
+        maxEntrypointSize: 512000,
+        maxAssetSize: 512000
+      }
+    }
+    return config
+  },
+
+}
 
 export default nextConfig;

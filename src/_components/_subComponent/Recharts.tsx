@@ -1,6 +1,9 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { useEffect, useState } from 'react';
+import { auth } from '@/lib/firebaseConfig';
+import useCompany from '@/services/fetchComapnyData';
+import { onAuthStateChanged } from 'firebase/auth';
 import {
   Chart as ChartJS,
   LineElement,
@@ -22,18 +25,6 @@ ChartJS.register(
   Filler  // Register this
 );
 
-// const data = {
-//   labels: [400, 300, 200, 278, 189, 239, 349],
-//   datasets: [{
-//     label: 'Interaction Data',
-//     data: [400, 300, 200, 278, 189, 239, 349],
-//     borderColor: '#8884d8',
-//     backgroundColor: 'rgba(136, 132, 216, 0.2)',
-//     fill: true,
-//     borderWidth: 2,
-//     tension: 0.4,
-//   }],
-// };
 
 const options = {
   responsive: true,
@@ -59,6 +50,7 @@ const options = {
 };
 
 const ResponsiveChart = () => {
+  
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [{
@@ -77,11 +69,25 @@ const ResponsiveChart = () => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
+  const [user, setUser] = useState(auth.currentUser);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
+  const company_Id = localStorage.getItem('companyId');
+  const { company } = useCompany({
+    userId: user?.uid,
+    companyId: company_Id!,
+  });
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5001/daily-chats/b0c2997a-9cea-454b-bcb1-f4709055713a');
+        const response = await fetch(`http://localhost:5001/daily-chats/${company?.company_id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
@@ -112,7 +118,7 @@ const ResponsiveChart = () => {
   
     // Cleanup interval on component unmount
     return () => clearInterval(interval);
-  }, []);
+  }, [company?.company_id]);
 
   return (
     <div style={{ height: '100%', width: '100%' }}>

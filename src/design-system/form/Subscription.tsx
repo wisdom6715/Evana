@@ -1,52 +1,74 @@
 'use client'
-import { useEffect, useState } from 'react';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
-import app from '@/lib/firebaseConfig'; // Adjust this path to where your firebase config is
-
-const auth = getAuth(app);
-const db = getFirestore(app);
+import React, { useState, useEffect } from 'react';
+import { User } from 'firebase/auth';
+import { auth } from '@/lib/firebaseConfig';
+import useCompany from '@/services/fetchComapnyData';
+import { onAuthStateChanged } from 'firebase/auth';
 
 interface UserData {
-  name?: string;
-  email?: string;
-  uid?: string;
-  // Add other fields as needed
+  planType: string;
+  status: string;
+  expiryDate: {
+    seconds: number;
+    nanoseconds: number;
+  } | string;
+  billingCycle: string;
+}
+
+interface Company {
+  company_name: string;
+  company_email: string;
+  company_contact: string;
+  userData: UserData;
 }
 
 export default function UserData() {
-  const [userData, setUserData] = useState<UserData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(auth.currentUser);
+  const [authLoading, setAuthLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        try {
-          // Get the user document from Firestore
-          const userDocRef = doc(db, 'users', user.uid);
-          const userDocSnap = await getDoc(userDocRef);
-
-          if (userDocSnap.exists()) {
-            setUserData(userDocSnap.data() as UserData);
-          } else {
-            setError('No user data found');
-          }
-        } catch (err: any) {
-          setError('Error fetching user data: ' + err.message);
-        }
-      } else {
-        setUserData(null);
-        setError('No user logged in');
-      }
-      setLoading(false);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setAuthLoading(false);
     });
-
-    // Cleanup subscription
     return () => unsubscribe();
   }, []);
 
-  if (loading) {
+  const company_Id = localStorage.getItem('companyId');
+  const { company } = useCompany({
+    userId: user?.uid,
+    companyId: company_Id ?? ''
+  });
+
+  const formatExpiryDate = (expiryDate: UserData['expiryDate'] | undefined): string => {
+    if (!expiryDate) return "N/A";
+
+    if (typeof expiryDate === 'object' && 'seconds' in expiryDate) {
+      return new Date(expiryDate.seconds * 1000).toLocaleString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
+    }
+
+    if (typeof expiryDate === "string") {
+      return new Date(expiryDate).toLocaleString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
+    }
+
+    return "Invalid Date";
+  };
+
+  if (authLoading) {
     return (
       <div className="flex items-center justify-center p-4">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
@@ -54,15 +76,7 @@ export default function UserData() {
     );
   }
 
-  if (error) {
-    return (
-      <div className="p-4 bg-red-50 text-red-500 rounded-md">
-        {error}
-      </div>
-    );
-  }
-
-  if (!userData) {
+  if (!company) {
     return (
       <div className="p-4 bg-yellow-50 text-yellow-600 rounded-md">
         Please log in to view your data
@@ -72,14 +86,16 @@ export default function UserData() {
 
   return (
     <div className="p-4 bg-white shadow rounded-lg">
-      <h2 className="text-xl font-semibold mb-4">User Profile</h2>
+      <h2 className="text-xl font-semibold mb-4">Company Profile</h2>
       <div className="space-y-2">
-        <p><span className="font-medium">Name:</span> {userData.name}</p>
-        <p><span className="font-medium">Email:</span> {userData.email}</p>
-        <p>userId: {userData?.uid}</p>
-        {/* Add more fields as needed */}
+        <p><span className="font-medium">Company Name:</span> {company?.company_name}</p>
+        <p><span className="font-medium">Email:</span> {company?.company_email}</p>
+        <p><span className="font-medium">Contact:</span> {company?.company_contact}</p>
+        <p><span className="font-medium">Subscription Type:</span> {company?.userData?.planType}</p>
+        <p><span className="font-medium">Subscription:</span> {company?.userData?.status}</p>
+        <p><span className="font-medium">Expiry Date:</span> {formatExpiryDate(company?.userData?.expiryDate)}</p>
+        <p><span className="font-medium">Billing Cycle:</span> {company?.userData?.billingCycle}</p>
       </div>
     </div>
   );
 }
-

@@ -3,6 +3,7 @@ import { collection, doc, setDoc } from "firebase/firestore";
 import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import useCompany from '@/services/fetchComapnyData';
+import fetchUserData from '@/services/fetchUserData';
 
 const API_BASE_URL = 'http://localhost:5001';
 
@@ -19,11 +20,10 @@ export const useCompanyRegistration = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const { userData, loading } = fetchUserData();
 
-  const company_Id = localStorage.getItem('companyId');
   const { company } = useCompany({
     userId: user?.uid,
-    companyId: company_Id!
   });
 
   const [formData, setFormData] = useState<CompanyData>({
@@ -82,14 +82,17 @@ export const useCompanyRegistration = () => {
       const companiesRef = collection(db, 'companies');
       const companyDoc = doc(companiesRef, companyId);
 
-      await setDoc(companyDoc, {
-        ...companyData,
-        company_id: companyId,
-        uid: user.uid,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        status: 'active',
-      });
+      if(!loading){
+        await setDoc(companyDoc, {
+          ...companyData,
+          company_id: companyId,
+          uid: user.uid,
+          userData: userData?.subscription,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          status: 'active',
+        });
+      }
 
       return true;
     } catch (error) {

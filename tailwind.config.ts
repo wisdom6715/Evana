@@ -27,7 +27,7 @@ export default {
       },
       animation: {
         'bg-theme': 'bg-theme 2s infinite alternate',
-      },
+      }
     },
   },
   plugins: [],

@@ -33,8 +33,8 @@ const Invitation: React.FC<InvitationProps> = ({ onClose }) => {
       } else {
         setError('Invalid company ID. Please check and try again.');
       }
-    } catch (error) {
-      setError('Unable to verify company ID. Please try again.');
+    } catch (error: any) {
+      setError(`Unable to verify company ID. Please try again.  ${error}`);
     } finally {
       setIsLoading(false);
     }

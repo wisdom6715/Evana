@@ -22,7 +22,7 @@ export const useWebSocket = ({
   companyId, 
   userId, 
   sessionId,
-  isAgent = false 
+  isAgent = true 
 }: WebSocketHookProps) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -45,7 +45,6 @@ export const useWebSocket = ({
       console.log('Socket ID:', newSocket.id);
       setIsConnected(true);
 
-      // Join chat room on connection
       const joinPayload = { 
         company_id: companyId, 
         user_id: userId,
@@ -56,12 +55,24 @@ export const useWebSocket = ({
       newSocket.emit('join_chat_room', joinPayload);
     });
 
-    // Listen for messages specific to this session
+    // Modified message handling to prevent duplicates
     newSocket.on('new_message', (messageData: MessageData) => {
       console.log('📨 New Message Received:', messageData);
-      // Only add messages for the specific session
+      // Only add messages from other users
       if (messageData.session_id === sessionId && messageData.user_id !== userId) {
-        setMessages(prevMessages => [...prevMessages, messageData]);
+        setMessages(prevMessages => {
+          // Check if message already exists to prevent duplicates
+          const messageExists = prevMessages.some(msg => 
+            msg.timestamp === messageData.timestamp && 
+            msg.user_id === messageData.user_id &&
+            msg.message === messageData.message &&
+            msg.isAgent === messageData.isAgent
+          );
+          if (!messageExists) {
+            return [...prevMessages, messageData];
+          }
+          return prevMessages;
+        });
       }
     });
 
@@ -84,14 +95,32 @@ export const useWebSocket = ({
     };
   }, [url, companyId, userId, sessionId, isAgent]);
 
-  const sendMessage = useCallback((messageData: MessageData) => {
+  const sendMessage = useCallback(async (messageData: MessageData) => {
     if (socket && isConnected) {
       console.log('📤 Sending Message:', messageData);
-      socket.emit('send_message', messageData);
+      try {
+        const response = await fetch(`http://localhost:5001/chat/${sessionId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(messageData)
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Server returned ${response.status}`);
+        }
+        
+        // Emit the socket message after successful HTTP request
+        socket.emit('send_message', messageData);
+        
+        // Don't add the message to local state here since it will be handled by the component
+      } catch (error) {
+        console.error('Failed to send message:', error);
+        throw error;
+      }
     } else {
       console.warn('❗ Cannot send message: Socket not connected');
     }
-  }, [socket, isConnected]);
+  }, [socket, isConnected, sessionId]);  
 
   return {
     socket,

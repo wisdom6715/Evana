@@ -10,10 +10,12 @@ import visaCard from '@/app/assets/images/visacard.jpeg'
 import applePay from '@/app/assets/images/ApplePay.jpeg'
 import googlePay from '@/app/assets/images/gPay.jpeg'
 import secureIcon from '@/app/assets/images/secureIcon.png'
-import Logo from '@/app/assets/images/Screenshot 2025-01-11 090739.png'
+import Logo from '@/app/assets/images/newLogo.png'
 import {auth} from '@/lib/firebaseConfig'
 import DisplayDate from '@/_components/_subComponent/DisplayDate'
 import useCheckAuth from '@/app/dashboard/useCheck'
+import useDeviceCheck from '../useDevice'
+
 // Dynamically import PaystackButton to prevent SSR issues
 const DynamicPaystackButton = dynamic(() => 
   import('react-paystack').then((mod) => mod.PaystackButton), 
@@ -26,6 +28,26 @@ const PaymentContent = () => {
   const {isClient, componentProps, queryParams} = usePaymant();
   const user = auth.currentUser;
   const { loading} = useCheckAuth()
+
+  const isMobile = useDeviceCheck();
+
+  if (isMobile) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center bg-gray-100">
+        <div className="bg-white p-6 rounded-lg flex flex-col items-center gap-5 shadow-lg text-center">
+          <Image src={Logo} alt='Intuitionlabs logo' className='md:w-80 md:h-20 w-36 h-12'/>
+          <div>
+            <h2 className="text-xl font-bold text-red-500">
+              🚫 Mobile Not Supported
+            </h2>
+            <p className="text-gray-700 mt-2">
+              Please use a <strong>laptop</strong> or <strong>desktop</strong> for the best experience.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
   if(loading) {
     return (
       <div className="w-full h-screen flex items-center justify-center">
