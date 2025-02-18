@@ -3,11 +3,6 @@ import { auth } from '@/lib/firebaseConfig';
 import useCompany from '@/services/fetchComapnyData';
 import { onAuthStateChanged } from 'firebase/auth';
 
-interface CodeBlockProps {
-  code: string;
-  lineNumbers?: boolean;
-}
-
 const Integration = () => {
   const [user, setUser] = useState(auth.currentUser);
   const [authLoading, setAuthLoading] = useState(true);

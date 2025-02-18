@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
-import avatar1 from '../../_components/assets/images/avatar1.jpeg'
 import avatar2 from '../../_components/assets/images/avatar2.jpeg'
 import avatar3 from '../../_components/assets/images/avatar5.jpg'
 import avatar4 from '../../_components/assets/images/avatar4.webp'
@@ -8,26 +7,20 @@ const MeetAI = () => {
     const [ishover, setHoverIndex] = useState <number | null>(null)
     const Employees = [
         {
-            role: 'Virtual Assistant',
-            description: 'AI expert with expertise in virtual assistants and AI-powered customer support.',
+            role: 'Evana',
+            description: 'Meet your AI-powered Customer Support Assistant—ready to handle inquiries, resolve issues, and provide fast, efficient service 24/7.',
             image: avatar4
         },
         {
-            role: 'Customer Support',
-            description: 'Meet your AI-powered Customer Support Assistant—ready to handle inquiries, resolve issues, and provide fast, efficient service 24/7.',
+            role: 'Esher',
+            description: 'AI expert with expertise in virtual assistants and AI-powered customer support.',
             image: avatar3
         },
         {
-            role: 'Sales Assistant',
+            role: 'Eval',
             description: 'AI-powered Sales Assistant—automating tasks, managing leads, and providing insights to help you close more deals, faster.',
             image: avatar2
         },
-        {
-            
-           role: 'Appointments Manager',
-            description: 'AI-powered Appointment Manager—automating scheduling, reminders to keep your calendar organized and stress-free across platforms',
-            image: avatar1
-        }
     ]
   return (
     <div className="flex flex-col w-full mt-16 gap-12">
@@ -36,7 +29,7 @@ const MeetAI = () => {
             <p className="w-[70%]">Discover the diverse AI employees transforming business operations, from virtual assistants optimizing administrative tasks to advanced sales assistant uncovering valuable insights</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {
             Employees.map((employee, index) => (
                 <div
