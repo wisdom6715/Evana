@@ -1,0 +1,23 @@
+.formContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: .5rem 2rem;
+}
+.inputContainer{
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+}
+.inputTag{
+    background-color: rgb(225, 225, 225);
+    width: 50%;
+    height: 2.5rem;
+    padding: .5rem;
+
+}
+.submitButton{
+    background-color: black;
+    color: white;
+    padding: .5rem 1rem;
+}
